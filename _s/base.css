@@ -1,59 +1,135 @@
-html,
+/* --- CSS reset from --- */
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
 body {
-	  margin: 0;
-	  padding: 0;
+    line-height: 1;
+    background: #ffffff;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+}
+ol, ul {
+    padding-left: 1.5em;
+    /*list-style: unset;*/
+}
+blockquote {
+    border-left: 2px solid;
+    padding-left: 1em;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 2em;
+    width: 100%;
+}
+th {
+    border-bottom: 2px solid #efefef;
+    font-weight: bold;
+    text-align: left;
+}
+td { border-bottom: 1px solid #efefef; }
+caption, th, td {
+    padding: 4px 10px 4px 0;
+}
+caption {
+    background: #f1f1f1;
+    padding: 10px 0;
+    margin-bottom: 1em;
+}
+
+tr,td,th {
+    vertical-align: middle;
+}
+
+/* Use this if you use span-x classes on th/td. */
+table .last { padding-right: 0; } 
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
 }
 
 body {
-	  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 	  line-height: 1.4em;
 	  background: #eeeeee;
 	  color: #333333;
-	  width: 520px;
+}
+
+#cardapp {
+	  width: 44rem;
 	  margin: 0 auto;
-	  -webkit-font-smoothing: antialiased;
+    margin-top: 1em;
 }
 
-#todoapp {
-	  background: #fff;
-	  padding: 20px;
-	  margin-bottom: 40px;
-	  -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
-	  -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
-	  -ms-box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
-	  -o-box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
-	  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 6px 0;
-	  -webkit-border-radius: 0 0 5px 5px;
-	  -moz-border-radius: 0 0 5px 5px;
-	  -ms-border-radius: 0 0 5px 5px;
-	  -o-border-radius: 0 0 5px 5px;
-	  border-radius: 0 0 5px 5px;
+#cardapp header {
+    padding: 1em 0;
 }
 
-#todoapp h1 {
-	  font-size: 36px;
+#cardapp h1 {
 	  font-weight: bold;
 	  text-align: center;
 	  padding: 0 0 10px 0;
 }
 
-#todoapp input[type="text"] {
-	  width: 466px;
-	  font-size: 24px;
-	  font-family: inherit;
-	  line-height: 1.4em;
-	  border: 0;
-	  outline: none;
-	  padding: 6px;
-	  border: 1px solid #999999;
-	  -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
-	  -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
-	  -ms-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
-	  -o-box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
-	  box-shadow: rgba(0, 0, 0, 0.2) 0 1px 2px 0 inset;
+#cardapp input[type="text"], input.edit{
+    width: calc(100% - 2em);
+    font-family: inherit;
+    line-height: 1.4em;
+    outline: none;
+    background-color: #fff;
+    border-radius: 3px;
+    border: none;
+    box-shadow: 0 1px 0 #091e4240;
+    cursor: pointer;
+    display: block;
+    padding: 1em;
+    margin-bottom: 8px;
+    text-decoration: none;
+    font-size: 100%;
 }
 
-#todoapp input::-webkit-input-placeholder {
+#cardapp input::-webkit-input-placeholder {
 	  font-style: italic;
 }
 
@@ -61,29 +137,32 @@ body {
 	  display: none;
 }
 
-#todo-list {
-	  margin: 10px 0;
-	  padding: 0;
+#card-list {
+	  padding: 1em 0;
 	  list-style: none;
+    background-color: #ebecf0;
 }
 
-#todo-list li {
-	  padding: 18px 20px 18px 0;
-	  position: relative;
-	  font-size: 24px;
-	  border-bottom: 1px solid #cccccc;
+#card-list .card {
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 #091e4240;
+    cursor: pointer;
+    display: block;
+    padding: 1em;
+    margin-bottom: 8px;
+    min-height: 20px;
+    position: relative;
+    text-decoration: none;
+    z-index: 0;
 }
 
-#todo-list li:last-child {
-	  border-bottom: none;
-}
-
-#todo-list li.done label {
+#card-list .card.done label {
 	  color: #777777;
 	  text-decoration: line-through;
 }
 
-#todo-list .destroy {
+#card-list .destroy {
 	  position: absolute;
 	  right: 5px;
 	  top: 20px;
@@ -94,49 +173,45 @@ body {
 	  background: url(destroy.png) no-repeat;
 }
 
-#todo-list li:hover .destroy {
+#card-list .card:hover .destroy {
   	display: block;
 }
 
-#todo-list .destroy:hover {
+#card-list .destroy:hover {
   	background-position: 0 -20px;
 }
 
-#todo-list li.editing {
+#card-list .card.editing {
 	  border-bottom: none;
 	  margin-top: -1px;
 	  padding: 0;
 }
 
-#todo-list li.editing:last-child {
+#card-list .card.editing:last-child {
 	  margin-bottom: -1px;
 }
 
-#todo-list li.editing .edit {
+#card-list .card.editing .edit {
 	  display: block;
-	  width: 444px;
-	  padding: 13px 15px 14px 20px;
-	  margin: 0;
 }
 
-#todo-list li.editing .view {
+#card-list .card.editing .view {
 	  display: none;
 }
 
-#todo-list li .view label {
+#card-list .card .view label {
 	  word-break: break-word;
 }
 
-#todo-list li .edit {
+#card-list .card .edit {
 	  display: none;
 }
 
-#todoapp footer {
+#cardapp footer {
 	  display: none;
 	  margin: 0 -20px -20px -20px;
 	  overflow: hidden;
 	  color: #555555;
-	  background: #f4fce8;
 	  border-top: 1px solid #ededed;
 	  padding: 0 20px;
 	  line-height: 37px;
@@ -153,7 +228,6 @@ body {
 	  text-decoration: none;
 	  background: rgba(0, 0, 0, 0.1);
 	  color: #555555;
-	  font-size: 11px;
 	  margin-top: 8px;
 	  margin-bottom: 8px;
 	  padding: 0 10px 1px;
@@ -184,7 +258,7 @@ body {
 	  top: 1px;
 }
 
-#todo-count span {
+#card-count span {
 	  font-weight: bold;
 }
 

@@ -8,28 +8,28 @@
         <link rel="stylesheet" href="/_s/base.css"/>
     </head>
     <body>
-        <div id="todoapp">
+        <div id="cardapp">
 
             <header>
-                <h1>Todos</h1>
-                <input id="new-todo" type="text" placeholder="What needs to be done?">
+                <h1>Cards</h1>
+                <input id="new-card" type="text" placeholder="What needs to be done?">
             </header>
 
             <section id="main">
                 <input id="toggle-all" type="checkbox">
                 <label for="toggle-all">Mark all as complete</label>
-                <ul id="todo-list"></ul>
+                <div id="card-list"></div>
             </section>
 
             <footer>
                 <a id="clear-completed">Clear completed</a>
-                <div id="todo-count"></div>
+                <div id="card-count"></div>
             </footer>
 
         </div>
 
         <div id="instructions">
-            Double-click to edit a todo.
+            Double-click to edit a card.
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
@@ -57,7 +57,7 @@
          <% if (done) { %>
          <a id="clear-completed">Clear <%= done %> completed <%= done == 1 ? 'item' : 'items' %></a>
          <% } %>
-         <div class="todo-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
+         <div class="card-count"><b><%= remaining %></b> <%= remaining == 1 ? 'item' : 'items' %> left</div>
         </script>
 
     </body>
