@@ -112,7 +112,7 @@ body {
 	  padding: 0 0 10px 0;
 }
 
-#cardapp input[type="text"], input.edit{
+#cardapp input[type="text"], input.edit, #cardapp textarea{
     width: calc(100% - 2em);
     font-family: inherit;
     line-height: 1.4em;
@@ -201,6 +201,7 @@ body {
 
 #card-list .card .view label {
 	  word-break: break-word;
+    white-space: pre-wrap;
 }
 
 #card-list .card .edit {
@@ -209,17 +210,9 @@ body {
 
 #cardapp footer {
 	  display: none;
-	  margin: 0 -20px -20px -20px;
-	  overflow: hidden;
 	  color: #555555;
 	  border-top: 1px solid #ededed;
-	  padding: 0 20px;
-	  line-height: 37px;
-	  -webkit-border-radius: 0 0 5px 5px;
-	  -moz-border-radius: 0 0 5px 5px;
-	  -ms-border-radius: 0 0 5px 5px;
-	  -o-border-radius: 0 0 5px 5px;
-	  border-radius: 0 0 5px 5px;
+    padding: 1em 0;
 }
 
 #clear-completed {

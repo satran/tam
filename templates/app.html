@@ -12,7 +12,6 @@
 
             <header>
                 <h1>Cards</h1>
-                <input id="new-card" type="text" placeholder="What needs to be done?">
             </header>
 
             <section id="main">
@@ -25,6 +24,10 @@
                 <a id="clear-completed">Clear completed</a>
                 <div id="card-count"></div>
             </footer>
+
+            <div>
+                <textarea id="new-card" placeholder="What needs to be done?" rows="2"></textarea>
+            </div>
 
         </div>
 
@@ -50,7 +53,8 @@
          <label><%- title %></label>
          <a class="destroy"></a>
          </div>
-         <input class="edit" type="text" value="<%- title %>" />
+         <textarea class="edit"><%- title %></textarea>
+         <!-- <input class="edit" type="text" value="<%- title %>" /> -->
         </script>
 
         <script type="text/template" id="stats-template">
