@@ -8,9 +8,17 @@ import (
 
 type options struct {
 	addr string
+	dev  bool
 }
 
 type Opts func(o *options) *options
+
+func WithDevServer(enable bool) Opts {
+	return func(o *options) *options {
+		o.dev = enable
+		return o
+	}
+}
 
 func WithServerAddr(addr string) Opts {
 	return func(o *options) *options {
@@ -35,7 +43,11 @@ func Server(opts ...Opts) (*http.Server, error) {
 	_ = template.Must(template.ParseFS(contents, "templates/*"))
 	srv := &http.Server{Addr: o.addr}
 
-	http.Handle("/_s/", http.FileServer(http.FS(contents)))
+	if o.dev {
+		http.Handle("/_s/", http.StripPrefix("/_s/", http.FileServer(http.Dir("_s"))))
+	} else {
+		http.Handle("/_s/", http.FileServer(http.FS(contents)))
+	}
 	http.HandleFunc("/app/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "templates/app.html")
 	})

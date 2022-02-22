@@ -10,8 +10,9 @@ import (
 
 func main() {
 	addr := flag.String("addr", "127.0.0.1:8080", "addr and port to serve from")
+	dev := flag.Bool("dev", false, "enable development mode")
 	flag.Parse()
-	srv, err := Server(WithServerAddr(*addr))
+	srv, err := Server(WithServerAddr(*addr), WithDevServer(*dev))
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -2,10 +2,10 @@ var d = {};
 
 (function () {
     function initDB(path) {
-	var db = {};
-	db.items = new PouchDB(path+'-items');
-	db.meta = new PouchDB(path+'-meta');
-	return db
+	      var db = {};
+	      db.items = new PouchDB(path+'-items');
+	      db.meta = new PouchDB(path+'-meta');
+	      return db
     }
     
 
@@ -17,35 +17,34 @@ var d = {};
     let Item = Backbone.Model.extend({});
 
     let ItemList = Backbone.Collection.extend({
-	model: Item,
+	      model: Item,
     });
 
     var ItemView = Backbone.View.extend({
-	tagName:  "div",
-	template: _.template($('#item-view-template').html()),
-	events: {
-	},
-	initialize: function() {
-	},
+	      tagName:  "div",
+	      template: _.template($('#item-view-template').html()),
+	      events: {
+	      },
+	      initialize: function() {
+	      },
 
-	render: function() {
-	},
+	      render: function() {
+	      },
 
     });
 
     var AppView = Backbone.View.extend({
-	el: $("#app"),
-	events: {},
+	      el: $("#app"),
+	      events: {},
 
-	initialize: function() {
-	},
+	      initialize: function() {
+	      },
 
-	render: function() {
-	},
+	      render: function() {
+	      },
 
     });
 
     var App = new AppView;
 
 })();
-
