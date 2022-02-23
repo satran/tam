@@ -1,13 +1,25 @@
-// An example Backbone application contributed by
-// [Jérôme Gravel-Niquet](http://jgn.me/). This demo uses a simple
-// [LocalStorage adapter](backbone.localStorage.html)
-// to persist Backbone models within your browser.
-
-// Load the application once the DOM is ready, using `jQuery.ready`:
 $(function(){
+
+    function sync(db) {
+        return function(method, model, options) {
+            console.log(method, model, options);
+            switch(method) {
+            case "read":
+                if (model instanceof Backbone.Collection) {
+                    console.log("collection");
+                    let data = db.find({selector: {done: false}}).then(function(r){
+                        console.log(r);
+                    });
+                }
+            }
+        };
+    }
+
+    Backbone.sync = sync(new PouchDB('cards'));
 
     var Card = Backbone.Model.extend({
         // Default attributes for the card item.
+
         defaults: function() {
             return {
                 title: "empty card...",
@@ -27,7 +39,7 @@ $(function(){
     // server.
     var CardList = Backbone.Collection.extend({
         model: Card,
-        localStorage: new Backbone.LocalStorage("cards-backbone"),
+        // localStorage: new Backbone.LocalStorage("cards-backbone"),
 
         // Filter down the list of all card items that are finished.
         done: function() {
@@ -212,5 +224,4 @@ $(function(){
 
     // Finally, we kick things off by creating the **App**.
     var App = new AppView;
-
 });
