@@ -6,12 +6,7 @@
 // Load the application once the DOM is ready, using `jQuery.ready`:
 $(function(){
 
-    // Card Model
-    // ----------
-
-    // Our basic **Card** model has `title`, `order`, and `done` attributes.
     var Card = Backbone.Model.extend({
-
         // Default attributes for the card item.
         defaults: function() {
             return {
@@ -28,17 +23,10 @@ $(function(){
 
     });
 
-    // Card Collection
-    // ---------------
-
     // The collection of cards is backed by *localStorage* instead of a remote
     // server.
     var CardList = Backbone.Collection.extend({
-
-        // Reference to this collection's model.
         model: Card,
-
-        // Save all of the card items under the `"cards-backbone"` namespace.
         localStorage: new Backbone.LocalStorage("cards-backbone"),
 
         // Filter down the list of all card items that are finished.
@@ -66,13 +54,7 @@ $(function(){
     // Create our global collection of **Cards**.
     var Cards = new CardList;
 
-    // Card Item View
-    // --------------
-
-    // The DOM element for a card item...
     var CardView = Backbone.View.extend({
-
-        //... is a list tag.
         tagName:  "div",
         className: "card",
 
@@ -85,7 +67,8 @@ $(function(){
             "dblclick .view"  : "edit",
             "click a.destroy" : "clear",
             "keypress .edit"  : "updateOnEnter",
-            "blur .edit"      : "close"
+            "blur .edit"      : "close",
+            "input .edit"     : "resize"
         },
 
         // The CardView listens for changes to its model, re-rendering. Since there's
@@ -104,6 +87,10 @@ $(function(){
             return this;
         },
 
+        resize: function(e) {
+            e.target.style.height = (e.target.scrollHeight) + 'px';
+        },
+
         // Toggle the `"done"` state of the model.
         toggleDone: function() {
             this.model.toggle();
@@ -113,6 +100,7 @@ $(function(){
         edit: function() {
             this.$el.addClass("editing");
             this.input.focus();
+            this.resize({target: this.input.get(0)});
         },
 
         // Close the `"editing"` mode, saving changes to the card.
@@ -138,14 +126,7 @@ $(function(){
 
     });
 
-    // The Application
-    // ---------------
-
-    // Our overall **AppView** is the top-level piece of UI.
     var AppView = Backbone.View.extend({
-
-        // Instead of generating a new element, bind to the existing skeleton of
-        // the App already present in the HTML.
         el: $("#cardapp"),
 
         // Our template for the line of statistics at the bottom of the app.
