@@ -96,23 +96,133 @@ body {
 	  color: #333333;
 }
 
-#cardapp {
-	  width: 44rem;
-	  margin: 0 auto;
+#app {
+    max-width: 44em;
+    margin: 0 auto;
+}
+
+.favs-list {
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
     margin-top: 1em;
 }
-
-#cardapp header {
-    padding: 1em 0;
+.favs-list .fav {
+    display: block;
+    text-decoration: none;
+    padding: 1em;
 }
 
-#cardapp h1 {
-	  font-weight: bold;
-	  text-align: center;
-	  padding: 0 0 10px 0;
+#favs-col {
+    width: 15em;
+    background: #333;
+    color: #fff;
+    padding: 1em;
 }
 
-#cardapp input[type="text"], input.edit, #cardapp textarea{
+#favs-col a {
+    display: block;
+    text-decoration: none;
+    color: #fff;
+    font-size: .8em;
+    text-transform: uppercase;
+}
+
+#cards-col {
+    max-width: 33em;
+    margin: 0 auto;
+}
+
+.header {
+    background: #fff;
+    max-width: 33em;
+    box-shadow: 0 1px 0 #091e4240;
+}
+
+.header a {
+    display: inline-block;
+    padding: 1em;
+    text-decoration: none;
+    color: #000;
+}
+
+.search {
+    top: 0;
+    position: sticky;
+    width: calc(100% - 2em);
+    font-family: inherit;
+    line-height: 1.4em;
+    outline: none;
+    background-color: #fff;
+    border-radius: 2em;
+    border: none;
+    display: block;
+    padding: 1em;
+    margin: 1em 0;
+    text-decoration: none;
+    font-size: 100%;
+    z-index: 1000;
+    border: 1px solid #eeeeee;
+    box-shadow: 0 1px 0 #091e4240;
+}
+
+.card-summary {
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 #091e4240;
+    cursor: pointer;
+    display: block;
+    padding: 1em;
+    margin: 1em 0;
+    min-height: 20px;
+    position: relative;
+    text-decoration: none;
+    z-index: 0;
+}
+
+#card-detail-col {
+    width: 33em;
+    padding: 1em;
+    margin: 1em auto;
+    bottom: 0;
+    border-radius: 3px;
+    box-shadow: 0 0px 8px 0px #091e4240;
+    background: #fff;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow-y: auto;
+    display: none;
+}
+
+#app>header {
+    max-width: 33em;
+    margin: 0 auto;
+    top: 0;
+    position: sticky;
+    padding: 1em;
+    border-bottom: 1px solid #ccc;
+    background: #fff;
+    text-align: center;
+}
+
+#app>section {
+    max-width: 33em;
+    margin: 1em auto;
+    padding: 1em;
+
+    background-color: #fff;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 #091e4240;
+    cursor: pointer;
+    min-height: 20px;
+    text-decoration: none;
+}
+
+.card textarea, #new-card{
     width: calc(100% - 2em);
     font-family: inherit;
     line-height: 1.4em;
@@ -129,150 +239,4 @@ body {
     font-size: 100%;
 }
 
-#cardapp input::-webkit-input-placeholder {
-	  font-style: italic;
-}
 
-#main {
-	  display: none;
-}
-
-#card-list {
-	  padding: 1em 0;
-	  list-style: none;
-    background-color: #ebecf0;
-}
-
-#card-list .card {
-    background-color: #fff;
-    border-radius: 3px;
-    box-shadow: 0 1px 0 #091e4240;
-    cursor: pointer;
-    display: block;
-    padding: 1em;
-    margin-bottom: 8px;
-    min-height: 20px;
-    position: relative;
-    text-decoration: none;
-    z-index: 0;
-}
-
-#card-list .card.done label {
-	  color: #777777;
-	  text-decoration: line-through;
-}
-
-#card-list .destroy {
-	  position: absolute;
-	  right: 5px;
-	  top: 20px;
-	  display: none;
-	  cursor: pointer;
-	  width: 20px;
-	  height: 20px;
-	  background: url(destroy.png) no-repeat;
-}
-
-#card-list .card:hover .destroy {
-  	display: block;
-}
-
-#card-list .destroy:hover {
-  	background-position: 0 -20px;
-}
-
-#card-list .card.editing {
-	  border-bottom: none;
-	  margin-top: -1px;
-	  padding: 0;
-}
-
-#card-list .card.editing:last-child {
-	  margin-bottom: -1px;
-}
-
-#card-list .card.editing .edit {
-	  display: block;
-}
-
-#card-list .card.editing .view {
-	  display: none;
-}
-
-#card-list .card .view label {
-	  word-break: break-word;
-    white-space: pre-wrap;
-}
-
-#card-list .card .edit {
-	  display: none;
-}
-
-#cardapp footer {
-	  display: none;
-	  color: #555555;
-	  border-top: 1px solid #ededed;
-    padding: 1em 0;
-}
-
-#clear-completed {
-	  float: right;
-	  line-height: 20px;
-	  text-decoration: none;
-	  background: rgba(0, 0, 0, 0.1);
-	  color: #555555;
-	  margin-top: 8px;
-	  margin-bottom: 8px;
-	  padding: 0 10px 1px;
-	  cursor: pointer;
-	  -webkit-border-radius: 12px;
-	  -moz-border-radius: 12px;
-	  -ms-border-radius: 12px;
-	  -o-border-radius: 12px;
-	  border-radius: 12px;
-	  -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
-	  -moz-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
-	  -ms-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
-	  -o-box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
-	  box-shadow: rgba(0, 0, 0, 0.2) 0 -1px 0 0;
-}
-
-#clear-completed:hover {
-	  background: rgba(0, 0, 0, 0.15);
-	  -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
-	  -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
-	  -ms-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
-	  -o-box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
-	  box-shadow: rgba(0, 0, 0, 0.3) 0 -1px 0 0;
-}
-
-#clear-completed:active {
-	  position: relative;
-	  top: 1px;
-}
-
-#card-count span {
-	  font-weight: bold;
-}
-
-#instructions {
-	  margin: 10px auto;
-	  color: #777777;
-	  text-shadow: rgba(255, 255, 255, 0.8) 0 1px 0;
-	  text-align: center;
-}
-
-#instructions a {
-	  color: #336699;
-}
-
-#credits {
-	  margin: 30px auto;
-	  color: #999;
-	  text-shadow: rgba(255, 255, 255, 0.8) 0 1px 0;
-	  text-align: center;
-}
-
-#credits a {
-	  color: #888;
-}
