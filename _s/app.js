@@ -2,27 +2,65 @@ var a;
 (function() {
 
     var CardDetailView = Backbone.View.extend({
+        initialize: function(options) {
+            this.model = options.model;
+            this.db = options.db;
+        },
+
         template: _.template($("#card-detail-view-template").html()),
         className: "card-detail-col",
 
         events : {
-            "click .back-btn": "back" 
+            "click .back-btn": "back",
+            "click .view": "edit",
+            "click .edit .cancel-btn": "view",
+            "click .edit .save-btn": "save",
+            "input .edit .description": "resize"
         },
 
         back: function() {
             window.history.back();
         },
 
-        initialize: function(options) {
-            this.model = {
-                id: 1,
-                title: "Hello world",
-                description: "Web applications often provide linkable, bookmarkable, shareable URLs for important locations in the app. Until recently, hash fragments (#page) were used to provide these permalinks, but with the arrival of the History API, it's now possible to use standard URLs (/page). Backbone.Router provides methods for routing client-side pages, and connecting them to actions and events. For browsers which don't yet support the History API, the Router handles graceful fallback and transparent translation to the fragment version of the URL. Getting Started When working on a web application that involves a lot of JavaScript, one of the first things you learn is to stop tying your data to the DOM. It's all too easy to create JavaScript applications that end up as tangled piles of jQuery selectors and callbacks, all trying frantically to keep data in sync between the HTML UI, your JavaScript logic, and the database on your server. For rich client-side applications, a more structured approach is often helpful. With Backbone, you represent your data as Models, which can be created, validated, destroyed, and saved to the server. Whenever a UI action causes an attribute of a model to change, the model triggers a change event; all the Views that display the model's state can be notified of the change, so that they are able to respond accordingly, re-rendering themselves with the new information. In a finished Backbone app, you don't have to write the glue code that looks into the DOM to find an element with a specific id, and update the HTML manually — when the model changes, the views simply update themselves. Philosophically, Backbone is an attempt to discover the minimal set of data-structuring (models and collections) and user interface (views and URLs) primitives that are generally useful when building web applications with JavaScript. In an ecosystem where overarching, decides-everything-for-you frameworks are commonplace, and many libraries require your site to be reorganized to suit their look, feel, and default behavior — Backbone should continue to be a tool that gives you the freedom to design the full experience of your web application. ",
+        edit: function(){
+            this.$el.find(".view").hide();
+            let editEl = this.$el.find(".edit");
+            editEl.show();
+            this.resize(editEl.get(0));
+        },
+
+        view: function() {
+            this.$el.find(".view").show();
+            this.$el.find(".edit").hide();
+        },
+
+        save: function() {
+            let title= this.$el.find(".edit .title").val();
+            let desc = this.$el.find(".edit .description").val();
+            let data = {
+                _id: this.model._id,
+                _rev: this.model._rev,
+                title: title,
+                description: desc
             };
+            let parent = this;
+            this.db.put(data).then(function(resp){
+                data._rev = resp.rev;
+                parent.model = data;
+                parent.render();
+            }).catch(function(err){
+                console.log(err);
+            });
+        },
+
+        resize: function(e) {
+            let ta = this.$el.find(".edit .description").get(0);
+            ta.style.height = "auto";
+            ta.style.height = (ta.scrollHeight) + 'px';
         },
 
         render: function() {
-            this.$el.html(this.template(this.model));
+            this.$el.html(this.template({model: this.model}));
             return this;
         }
     });
@@ -63,6 +101,7 @@ var a;
                 });
                 parent.$el.find(".new-card").val("");
                 parent.render();
+                parent.$el.find(".new-card").focus();
             }).catch(function(error){
                 console.log(error);
             });
@@ -158,7 +197,6 @@ var a;
         favourites: function() {
             var root = this;
             this.db.favs.allDocs({include_docs: true}).then(function(response){
-                console.log(response);
                 let favs = [];
                 response.rows.forEach(function(row){
                     favs.push(row.doc);
@@ -173,7 +211,6 @@ var a;
         search: function(query) {
             var root = this;
             this.db.cards.allDocs({ include_docs: true }).then(function(response) {
-                console.log(response);
                 let cards = [];
                 response.rows.forEach(function(row) {
                     cards.push(row.doc);
@@ -186,8 +223,13 @@ var a;
         },
 
         card: function(id) {
-            let view = new CardDetailView();
-            this.el.html(view.render().el);
+            var root = this;
+            this.db.cards.get(id).then(function(card) {
+                let view = new CardDetailView({model: card, db: root.db.cards});
+                root.el.html(view.render().el);
+            }).catch(function(error) {
+                console.log(error);
+            });
         }
     });
 

@@ -170,6 +170,7 @@ body {
     padding: 1em;
     text-decoration: none;
     display: block;
+    color: #333;
 }
 
 .fav a {
@@ -182,12 +183,14 @@ body {
     color: #777;
 }
 
-.favs-list .edit {
+.favs-list .edit, .card-detail-col .edit {
     display: none;
 }
+
 .favs-list .edit input{
     width: calc(100%);
     font-family: inherit;
+    font-size: 100%;
     outline: none;
     background-color: #fff;
     border-bottom: 1px solid #eee;
@@ -195,11 +198,51 @@ body {
     padding: .5em 0;
     margin: 0;
     text-decoration: none;
-    font-size: 100%;
     border: none;
     border-bottom: 1px solid red;
 }
 
 .card-detail-col .title, .card-detail-col .description{
     padding: 1em;
+}
+
+.card-detail-col .edit .title, .card-detail-col .edit .description {
+    padding: 1em;
+    margin: .5em;
+    display: block;
+    width: calc(100% - 3em);
+    border: 1px solid #eee;
+    font-family: inherit;
+    font-size: 100%;
+    outline: none;
+    text-decoration: none;
+    background-color: #fff;
+}
+
+.card-detail-col .edit .description {
+    height: auto;
+}
+
+.card-detail-col .view .description {
+    white-space: pre-wrap;
+}
+
+.card-detail-col .view .title {
+    font-weight: bold;
+}
+
+.card-detail-col .edit .btns {
+    padding: 1em;
+}
+.card-detail-col .edit .btns span {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.card-detail-col .edit .btns .save-btn {
+    background: #0079bf;
+    color: #fff;
+    padding: .25em .5em;
+    border-radius: 3px;
+    margin-right: .5em;
 }
