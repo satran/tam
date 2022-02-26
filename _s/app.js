@@ -67,6 +67,26 @@ var a;
 
         template: _.template($("#favourite-view-template").html()),
 
+        events: {
+            "click .edit-btn": "toggleEdit",
+            "keydown .edit input": "save"
+        },
+
+        toggleEdit: function() {
+            this.$el.find(".fav").hide();
+            this.$el.find(".edit").show();
+            this.$el.find(".edit").find("input[name=title]").focus();
+        },
+
+        save: function(e){
+            if (e.keyCode !== 13) return;
+            let url = this.$el.find("input[name=url]").val();
+            let title = this.$el.find("input[name=title]").val();
+            console.log(url, title);
+            this.$el.find(".edit").hide();
+            this.$el.find(".fav").show();
+        },
+
         render: function() {
             this.$el.html(this.template(this.model));
             return this;
@@ -75,11 +95,8 @@ var a;
 
     var FavouriteListView = Backbone.View.extend({
         className: "favs-list",
-        initialize: function() {
-            this.items = [
-                { url: "s/tags:next", title: "Next" },
-                { url: "s/tags:follow-up", title: "Follow Up" }
-            ];
+        initialize: function(options) {
+            this.items = options.items;
         },
 
         template: _.template($("#favourite-list-view-template").html()),
@@ -98,6 +115,16 @@ var a;
     var App = Backbone.Router.extend({
         el: $("#app"),
 
+        initialize: function(options){
+            if(options.name === undefined || options.name === ""){
+                options.name = "tam";
+            }
+            this.db = {
+                favs: new PouchDB(options.name + "-favs"),
+                cards: new PouchDB(options.name + "-cards")
+            };
+        },
+
         routes: {
             "": "favourites",
             "fav": "favourites",
@@ -106,8 +133,18 @@ var a;
         },
 
         favourites: function() {
-            let view = new FavouriteListView();
-            this.el.html(view.render().el);
+            var root = this;
+            this.db.favs.allDocs({include_docs: true}).then(function(response){
+                console.log(response);
+                let favs = [];
+                response.rows.forEach(function(row){
+                    favs.push(row.doc);
+                });
+                let view = new FavouriteListView({items: favs});
+                root.el.html(view.render().el);
+            }).catch(function(error){
+                console.log(error);
+            });
         },
 
         search: function(query) {
@@ -121,6 +158,6 @@ var a;
         }
     });
 
-    a = new App();
+    a = new App({name: "tam-default"});
     Backbone.history.start();
 })();

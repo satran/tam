@@ -151,7 +151,7 @@ body {
     border-radius: 2em;
 }
 
-.card-summary a, .favs-list .fav {
+.card-summary a, .favs-list .fav, .favs-list .edit{
     margin: 0 1em;
     border-bottom: 1px solid #eee;
     padding: 1em;
@@ -159,6 +159,33 @@ body {
     display: block;
 }
 
+.fav a {
+    text-decoration: none;
+}
+
+.fav .edit-btn {
+    cursor: pointer;
+    float: right;
+    color: #777;
+}
+
+.favs-list .edit {
+    display: none;
+}
+.favs-list .edit input{
+    width: calc(100%);
+    font-family: inherit;
+    outline: none;
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    display: block;
+    padding: .5em 0;
+    margin: 0;
+    text-decoration: none;
+    font-size: 100%;
+    border: none;
+    border-bottom: 1px solid red;
+}
 
 .card-detail-col .title, .card-detail-col .description{
     padding: 1em;
