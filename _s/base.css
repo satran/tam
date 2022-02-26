@@ -79,7 +79,7 @@ tr,td,th {
 }
 
 /* Use this if you use span-x classes on th/td. */
-table .last { padding-right: 0; } 
+table .last { padding-right: 0; }
 
 strong {
   font-weight: bold;
@@ -87,6 +87,10 @@ strong {
 
 em {
   font-style: italic;
+}
+
+a:visited{
+    color: inherit;
 }
 
 body {
@@ -97,46 +101,33 @@ body {
 }
 
 #app {
-    max-width: 44em;
-    margin: 0 auto;
-}
-
-.favs-list {
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-top: 1em;
-}
-.favs-list .fav {
-    display: block;
-    text-decoration: none;
-    padding: 1em;
-}
-
-#favs-col {
-    width: 15em;
-    background: #333;
-    color: #fff;
-    padding: 1em;
-}
-
-#favs-col a {
-    display: block;
-    text-decoration: none;
-    color: #fff;
-    font-size: .8em;
-    text-transform: uppercase;
-}
-
-#cards-col {
     max-width: 33em;
     margin: 0 auto;
+    padding: 1em;
+}
+
+.logo{
+    background: #fff;
+    border-radius: 5px;
+    margin: .5em !important;
+    padding: .5em 1em !important;
+    border: 1px solid #eee;
+    box-shadow: 0 1px 0 #091e4240;
+    float: right;
+}
+
+.favs-list, .card-detail-col, .search-col{
+    border-radius: 5px;
+    box-shadow: 0 1px 0 #091e4240;
+    background: #fff;
 }
 
 .header {
+    top: 0;
     background: #fff;
     max-width: 33em;
     box-shadow: 0 1px 0 #091e4240;
+    position: sticky;
 }
 
 .header a {
@@ -147,96 +138,28 @@ body {
 }
 
 .search {
-    top: 0;
-    position: sticky;
-    width: calc(100% - 2em);
+    width: calc(100% - 4em);
     font-family: inherit;
-    line-height: 1.4em;
     outline: none;
     background-color: #fff;
-    border-radius: 2em;
-    border: none;
-    display: block;
-    padding: 1em;
-    margin: 1em 0;
-    text-decoration: none;
-    font-size: 100%;
-    z-index: 1000;
     border: 1px solid #eeeeee;
-    box-shadow: 0 1px 0 #091e4240;
-}
-
-.card-summary {
-    background-color: #fff;
-    border-radius: 3px;
-    box-shadow: 0 1px 0 #091e4240;
-    cursor: pointer;
     display: block;
-    padding: 1em;
-    margin: 1em 0;
-    min-height: 20px;
-    position: relative;
-    text-decoration: none;
-    z-index: 0;
-}
-
-#card-detail-col {
-    width: 33em;
-    padding: 1em;
-    margin: 1em auto;
-    bottom: 0;
-    border-radius: 3px;
-    box-shadow: 0 0px 8px 0px #091e4240;
-    background: #fff;
-    position: fixed;
-    z-index: 1000;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    overflow-y: auto;
-    display: none;
-}
-
-#app>header {
-    max-width: 33em;
-    margin: 0 auto;
-    top: 0;
-    position: sticky;
-    padding: 1em;
-    border-bottom: 1px solid #ccc;
-    background: #fff;
-    text-align: center;
-}
-
-#app>section {
-    max-width: 33em;
-    margin: 1em auto;
-    padding: 1em;
-
-    background-color: #fff;
-    border-radius: 3px;
-    box-shadow: 0 1px 0 #091e4240;
-    cursor: pointer;
-    min-height: 20px;
-    text-decoration: none;
-}
-
-.card textarea, #new-card{
-    width: calc(100% - 2em);
-    font-family: inherit;
-    line-height: 1.4em;
-    outline: none;
-    background-color: #fff;
-    border-radius: 3px;
-    border: none;
-    box-shadow: 0 1px 0 #091e4240;
-    cursor: pointer;
-    display: block;
-    padding: 1em;
-    margin-bottom: 8px;
+    padding: .5em 1em;
+    margin: 1em;
     text-decoration: none;
     font-size: 100%;
+    border-radius: 2em;
+}
+
+.card-summary a, .favs-list .fav {
+    margin: 0 1em;
+    border-bottom: 1px solid #eee;
+    padding: 1em;
+    text-decoration: none;
+    display: block;
 }
 
 
+.card-detail-col .title, .card-detail-col .description{
+    padding: 1em;
+}

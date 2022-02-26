@@ -17,12 +17,21 @@
         <script src="https://cdn.jsdelivr.net/npm/backbone@1.4.0/backbone.min.js"></script>
 
         <!-- Templates -->
+
         <script type="text/template" id="favourite-list-view-template">
+            <div class="header">
+                <a class="logo" href="#">T</a>
+                <a href="#s/@default"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                </svg></a>
+            </div>
             <a class="fav" href="#s/@last-updated">Last Updated</a>
             <a class="fav" href="#s/@last-created">Last Created</a>
             <a class="fav" href="#s/@archived">Archived</a>
             <div class="custom"></div>
-            <a class="fav" href="#new-search">+ Add Query</a>
+            <a class="fav" href="#new-search"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+         <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
+         </svg> Add Query</a>
         </script>
 
         <script type="text/template" id="favourite-view-template">
@@ -30,19 +39,32 @@
         </script>
 
         <script type="text/template" id="card-summary-view-template">
+         <a href="#c/<%= id %>">
             <div class="title"> <%= title %></div>
             <div class="btns"></div>
+         </a>
         </script>
 
         <script type="text/template" id="search-view-template">
             <div class="header">
-
+                <a class="logo" href="#">T</a>
+                <a href="#fav">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"/>
+                    </svg>
+                </a>
             </div>
             <input class="search" placeholder="Search" />
             <div class="items"></div>
         </script>
 
-        <script type="text/template" id="card-view-template">
+        <script type="text/template" id="card-detail-view-template">
+            <div class="header">
+                <a class="logo" href="#">T</a>
+              <a class="back-btn"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left" viewBox="0 0 16 16">
+         <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+         </svg></a>
+            </div>
             <div class="title"><%= title %></div>
             <div class="btns"></div>
             <div class="description"><%= description %></div>
