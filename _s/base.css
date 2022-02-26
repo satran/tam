@@ -151,6 +151,19 @@ body {
     border-radius: 2em;
 }
 
+.new-card {
+    width: calc(100% - 4em);
+    font-family: inherit;
+    outline: none;
+    background-color: #fff;
+    border: 1px solid #eeeeee;
+    display: inline-block;
+    padding: .5em 1em;
+    margin: 1em;
+    text-decoration: none;
+    font-size: 100%;
+}
+
 .card-summary a, .favs-list .fav, .favs-list .edit{
     margin: 0 1em;
     border-bottom: 1px solid #eee;

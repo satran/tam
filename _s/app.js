@@ -43,12 +43,34 @@ var a;
         className: "search-col",
         tagName: "div",
 
+        events: {
+            "keydown .new-card": "newCard"
+        },
+
+        newCard: function(e) {
+            if (e.keyCode !== 13) return;
+            let title = this.$el.find(".new-card").val();
+            var parent = this;
+            this.db.post({
+                title: title
+            }).then(function(resp){
+                if (!resp.ok) {
+                    console.log("couldn't save");
+                }
+                parent.cards.push({
+                    _id: resp.id,
+                    title: title
+                });
+                parent.$el.find(".new-card").val("");
+                parent.render();
+            }).catch(function(error){
+                console.log(error);
+            });
+        },
+
         initialize: function(options) {
-            this.cards = [
-                { id: 1, title: "hello world" },
-                { id: 1, title: "Another card" },
-                { id: 1, title: "Yet Another card" }
-            ];
+            this.cards = options.cards;
+            this.db = options.db;
         },
 
         render: function() {
@@ -82,6 +104,7 @@ var a;
             if (e.keyCode !== 13) return;
             let url = this.$el.find("input[name=url]").val();
             let title = this.$el.find("input[name=title]").val();
+            //TODO: implement save changes to db
             console.log(url, title);
             this.$el.find(".edit").hide();
             this.$el.find(".fav").show();
@@ -148,8 +171,18 @@ var a;
         },
 
         search: function(query) {
-            let view = new SearchView();
-            this.el.html(view.render().el);
+            var root = this;
+            this.db.cards.allDocs({ include_docs: true }).then(function(response) {
+                console.log(response);
+                let cards = [];
+                response.rows.forEach(function(row) {
+                    cards.push(row.doc);
+                });
+                let view = new SearchView({cards: cards, db: root.db.cards});
+                root.el.html(view.render().el);
+            }).catch(function(error) {
+                console.log(error);
+            });
         },
 
         card: function(id) {
