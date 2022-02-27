@@ -76,7 +76,7 @@ var a;
         template: _.template($("#card-summary-view-template").html()),
 
         render: function() {
-            this.$el.html(this.template(this.model));
+            this.$el.html(this.template({model: this.model}));
             return this;
         }
     });
@@ -87,7 +87,14 @@ var a;
         tagName: "div",
 
         events: {
+            "keydown .search": "search",
             "keydown .new-card": "newCard"
+        },
+
+        search: function(e){
+            if(e.keyCode !== 13) return;
+            let query = this.$el.find(".search").val();
+            document.location = "#s/" + query;
         },
 
         newCard: function(e) {
@@ -115,13 +122,14 @@ var a;
         initialize: function(options) {
             this.cards = options.cards;
             this.db = options.db;
+            this.query = options.query;
         },
 
         render: function() {
-            this.$el.html(this.template());
+            this.$el.html(this.template({query: this.query}));
             let parent = this;
             _.each(this.cards, function(card) {
-                var v = new CardSummaryView({ model: card });
+                var v = new CardSummaryView({ model: card});
                 parent.$el.find('.items').append(v.render().$el);
             });
             return this;
@@ -155,7 +163,7 @@ var a;
         },
 
         render: function() {
-            this.$el.html(this.template(this.model));
+            this.$el.html(this.template({model: this.model}));
             return this;
         }
     });
@@ -195,6 +203,7 @@ var a;
         routes: {
             "": "favourites",
             "fav": "favourites",
+            "s": "search",
             "s/:query": "search",
             "c/:id": "card",
         },
@@ -214,17 +223,40 @@ var a;
         },
 
         search: function(query) {
-            var root = this;
-            this.db.cards.allDocs({ include_docs: true }).then(function(response) {
-                let cards = [];
-                response.rows.forEach(function(row) {
-                    cards.push(row.doc);
+            let root = this;
+            if (query !== undefined && query !== "") {
+                /*
+                 The query is formed out of keywords separated by spaces.
+                 The parameter is separated by colons.
+                 */
+                let qitems = query.split(" ");
+                let selector = {};
+                qitems.forEach(function(q) {
+                    let chunks = q.split(":");
+                    if (chunks.length === 1) {
+                        selector["title"] = { title: { "$regex": chunks[0] } };
+                    } else if (chunks.length === 2 && chunks[0] == "tags") {
+                        selector["tags"] = { "$elemMatch": chunks[1] };
+                    } else {
+                        console.log("unsupported query");
+                    }
                 });
-                let view = new SearchView({cards: cards, db: root.db.cards});
-                root.el.html(view.render().el);
-            }).catch(function(error) {
-                console.log(error);
-            });
+                this.db.cards.find({
+                    selector: selector
+                }).then(function(resp) {
+                    let view = new SearchView({ cards: resp.docs, db: root.db.cards, query: query});
+                    root.el.html(view.render().el);
+                }).catch((err) => console.log(err));
+            } else {
+                this.db.cards.allDocs({ include_docs: true }).then(function(response) {
+                    let cards = [];
+                    response.rows.forEach(function(row) {
+                        cards.push(row.doc);
+                    });
+                    let view = new SearchView({ cards: cards, db: root.db.cards });
+                    root.el.html(view.render().el);
+                }).catch((err) => console.log(err));
+            }
         },
 
         card: function(id) {
