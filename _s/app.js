@@ -224,7 +224,26 @@ var a;
 
         search: function(query) {
             let root = this;
-            if (query !== undefined && query !== "") {
+            if (query === undefined || query === null || query === "") {
+                this.db.cards.allDocs({ include_docs: true }).then((response) => {
+                    let cards = [];
+                    response.rows.forEach(function(row) {
+                        cards.push(row.doc);
+                    });
+                    let view = new SearchView({ cards: cards, db: root.db.cards, query: {url: "", title: ""}});
+                    root.el.html(view.render().el);
+                }).catch((err) => console.log(err));
+            } else {
+                let queryModel = {};
+                this.db.favs.find({selector: {url: query}}).then(
+                    (r) => {
+                        if (r.docs.length > 0) {
+                            queryModel = r.docs[0];
+                        } else {
+                            queryModel = {url: query, title: query};
+                        }
+                    }
+                );
                 /*
                  The query is formed out of keywords separated by spaces.
                  The parameter is separated by colons.
@@ -244,16 +263,7 @@ var a;
                 this.db.cards.find({
                     selector: selector
                 }).then(function(resp) {
-                    let view = new SearchView({ cards: resp.docs, db: root.db.cards, query: query});
-                    root.el.html(view.render().el);
-                }).catch((err) => console.log(err));
-            } else {
-                this.db.cards.allDocs({ include_docs: true }).then(function(response) {
-                    let cards = [];
-                    response.rows.forEach(function(row) {
-                        cards.push(row.doc);
-                    });
-                    let view = new SearchView({ cards: cards, db: root.db.cards });
+                    let view = new SearchView({ cards: resp.docs, db: root.db.cards, query: queryModel});
                     root.el.html(view.render().el);
                 }).catch((err) => console.log(err));
             }

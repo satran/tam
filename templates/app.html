@@ -15,7 +15,6 @@
         <script src="https://cdn.jsdelivr.net/npm/pouchdb@7.2.2/dist/pouchdb.find.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/underscore@1.13.2/underscore-min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/backbone@1.4.0/backbone.min.js"></script>
-        <script src="/_s/search-query-parser.js"></script>
 
         <!-- Templates -->
 
@@ -61,7 +60,8 @@
                     </svg>
                 </a>
             </div>
-            <input class="search" placeholder="Search" value="<%= query %>"/>
+            <h1><%= query.title %></h1>
+            <input class="search" placeholder="Search" value="<%= query.url %>"/>
             <div class="items"></div>
             <input class="new-card" placeholder="Add new card" />
         </script>

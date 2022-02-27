@@ -136,7 +136,11 @@ body {
     text-decoration: none;
     color: #000;
 }
-
+.search-col h1 {
+    padding: 1em 1em 0 1em;
+    font-weight: bold;
+    text-align: center;
+}
 .search {
     width: calc(100% - 4em);
     font-family: inherit;
