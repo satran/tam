@@ -4,6 +4,9 @@ var a;
     var CardDetailView = Backbone.View.extend({
         initialize: function(options) {
             this.model = options.model;
+            if (this.model.tags === undefined) {
+                this.model.tags = [];
+            }
             this.db = options.db;
         },
 
@@ -37,11 +40,13 @@ var a;
         save: function() {
             let title= this.$el.find(".edit .title").val();
             let desc = this.$el.find(".edit .description").val();
+            let rawtags = this.$el.find(".edit .tags").val();
             let data = {
                 _id: this.model._id,
                 _rev: this.model._rev,
                 title: title,
-                description: desc
+                description: desc,
+                tags: rawtags.split(" ")
             };
             let parent = this;
             this.db.put(data).then(function(resp){

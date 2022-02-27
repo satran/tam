@@ -74,12 +74,18 @@
             </div>
             <div class="view">
                 <div class="title"><%= model.title %></div>
+                <div class="tags">
+                  <% for (let i=0; i<model.tags.length; i++) {%>
+                  <a href="#s/tag:<%= model.tags[i] %>"><%= model.tags[i] %></a>
+                  <% } %>
+                </div>
                 <div class="btns"></div>
                 <div class="description"><%= model.description %></div>
             </div>
             <div class="edit">
-                <input class="title" value="<%= model.title %>" placeholder="Enter title" />
-                <textarea class="description" placeholder="Enter description"><%= model.description %></textarea>
+                <input class="input title" value="<%= model.title %>" placeholder="Enter title" />
+                <input class="input tags" value="<%- model.tags.join(" ") %>" placeholder="Enter tags" />
+                <textarea class="input description" placeholder="Enter description"><%= model.description %></textarea>
                 <div class="btns">
                     <span class="save-btn">Save</span>
                     <span class="cancel-btn">

@@ -202,21 +202,22 @@ body {
     border-bottom: 1px solid red;
 }
 
-.card-detail-col .title, .card-detail-col .description{
+.card-detail-col .title, .card-detail-col .description, .card-detail-col .tags{
     padding: 1em;
 }
 
-.card-detail-col .edit .title, .card-detail-col .edit .description {
+.card-detail-col .edit .input{
     padding: 1em;
     margin: .5em;
     display: block;
     width: calc(100% - 3em);
-    border: 1px solid #eee;
     font-family: inherit;
     font-size: 100%;
     outline: none;
     text-decoration: none;
-    background-color: #fff;
+    border: 1px solid #ffedda;
+    background-color: #fffbf3;
+}
 }
 
 .card-detail-col .edit .description {
@@ -227,7 +228,7 @@ body {
     white-space: pre-wrap;
 }
 
-.card-detail-col .view .title {
+.card-detail-col .title {
     font-weight: bold;
 }
 
@@ -245,4 +246,18 @@ body {
     padding: .25em .5em;
     border-radius: 3px;
     margin-right: .5em;
+}
+
+.card-detail-col .tags a {
+    display: inline-block;
+    padding: 0.16em 0.7em;
+    font-size: 0.9em;
+    font-weight: normal;
+    line-height: 1.2em;
+    color: #000;
+    white-space: nowrap;
+    vertical-align: baseline;
+    background-color: #ec6;
+    border-radius: 1em;
+    text-decoration: none;
 }
