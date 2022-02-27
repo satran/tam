@@ -138,29 +138,7 @@ var a;
 
     var FavouriteView = Backbone.View.extend({
         tagName: "span",
-
         template: _.template($("#favourite-view-template").html()),
-
-        events: {
-            "click .edit-btn": "toggleEdit",
-            "keydown .edit input": "save"
-        },
-
-        toggleEdit: function() {
-            this.$el.find(".fav").hide();
-            this.$el.find(".edit").show();
-            this.$el.find(".edit").find("input[name=title]").focus();
-        },
-
-        save: function(e){
-            if (e.keyCode !== 13) return;
-            let url = this.$el.find("input[name=url]").val();
-            let title = this.$el.find("input[name=title]").val();
-            //TODO: implement save changes to db
-            console.log(url, title);
-            this.$el.find(".edit").hide();
-            this.$el.find(".fav").show();
-        },
 
         render: function() {
             this.$el.html(this.template({model: this.model}));
@@ -188,7 +166,8 @@ var a;
     });
 
     var App = Backbone.Router.extend({
-        el: $("#app"),
+        sidebar: $("#sidebar"),
+        app: $("#app"),
 
         initialize: function(options){
             if(options.name === undefined || options.name === ""){
@@ -201,8 +180,7 @@ var a;
         },
 
         routes: {
-            "": "favourites",
-            "fav": "favourites",
+            "": "search",
             "s": "search",
             "s/:query": "search",
             "c/:id": "card",
@@ -216,13 +194,14 @@ var a;
                     favs.push(row.doc);
                 });
                 let view = new FavouriteListView({items: favs});
-                root.el.html(view.render().el);
+                root.sidebar.html(view.render().el);
             }).catch(function(error){
                 console.log(error);
             });
         },
 
         search: function(query) {
+            this.favourites();
             let root = this;
             if (query === undefined || query === null || query === "") {
                 this.db.cards.allDocs({ include_docs: true }).then((response) => {
@@ -231,7 +210,7 @@ var a;
                         cards.push(row.doc);
                     });
                     let view = new SearchView({ cards: cards, db: root.db.cards, query: {url: "", title: ""}});
-                    root.el.html(view.render().el);
+                    root.app.html(view.render().el);
                 }).catch((err) => console.log(err));
             } else {
                 let queryModel = {};
@@ -264,16 +243,17 @@ var a;
                     selector: selector
                 }).then(function(resp) {
                     let view = new SearchView({ cards: resp.docs, db: root.db.cards, query: queryModel});
-                    root.el.html(view.render().el);
+                    root.app.html(view.render().el);
                 }).catch((err) => console.log(err));
             }
         },
 
         card: function(id) {
+            this.favourites();
             var root = this;
             this.db.cards.get(id).then(function(card) {
                 let view = new CardDetailView({model: card, db: root.db.cards});
-                root.el.html(view.render().el);
+                root.app.html(view.render().el);
             }).catch(function(error) {
                 console.log(error);
             });
