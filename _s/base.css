@@ -96,7 +96,6 @@ a:visited{
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 	  line-height: 1.4em;
-	  background: #eeeeee;
 	  color: #333333;
 }
 
@@ -108,6 +107,8 @@ body {
     width: 20em;
     overflow-y: auto;
     text-align: right;
+    padding: 1em;
+    background: #eee;
 }
 
 .favs-list{
@@ -121,31 +122,14 @@ body {
     padding: .25em;
 }
 #app {
-    max-width: 33em;
-    margin-left: 21em;
-    padding: 1em;
-}
-
-.logo{
-    background: #fff;
-    border-radius: 5px;
-    margin: .5em !important;
-    padding: .5em 1em !important;
-    border: 1px solid #eee;
-    box-shadow: 0 1px 0 #091e4240;
-    float: right;
-}
-
-.card-detail-col, .search-col{
-    border-radius: 5px;
-    box-shadow: 0 1px 0 #091e4240;
-    background: #fff;
+    max-width: 44em;
+    margin-left: 23em;
+    padding: 0;
 }
 
 .header {
     top: 0;
     background: #fff;
-    max-width: 33em;
     box-shadow: 0 1px 0 #091e4240;
     position: sticky;
 }
@@ -156,11 +140,14 @@ body {
     text-decoration: none;
     color: #000;
 }
-.search-col h1 {
-    padding: 1em 1em 0 1em;
+.search-col .header .view{
+    padding: 1em;
     font-weight: bold;
-    text-align: center;
 }
+.search-col .header .view span {
+    padding-right: .5em;
+}
+
 .search {
     width: calc(100% - 4em);
     font-family: inherit;
@@ -254,6 +241,7 @@ body {
 
 .card-detail-col .title {
     font-weight: bold;
+    padding-bottom: 0;
 }
 
 .card-detail-col .edit .btns {

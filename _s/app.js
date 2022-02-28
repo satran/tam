@@ -188,10 +188,27 @@ var a;
 
         favourites: function() {
             var root = this;
+            //function map(card) {
+            //if (card.title && card.tags) {
+            //    card.tags.forEach((tag) => emit(tag, 1))
+            //}
+            //}
+            //this.db.cards.query(map).then((resp) => a = resp);
+            //a.rows.forEach((r) => tags[r.key] = null)
+
             this.db.favs.allDocs({include_docs: true}).then(function(response){
                 let favs = [];
                 response.rows.forEach(function(row){
                     favs.push(row.doc);
+                });
+                root.db.cards.query((card) => {
+                    if (card.title && card.tags) {
+                        card.tags.forEach((tag) => emit(tag, 1));
+                    }
+                }).then((resp) => {
+                    let s = new Set();
+                    resp.rows.forEach((r) => s.add(r.key));
+                    s.forEach((x) => favs.push({title: x, url: x}));
                 });
                 let view = new FavouriteListView({items: favs});
                 root.sidebar.html(view.render().el);
