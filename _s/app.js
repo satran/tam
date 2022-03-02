@@ -152,7 +152,6 @@ var a;
     });
 
     var App = Backbone.Router.extend({
-        sidebar: $("#sidebar"),
         app: $("#app"),
 
         initialize: function(options) {
@@ -166,7 +165,7 @@ var a;
         },
 
         routes: {
-            "": "search",
+            "": "favourites",
             "s": "search",
             "s/:query": "search",
             "c/:id": "card",
@@ -191,7 +190,7 @@ var a;
                         tags.add(row.key);
                     });
                     let view = new FavouriteListView({ favs: favs, tags: tags });
-                    root.sidebar.html(view.render().el);
+                    root.app.html(view.render().el);
                 });
             }).catch(function(error) {
                 console.log(error);
@@ -199,7 +198,6 @@ var a;
         },
 
         search: function(query) {
-            this.favourites();
             let root = this;
             if (query === undefined || query === null || query === "") {
                 this.db.cards.allDocs({ include_docs: true }).then((response) => {
@@ -251,7 +249,6 @@ var a;
         },
 
         card: function(id) {
-            this.favourites();
             var root = this;
             this.db.cards.get(id).then(function(card) {
                 let view = new CardDetailView({ model: card, db: root.db.cards });
