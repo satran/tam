@@ -1,11 +1,25 @@
 var a;
 (function() {
 
+    var Card = Backbone.Model.extend({
+        idAttribute: "_id",
+
+        save: function(_, options) {
+            var that = this;
+            options.db.put(this.attributes).then(function(resp) {
+                that.set("_rev", resp.rev);
+                options.success();
+            }).catch(function(err) {
+                console.log(err);
+            });
+        }
+    });
+
     var CardDetailView = Backbone.View.extend({
         initialize: function(options) {
             this.model = options.model;
-            if (this.model.tags === undefined) {
-                this.model.tags = [];
+            if (this.model.get('tags') === undefined) {
+                this.model.set("tags", []);
             }
             this.db = options.db;
         },
@@ -38,24 +52,10 @@ var a;
         },
 
         save: function() {
-            let title = this.$el.find(".edit .title").val();
-            let desc = this.$el.find(".edit .description").val();
-            let rawtags = this.$el.find(".edit .tags").val();
-            let data = {
-                _id: this.model._id,
-                _rev: this.model._rev,
-                title: title,
-                description: desc,
-                tags: rawtags.split(" ")
-            };
-            let parent = this;
-            this.db.put(data).then(function(resp) {
-                data._rev = resp.rev;
-                parent.model = data;
-                parent.render();
-            }).catch(function(err) {
-                console.log(err);
-            });
+            this.model.set("title", this.$el.find(".edit .title").val());
+            this.model.set("description", this.$el.find(".edit .description").val());
+            this.model.set("tags", this.$el.find(".edit .tags").val().split(" "));
+            this.model.save(this.model.attributes, {db: this.db, success: () => {this.render()}});
         },
 
         resize: function(e) {
@@ -65,7 +65,7 @@ var a;
         },
 
         render: function() {
-            this.$el.html(this.template({ model: this.model }));
+            this.$el.html(this.template({ model: this.model.attributes }));
             return this;
         }
     });
@@ -251,7 +251,8 @@ var a;
         card: function(id) {
             var root = this;
             this.db.cards.get(id).then(function(card) {
-                let view = new CardDetailView({ model: card, db: root.db.cards });
+                let model = new Card(card);
+                let view = new CardDetailView({ model: model, db: root.db.cards });
                 root.app.html(view.render().el);
             }).catch(function(error) {
                 console.log(error);
