@@ -13,7 +13,7 @@ var a;
         template: _.template($("#card-detail-view-template").html()),
         className: "card-detail-col",
 
-        events : {
+        events: {
             "click .back-btn": "back",
             "click .view": "edit",
             "click .edit .cancel-btn": "view",
@@ -25,7 +25,7 @@ var a;
             window.history.back();
         },
 
-        edit: function(){
+        edit: function() {
             this.$el.find(".view").hide();
             let editEl = this.$el.find(".edit");
             editEl.show();
@@ -38,7 +38,7 @@ var a;
         },
 
         save: function() {
-            let title= this.$el.find(".edit .title").val();
+            let title = this.$el.find(".edit .title").val();
             let desc = this.$el.find(".edit .description").val();
             let rawtags = this.$el.find(".edit .tags").val();
             let data = {
@@ -49,11 +49,11 @@ var a;
                 tags: rawtags.split(" ")
             };
             let parent = this;
-            this.db.put(data).then(function(resp){
+            this.db.put(data).then(function(resp) {
                 data._rev = resp.rev;
                 parent.model = data;
                 parent.render();
-            }).catch(function(err){
+            }).catch(function(err) {
                 console.log(err);
             });
         },
@@ -65,7 +65,7 @@ var a;
         },
 
         render: function() {
-            this.$el.html(this.template({model: this.model}));
+            this.$el.html(this.template({ model: this.model }));
             return this;
         }
     });
@@ -76,7 +76,7 @@ var a;
         template: _.template($("#card-summary-view-template").html()),
 
         render: function() {
-            this.$el.html(this.template({model: this.model}));
+            this.$el.html(this.template({ model: this.model }));
             return this;
         }
     });
@@ -91,8 +91,8 @@ var a;
             "keydown .new-card": "newCard"
         },
 
-        search: function(e){
-            if(e.keyCode !== 13) return;
+        search: function(e) {
+            if (e.keyCode !== 13) return;
             let query = this.$el.find(".search").val();
             document.location = "#s/" + query;
         },
@@ -103,7 +103,7 @@ var a;
             var parent = this;
             this.db.post({
                 title: title
-            }).then(function(resp){
+            }).then(function(resp) {
                 if (!resp.ok) {
                     console.log("couldn't save");
                 }
@@ -114,7 +114,7 @@ var a;
                 parent.$el.find(".new-card").val("");
                 parent.render();
                 parent.$el.find(".new-card").focus();
-            }).catch(function(error){
+            }).catch(function(error) {
                 console.log(error);
             });
         },
@@ -126,22 +126,12 @@ var a;
         },
 
         render: function() {
-            this.$el.html(this.template({query: this.query}));
+            this.$el.html(this.template({ query: this.query }));
             let parent = this;
             _.each(this.cards, function(card) {
-                var v = new CardSummaryView({ model: card});
+                var v = new CardSummaryView({ model: card });
                 parent.$el.find('.items').append(v.render().$el);
             });
-            return this;
-        }
-    });
-
-    var FavouriteView = Backbone.View.extend({
-        tagName: "span",
-        template: _.template($("#favourite-view-template").html()),
-
-        render: function() {
-            this.$el.html(this.template({model: this.model}));
             return this;
         }
     });
@@ -149,18 +139,14 @@ var a;
     var FavouriteListView = Backbone.View.extend({
         className: "favs-list",
         initialize: function(options) {
-            this.items = options.items;
+            this.favs = options.favs;
+            this.tags = options.tags;
         },
 
         template: _.template($("#favourite-list-view-template").html()),
 
         render: function() {
-            this.$el.html(this.template());
-            let parent = this;
-            _.each(this.items, function(item) {
-                var itemView = new FavouriteView({ model: item });
-                parent.$el.find('.custom').append(itemView.render().$el);
-            });
+            this.$el.html(this.template({ tags: this.tags, saved: this.favs }));
             return this;
         }
     });
@@ -169,8 +155,8 @@ var a;
         sidebar: $("#sidebar"),
         app: $("#app"),
 
-        initialize: function(options){
-            if(options.name === undefined || options.name === ""){
+        initialize: function(options) {
+            if (options.name === undefined || options.name === "") {
                 options.name = "tam";
             }
             this.db = {
@@ -188,31 +174,26 @@ var a;
 
         favourites: function() {
             var root = this;
-            //function map(card) {
-            //if (card.title && card.tags) {
-            //    card.tags.forEach((tag) => emit(tag, 1))
-            //}
-            //}
-            //this.db.cards.query(map).then((resp) => a = resp);
-            //a.rows.forEach((r) => tags[r.key] = null)
 
-            this.db.favs.allDocs({include_docs: true}).then(function(response){
+            this.db.favs.allDocs({ include_docs: true }).then(function(response) {
                 let favs = [];
-                response.rows.forEach(function(row){
+                response.rows.forEach(function(row) {
                     favs.push(row.doc);
                 });
-                root.db.cards.query((card) => {
+                function map(card) {
                     if (card.title && card.tags) {
                         card.tags.forEach((tag) => emit(tag, 1));
                     }
-                }).then((resp) => {
-                    let s = new Set();
-                    resp.rows.forEach((r) => s.add(r.key));
-                    s.forEach((x) => favs.push({title: x, url: x}));
+                }
+                root.db.cards.query(map).then((r) => {
+                    let tags = new Set();
+                    r.rows.forEach((row) => {
+                        tags.add(row.key);
+                    });
+                    let view = new FavouriteListView({ favs: favs, tags: tags });
+                    root.sidebar.html(view.render().el);
                 });
-                let view = new FavouriteListView({items: favs});
-                root.sidebar.html(view.render().el);
-            }).catch(function(error){
+            }).catch(function(error) {
                 console.log(error);
             });
         },
@@ -226,20 +207,10 @@ var a;
                     response.rows.forEach(function(row) {
                         cards.push(row.doc);
                     });
-                    let view = new SearchView({ cards: cards, db: root.db.cards, query: {url: "", title: ""}});
+                    let view = new SearchView({ cards: cards, db: root.db.cards, query: { url: "", title: "" } });
                     root.app.html(view.render().el);
                 }).catch((err) => console.log(err));
             } else {
-                let queryModel = {};
-                this.db.favs.find({selector: {url: query}}).then(
-                    (r) => {
-                        if (r.docs.length > 0) {
-                            queryModel = r.docs[0];
-                        } else {
-                            queryModel = {url: query, title: query};
-                        }
-                    }
-                );
                 /*
                  The query is formed out of keywords separated by spaces.
                  The parameter is separated by colons.
@@ -259,8 +230,22 @@ var a;
                 this.db.cards.find({
                     selector: selector
                 }).then(function(resp) {
-                    let view = new SearchView({ cards: resp.docs, db: root.db.cards, query: queryModel});
-                    root.app.html(view.render().el);
+                    let queryModel = {};
+                    root.db.favs.find({ selector: { url: query } }).then(
+                        (r) => {
+                            if (r.docs.length > 0) {
+                                queryModel = r.docs[0];
+                            } else {
+                                queryModel = { url: query };
+                            }
+                            let view = new SearchView({
+                                cards: resp.docs,
+                                db: root.db.cards,
+                                query: queryModel
+                            });
+                            root.app.html(view.render().el);
+                        }
+                    );
                 }).catch((err) => console.log(err));
             }
         },
@@ -269,7 +254,7 @@ var a;
             this.favourites();
             var root = this;
             this.db.cards.get(id).then(function(card) {
-                let view = new CardDetailView({model: card, db: root.db.cards});
+                let view = new CardDetailView({ model: card, db: root.db.cards });
                 root.app.html(view.render().el);
             }).catch(function(error) {
                 console.log(error);
@@ -277,6 +262,6 @@ var a;
         }
     });
 
-    a = new App({name: "tam-default"});
+    a = new App({ name: "tam-default" });
     Backbone.history.start();
 })();
