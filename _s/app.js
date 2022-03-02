@@ -6,9 +6,16 @@ var a;
 
         save: function(_, options) {
             var that = this;
-            options.db.put(this.attributes).then(function(resp) {
+            let saveFn = options.db.put;
+            if (this.isNew()) {
+                saveFn = options.db.post; 
+            }
+            saveFn(this.attributes).then(function(resp) {
+                if (that.isNew()) {
+                    that.set("_id", resp.id);
+                }
                 that.set("_rev", resp.rev);
-                options.success();
+                options.success(that);
             }).catch(function(err) {
                 console.log(err);
             });
@@ -55,7 +62,7 @@ var a;
             this.model.set("title", this.$el.find(".edit .title").val());
             this.model.set("description", this.$el.find(".edit .description").val());
             this.model.set("tags", this.$el.find(".edit .tags").val().split(" "));
-            this.model.save(this.model.attributes, {db: this.db, success: () => {this.render()}});
+            this.model.save(this.model.attributes, {db: this.db, success: (model) => {this.render()}});
         },
 
         resize: function(e) {
@@ -101,22 +108,16 @@ var a;
             if (e.keyCode !== 13) return;
             let title = this.$el.find(".new-card").val();
             var parent = this;
-            this.db.post({
-                title: title
-            }).then(function(resp) {
-                if (!resp.ok) {
-                    console.log("couldn't save");
-                }
+            let card = new Card({ title: title });
+            card.save(card.attributes, {db: parent.db, success: (model) => {
                 parent.cards.push({
-                    _id: resp.id,
-                    title: title
+                    _id: model.id,
+                    title: model.get("title")
                 });
                 parent.$el.find(".new-card").val("");
                 parent.render();
                 parent.$el.find(".new-card").focus();
-            }).catch(function(error) {
-                console.log(error);
-            });
+            }});
         },
 
         initialize: function(options) {
@@ -167,6 +168,7 @@ var a;
         routes: {
             "": "favourites",
             "s": "search",
+            "s/": "search",
             "s/:query": "search",
             "c/:id": "card",
         },
