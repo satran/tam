@@ -97,12 +97,14 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 	  line-height: 1.4em;
 	  color: #333333;
+    background: #eee;
 }
 
 #app {
     max-width: 44em;
-    margin: 0 auto;
+    margin: 1em auto;
     padding: 0;
+    background: #fff;
 }
 
 .favs-list .fav {
@@ -110,20 +112,18 @@ body {
     text-decoration: none;
     display: flex;
     align-items: baseline;
+    padding: 0 1em;
 }
 .favs-list .legend {
-    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
     text-transform: uppercase;
     font-size: .8em;
-    padding: 1em 0;
-    text-align: right;
+    padding: 1em;
 }
 .fav a {
     padding: .5em;
     flex-grow: 1;
     text-decoration: none;
-}
-.fav span{
 }
 
 .search-col .header .view{
@@ -139,23 +139,27 @@ body {
     position: sticky;
     display: flex;
     align-items: baseline;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #ddd;
     line-height: 1;
 }
 
 .header a, .header span {
-    padding: 1em 0 1em 1em;
+    padding: 1em;
     text-decoration: none;
     color: #000;
     font-weight: bold;
+    border-right: 1px solid #eee;
+}
+.header .title {
+    flex-grow: 1;
+    border-right: none;
 }
 
 .search-bar {
     display: flex;
     align-items: center;
 }
-
-.search {
+.search-bar .search {
     flex-grow: 1;
     font-family: inherit;
     outline: none;
@@ -163,13 +167,13 @@ body {
     border: 1px solid #eeeeee;
     display: block;
     padding: .5em 1em;
-    margin: 1em;
+    margin: 1em 0 1em 1em;
     text-decoration: none;
     font-size: 100%;
     border-radius: 2em;
 }
-.save-icon {
-    padding-right: 1em;
+.search-bar .save-icon {
+    padding: 1em;
 }
 .new-card {
     width: calc(100% - 4em);
@@ -228,20 +232,9 @@ body {
     padding-bottom: 0;
 }
 
-.card-detail-col .edit .btns {
-    padding: 1em;
-}
-.card-detail-col .edit .btns span {
-    display: inline-block;
-    cursor: pointer;
-}
-
-.card-detail-col .edit .btns .save-btn {
+.card-detail-col .save-btn {
     background: #0079bf;
     color: #fff;
-    padding: .25em .5em;
-    border-radius: 3px;
-    margin-right: .5em;
 }
 
 .card-detail-col .tags a {

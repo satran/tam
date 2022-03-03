@@ -37,8 +37,8 @@ var a;
         events: {
             "click .back-btn": "back",
             "click .view": "edit",
-            "click .edit .cancel-btn": "view",
-            "click .edit .save-btn": "save",
+            "click .cancel-btn": "view",
+            "click .save-btn": "save",
             "input .edit .description": "resize"
         },
 
