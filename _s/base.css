@@ -99,21 +99,33 @@ body {
 	  color: #333333;
 }
 
-.favs-list{
-    margin-top: 4em;
-}
-.favs-list .fav {
-    display: block;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-size: .9em;
-    padding: .25em;
-}
 #app {
     max-width: 44em;
     margin: 0 auto;
     padding: 0;
 }
+
+.favs-list .fav {
+    display: block;
+    text-decoration: none;
+    display: flex;
+    align-items: baseline;
+}
+.favs-list .legend {
+    border-bottom: 1px solid #eee;
+    text-transform: uppercase;
+    font-size: .8em;
+    padding: 1em 0;
+    text-align: right;
+}
+.fav a {
+    padding: .5em;
+    flex-grow: 1;
+    text-decoration: none;
+}
+.fav span{
+}
+
 .search-col .header .view{
     padding: 1em;
     font-weight: bold;
@@ -126,8 +138,9 @@ body {
     background: #fff;
     position: sticky;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     border-bottom: 1px solid;
+    line-height: 1;
 }
 
 .header a, .header span {
@@ -180,37 +193,12 @@ body {
     color: #333;
 }
 
-.fav a {
-    text-decoration: none;
-}
-
-.fav .edit-btn {
-    cursor: pointer;
-    float: right;
-    color: #777;
-}
-
-.favs-list .edit, .card-detail-col .edit {
-    display: none;
-}
-
-.favs-list .edit input{
-    width: calc(100%);
-    font-family: inherit;
-    font-size: 100%;
-    outline: none;
-    background-color: #fff;
-    border-bottom: 1px solid #eee;
-    display: block;
-    padding: .5em 0;
-    margin: 0;
-    text-decoration: none;
-    border: none;
-    border-bottom: 1px solid red;
-}
 
 .card-detail-col .title, .card-detail-col .description, .card-detail-col .tags{
     padding: 1em;
+}
+.card-detail-col .edit{
+    display: none;
 }
 
 .card-detail-col .edit .input{
