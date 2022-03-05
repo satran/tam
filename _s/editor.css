@@ -1,0 +1,183 @@
+/* --- CSS reset from --- */
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+}
+ol, ul {
+    padding-left: 1.5em;
+    /*list-style: unset;*/
+}
+blockquote {
+    border-left: 2px solid;
+    padding-left: 1em;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 2em;
+    width: 100%;
+}
+th {
+    border-bottom: 2px solid #efefef;
+    font-weight: bold;
+    text-align: left;
+}
+td { border-bottom: 1px solid #efefef; }
+caption, th, td {
+    padding: 4px 10px 4px 0;
+}
+caption {
+    background: #f1f1f1;
+    padding: 10px 0;
+    margin-bottom: 1em;
+}
+
+tr,td,th {
+    vertical-align: middle;
+}
+
+/* Use this if you use span-x classes on th/td. */
+table .last { padding-right: 0; }
+
+strong {
+  font-weight: bold;
+}
+
+em {
+  font-style: italic;
+}
+
+a:visited{
+    color: inherit;
+}
+
+body {
+    /*font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
+    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+	  line-height: 1.4em;
+	  color: #333333;
+    /* background: #fffcf9; */
+    /*font-size: 20px;*/
+}
+#container {
+    max-width: 44em;
+    margin: 0 auto;
+}
+
+#container header {
+    top: 0;
+    background: #fff;
+    position: sticky;
+    display: flex;
+    align-items: baseline;
+    border-bottom: 1px solid #ddd;
+    line-height: 1;
+}
+
+#container header .item{
+    padding: 1em;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    border-right: 1px solid #eee;
+}
+
+#container header .item.main{
+    flex-grow: 1;
+    border-right: none;
+}
+.search-bar {
+    display: flex;
+    align-items: baseline;
+    border-bottom: 1px solid #eeeeee;
+}
+#search {
+    flex-grow: 1;
+    font-family: inherit;
+    outline: none;
+    background-color: #fff;
+    border: none;
+    display: block;
+    padding: .5em 1em;
+    text-decoration: none;
+    font-size: 100%;
+}
+#search-clear {
+    padding: 0 1em;
+}
+
+#editor {
+    font-family: inherit;
+    font-size: 100%;
+    outline: none;
+    background-color: #fff;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    display: block;
+    text-decoration: none;
+}
+.CodeMirror {
+    font-family: "Inconsolata", "SF Mono", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    height: auto;
+    line-height: 1.5;
+}
+.cm-s-default .cm-header {
+    color: inherit;
+}
+.cm-s-default .cm-tag {
+    color: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.cm-s-default .cm-search {
+    color: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.cm-s-default .cm-url {
+    color: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}

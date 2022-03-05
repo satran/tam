@@ -51,5 +51,9 @@ func Server(opts ...Opts) (*http.Server, error) {
 	http.HandleFunc("/app/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "templates/app.html")
 	})
+	http.HandleFunc("/editor/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "templates/editor.html")
+	})
+	http.HandleFunc("/ws", serveWS())
 	return srv, nil
 }

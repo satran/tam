@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+        <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+        <link rel="stylesheet" href="/_s/codemirror.css"/>
+        <link rel="stylesheet" href="/_s/editor.css"/>
+        <title>Tam</title>
+    </head>
+    <body>
+        <div id="container">
+            <header>
+                <span class="item main">Tam</span>
+            </header>
+            <div class="search-bar">
+                <input id="search" placeholder="Search" />
+                <span id="search-clear">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                        <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                    </svg>
+                </span>
+            </div>
+            <div id="editor"></div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/pouchdb@7.2.1/dist/pouchdb.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/pouchdb@7.2.2/dist/pouchdb.find.min.js"></script>
+        <!-- <script type="module" src="/_s/codemirror.js"></script>-->
+        <script type="module" src="/_s/editor.js"></script>
+    </body>
+</html>

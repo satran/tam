@@ -264,4 +264,15 @@ var a;
 
     a = new App({ name: "tam-default" });
     Backbone.history.start();
+
+    a. conn = new WebSocket("ws://" + document.location.host + "/ws");
+    a.conn.onclose = function(evt) {
+        console.log("connection closed");
+    };
+    a.conn.onmessage = function(evt) {
+        var messages = evt.data.split('\n');
+        for (var i = 0; i < messages.length; i++) {
+            console.log(messages[i]);
+        }
+    };
 })();
