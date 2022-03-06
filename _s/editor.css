@@ -94,7 +94,6 @@ a:visited{
 body {
     /*font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-	  line-height: 1.4em;
 	  color: #333333;
     /* background: #fffcf9; */
     /*font-size: 20px;*/
@@ -104,32 +103,11 @@ body {
     margin: 0 auto;
 }
 
-#container header {
-    top: 0;
-    background: #fff;
-    position: sticky;
-    display: flex;
-    align-items: baseline;
-    border-bottom: 1px solid #ddd;
-    line-height: 1;
-}
-
-#container header .item{
-    padding: 1em;
-    text-decoration: none;
-    color: #000;
-    font-weight: bold;
-    border-right: 1px solid #eee;
-}
-
-#container header .item.main{
-    flex-grow: 1;
-    border-right: none;
-}
 .search-bar {
     display: flex;
     align-items: baseline;
     border-bottom: 1px solid #eeeeee;
+    margin-top: .5em;
 }
 #search {
     flex-grow: 1;
@@ -143,7 +121,10 @@ body {
     font-size: 100%;
 }
 #search-clear {
-    padding: 0 1em;
+    pointer: default;
+}
+#sync-btn {
+    pointer: default;
 }
 
 #editor {
@@ -180,4 +161,33 @@ body {
     color: inherit;
     text-decoration: underline;
     cursor: pointer;
+}
+.cm-tab {
+    background-position: right;
+    background-repeat: none;
+    border-left: 1px solid silver;
+}
+
+.cm-indent-guide {
+    position: relative;
+    border-left: 1px dotted #bbb;
+}
+
+@media screen and (max-width: 800px) {
+    #container {
+        padding: 1em;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body, .CodeMirror, #search{
+        background: #000;
+        color: #ccc;
+    }
+    .search-bar {
+        border-color: #333;
+    }
+    .cm-indent-guide {
+        border-color: #555;
+    }
 }

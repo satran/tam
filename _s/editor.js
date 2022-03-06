@@ -1,10 +1,17 @@
 import "/_s/codemirror.js";
 import "/_s/simple.js";
 import "/_s/taskpaper.js";
+import "/_s/codemirror-indent-guide.js"
 
 
 (function() {
     const filename = "default";
+    const lastUpdateKey = "last-updated";
+
+    let conn = new WebSocket("ws://" + document.location.host + "/ws");
+    conn.onclose = function(_) {
+        alert("connection closed, reload window");
+    };
 
     // Load draft from localstorage
     let value = localStorage.getItem(filename);
@@ -21,21 +28,36 @@ import "/_s/taskpaper.js";
         autocorrect: true,
         cursorBlinkRate: 0,
         tabSize: 2,
+        indentUnit: 2,
+        indentGuide: true,
         spellcheck: true
     });
 
+    var charWidth = cm.defaultCharWidth(), basePadding = 2;
+    cm.on("renderLine", function(cm, line, elt) {
+        var off = CodeMirror.countColumn(line.text, null, cm.getOption("tabSize")) * charWidth;
+        elt.style.textIndent = "-" + off + "px";
+        elt.style.paddingLeft = (basePadding + off) + "px";
+    });
+    cm.refresh();
+
     // DEV hack
     window.cm = cm;
+
+    conn.onmessage = function(evt) {
+        cm.setValue(evt.data);
+    };
+
 
     let cancel;
     cm.on("changes", () => {
         if (cancel) clearTimeout(cancel);
         cancel = setTimeout(() => {
             localStorage.setItem(filename, cm.getValue());
+            localStorage.setItem(lastUpdateKey, new Date().getTime());
         }, 5000);
     });
 
-    let marks = [];
     function showAll(editor) {
         editor.doc.getAllMarks().forEach(marker => marker.clear());
         $('div.CodeMirror pre').on('click', clickTag);
@@ -109,6 +131,10 @@ import "/_s/taskpaper.js";
         showAll(cm);
     });
 
+    document.getElementById("sync-btn").addEventListener("click", function(e) {
+        conn.send(cm.getValue());
+    });
+
     $('div.CodeMirror pre').on('click', clickTag);
     function clickTag(e){
         var et = $(e.target);
@@ -132,3 +158,4 @@ import "/_s/taskpaper.js";
     }
 
 })();
+
