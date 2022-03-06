@@ -4,7 +4,7 @@ import "/_s/taskpaper.js";
 
 
 (function() {
-    const filename = "test";
+    const filename = "default";
 
     // Load draft from localstorage
     let value = localStorage.getItem(filename);
@@ -19,6 +19,7 @@ import "/_s/taskpaper.js";
         autofocus: true,
         autocapitalize: true,
         autocorrect: true,
+        cursorBlinkRate: 0,
         tabSize: 2,
         spellcheck: true
     });
@@ -37,10 +38,6 @@ import "/_s/taskpaper.js";
     let marks = [];
     function showAll(editor) {
         editor.doc.getAllMarks().forEach(marker => marker.clear());
-        //for (const mark of marks){
-        //    mark.clear();
-        //}
-        //marks = [];
         $('div.CodeMirror pre').on('click', clickTag);
     }
 
@@ -81,7 +78,6 @@ import "/_s/taskpaper.js";
             let header = getHeader(line);
             if (!match(line, query)){
                 let mark = editor.markText({ line: i, ch: 0 }, { line: i }, { inclusiveRight: true, inclusiveLeft: true, collapsed: true, clearWhenEmpty: false });
-                //marks.push(mark);
                 if (header.header) {
                     headers.push({line: i, mark: mark, depth: header.depth, shown: false});
                 }
