@@ -1,6 +1,10 @@
 import "/_s/codemirror.js";
 import "/_s/taskpaper.js";
 import "/_s/codemirror-indent-guide.js"
+import "/_s/addon/display/panel.js"
+import "/_s/addon/fold/foldcode.js"
+import "/_s/addon/fold/foldgutter.js"
+import "/_s/addon/fold/indent-fold.js"
 
 
 (function() {
@@ -26,19 +30,27 @@ import "/_s/codemirror-indent-guide.js"
         autocapitalize: true,
         autocorrect: true,
         cursorBlinkRate: 0,
+        indentWithTabs: true,
         tabSize: 2,
         indentUnit: 2,
-        indentGuide: true,
+        //indentGuide: true,
+          foldGutter: { rangeFinder: CodeMirror.fold.indent },
+          gutters: ["CodeMirror-foldgutter"],
         spellcheck: true
     });
+    
+    let searchNode = document.createElement('div');
+    searchNode.innerHTML = document.getElementById('search-bar-tmpl').innerHTML;
+    cm.addPanel(searchNode, {position: "top"});
+    let searchInput = document.getElementById('search');
 
-    var charWidth = cm.defaultCharWidth(), basePadding = 4;
-    cm.on("renderLine", function(cm, line, elt) {
-        var off = CodeMirror.countColumn(line.text, null, cm.getOption("tabSize")) * charWidth;
-        elt.style.textIndent = "-" + off + "px";
-        elt.style.paddingLeft = (basePadding + off) + "px";
-    });
-    cm.refresh();
+    //var charWidth = cm.defaultCharWidth(), basePadding = 4;
+    //cm.on("renderLine", function(cm, line, elt) {
+    //    var off = CodeMirror.countColumn(line.text, null, cm.getOption("tabSize")) * charWidth;
+    //    elt.style.textIndent = "-" + off + "px";
+    //    elt.style.paddingLeft = (basePadding + off) + "px";
+    //});
+    //cm.refresh();
 
     function gotoElement(editor, e) {
         var et = $(e.target);
@@ -71,7 +83,6 @@ import "/_s/codemirror-indent-guide.js"
         cm.setValue(evt.data);
     };
 
-
     let cancel;
     cm.on("changes", () => {
         if (cancel) clearTimeout(cancel);
@@ -87,7 +98,7 @@ import "/_s/codemirror-indent-guide.js"
 
     function getDepth(line) {
         let depth = 0;
-        let matched = line.match(/^[ ]*/);
+        let matched = line.match(/^\s*/);
         if (matched !== null && matched.length === 1) {
             depth = matched[0].length;
         }
@@ -137,7 +148,6 @@ import "/_s/codemirror-indent-guide.js"
         }
     }
 
-    let searchInput = document.getElementById("search");
     searchInput.addEventListener("keypress", function(e) {
         if (e.code !== "Enter") return;
         let query = searchInput.value.trim();

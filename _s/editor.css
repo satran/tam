@@ -107,7 +107,9 @@ body {
     display: flex;
     align-items: baseline;
     border-bottom: 1px solid #eeeeee;
-    margin-top: .5em;
+}
+.search-bar .item {
+    padding: .5em;
 }
 #search {
     flex-grow: 1;
@@ -116,15 +118,14 @@ body {
     background-color: #fff;
     border: none;
     display: block;
-    padding: .5em 1em;
     text-decoration: none;
     font-size: 100%;
 }
 #search-clear {
-    pointer: default;
+    cursor: default;
 }
 #sync-btn {
-    pointer: default;
+    cursor: default;
 }
 
 #editor {
@@ -139,7 +140,8 @@ body {
 }
 .CodeMirror {
     font-family: "Inconsolata", "SF Mono", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-    height: auto;
+    /*height: auto;*/
+    height: calc(100vh - 3em);
     line-height: 1.5;
 }
 .cm-s-default .cm-header {
@@ -170,6 +172,16 @@ body {
 .cm-indent-guide {
     position: relative;
     border-left: 1px dotted #bbb;
+}
+.CodeMirror-gutters {
+  background: inherit;
+  color: inherit;
+  border: none;
+}
+.cm-tab {
+  background-position: right;
+  background-repeat: no-repeat;
+  border-left: 1px solid #eee;
 }
 
 @media screen and (max-width: 800px) {
