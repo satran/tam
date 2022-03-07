@@ -1,5 +1,4 @@
 import "/_s/codemirror.js";
-import "/_s/simple.js";
 import "/_s/taskpaper.js";
 import "/_s/codemirror-indent-guide.js"
 

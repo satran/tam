@@ -162,12 +162,11 @@ body {
     text-decoration: underline;
     cursor: pointer;
 }
-.cm-tab {
-    background-position: right;
-    background-repeat: none;
-    border-left: 1px solid silver;
+.cm-function {
+    color: inherit;
+    text-decoration: underline;
+    cursor: pointer;
 }
-
 .cm-indent-guide {
     position: relative;
     border-left: 1px dotted #bbb;
