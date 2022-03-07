@@ -33,13 +33,37 @@ import "/_s/codemirror-indent-guide.js"
         spellcheck: true
     });
 
-    var charWidth = cm.defaultCharWidth(), basePadding = 2;
+    var charWidth = cm.defaultCharWidth(), basePadding = 4;
     cm.on("renderLine", function(cm, line, elt) {
         var off = CodeMirror.countColumn(line.text, null, cm.getOption("tabSize")) * charWidth;
         elt.style.textIndent = "-" + off + "px";
         elt.style.paddingLeft = (basePadding + off) + "px";
     });
     cm.refresh();
+
+    function gotoElement(editor, e) {
+        var et = $(e.target);
+
+        // Direct url-click
+        if (et.hasClass('cm-tag')) {
+            let tag = $(e.target).text().replace(/[\(\)]+/g, '');
+            searchInput.value = tag;
+            filter(cm, tag);
+        } else if (et.hasClass('cm-search')) {
+            let search = $(e.target).text();
+            let re = /search\((?<search>.*)\)/mg;
+            let matched = re.exec(search);
+            let query = matched.groups.search;
+            searchInput.value = query;
+            filter(cm, query);
+        } else if (et.hasClass('cm-url')) {
+            let url = $(e.target).text();
+            window.open(url);
+        }
+    }
+    cm.on("mousedown", gotoElement);
+    cm.on("touchstart", gotoElement);
+
 
     // DEV hack
     window.cm = cm;
@@ -60,7 +84,6 @@ import "/_s/codemirror-indent-guide.js"
 
     function showAll(editor) {
         editor.doc.getAllMarks().forEach(marker => marker.clear());
-        $('div.CodeMirror pre').on('click', clickTag);
     }
 
     function getDepth(line) {
@@ -134,28 +157,5 @@ import "/_s/codemirror-indent-guide.js"
     document.getElementById("sync-btn").addEventListener("click", function(e) {
         conn.send(cm.getValue());
     });
-
-    $('div.CodeMirror pre').on('click', clickTag);
-    function clickTag(e){
-        var et = $(e.target);
-
-        // Direct url-click
-        if (et.hasClass('cm-tag')) {
-            let tag = $(e.target).text().replace(/[\(\)]+/g, '');
-            searchInput.value = tag;
-            filter(cm, tag);
-        } else if (et.hasClass('cm-search')) {
-            let search = $(e.target).text();
-            let re = /search\((?<search>.*)\)/mg;
-            let matched = re.exec(search);
-            let query = matched.groups.search;
-            searchInput.value = query;
-            filter(cm, query);
-        } else if (et.hasClass('cm-url')) {
-            let url = $(e.target).text();
-            window.open(url);
-        }
-    }
-
 })();
 
