@@ -80,11 +80,11 @@ tr,td,th {
 table .last { padding-right: 0; }
 
 strong {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 em {
-  font-style: italic;
+    font-style: italic;
 }
 
 a:visited{
@@ -94,7 +94,7 @@ a:visited{
 body {
     /*font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-	  color: #333333;
+    color: #333333;
     /* background: #fffcf9; */
     /*font-size: 20px;*/
 }
@@ -110,6 +110,10 @@ body {
 }
 .search-bar .item {
     padding: .5em;
+    border-left: 1px solid #eee;
+}
+.search-bar .item:last-child {
+    border-right: 1px solid #eee;
 }
 #search {
     flex-grow: 1;
@@ -117,6 +121,8 @@ body {
     outline: none;
     background-color: #fff;
     border: none;
+    border-left: 1px solid #eee;
+    border-radius: 0;
     display: block;
     text-decoration: none;
     font-size: 100%;
@@ -144,6 +150,10 @@ body {
     height: calc(100vh - 3em);
     line-height: 1.5;
 }
+.CodeMirror-cursor{
+    border-color: red !important;
+}
+
 .cm-s-default .cm-header {
     color: inherit;
 }
@@ -174,18 +184,18 @@ body {
     border-left: 1px dotted #bbb;
 }
 .CodeMirror-gutters {
-  background: inherit;
-  color: inherit;
-  border: none;
+    background: inherit;
+    color: inherit;
+    border: none;
 }
 .cm-tab {
-  background-position: right;
-  background-repeat: no-repeat;
-  border-left: 1px solid #eee;
+    background-position: right;
+    background-repeat: no-repeat;
+    border-left: 1px solid #eee;
 }
 
 @media screen and (max-width: 800px) {
-    #container {
+    .CodeMirror {
         padding: 1em;
     }
 }
@@ -196,9 +206,22 @@ body {
         color: #ccc;
     }
     .search-bar {
-        border-color: #333;
+	background: #000;
+    }
+    #search, .search-bar, .search-bar .item{
+	border-color: #333;
+    }
+    .search-bar .item:last-child {
+	border-color: #333;
     }
     .cm-indent-guide {
         border-color: #555;
+    }
+    .cm-tab {
+	border-color: #333;
+    }
+    
+    .CodeMirror-cursor{
+	border-color: red !important;
     }
 }

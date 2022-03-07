@@ -1,11 +1,9 @@
 import "/_s/codemirror.js";
 import "/_s/taskpaper.js";
-import "/_s/codemirror-indent-guide.js"
 import "/_s/addon/display/panel.js"
 import "/_s/addon/fold/foldcode.js"
 import "/_s/addon/fold/foldgutter.js"
 import "/_s/addon/fold/indent-fold.js"
-
 
 (function() {
     const filename = "default";
