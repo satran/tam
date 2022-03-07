@@ -4,6 +4,9 @@ import "/_s/addon/display/panel.js"
 import "/_s/addon/fold/foldcode.js"
 import "/_s/addon/fold/foldgutter.js"
 import "/_s/addon/fold/indent-fold.js"
+import "/_s/addon/hint/show-hint.js"
+import "/_s/addon/hint/tag-hint.js"
+
 
 (function() {
     const filename = "default";
@@ -31,9 +34,9 @@ import "/_s/addon/fold/indent-fold.js"
         indentWithTabs: true,
         tabSize: 2,
         indentUnit: 2,
-        //indentGuide: true,
-          foldGutter: { rangeFinder: CodeMirror.fold.indent },
-          gutters: ["CodeMirror-foldgutter"],
+        foldGutter: { rangeFinder: CodeMirror.fold.indent },
+        gutters: ["CodeMirror-foldgutter"],
+	extraKeys: {"Ctrl-Space": "autocomplete"},
         spellcheck: true
     });
     
