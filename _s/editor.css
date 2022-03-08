@@ -102,15 +102,35 @@ body {
     max-width: 44em;
     margin: 0 auto;
 }
-
+.alert-bar {
+    display: flex;
+    margin-bottom: 1rem;
+    color: #664d03;
+    background-color: #fff3cd;
+    border: 1px solid #ffecb5;
+    border-radius: .25rem;
+    position: fixed;
+    top: .25em;
+    margin: 0 auto;
+    max-width: 44em;
+    left: 0;
+    right: 0;
+}
 .search-bar {
     display: flex;
     align-items: baseline;
     border-bottom: 1px solid #eeeeee;
 }
-.search-bar .item {
+.search-bar .item , .alert-bar .item{
     padding: .5em;
+    border: none;
     border-left: 1px solid #eee;
+}
+.alert-bar .item{
+    border-color: #ffecb5;
+}
+.alert-bar .message {
+    flex-grow: 1;
 }
 .search-bar .item:last-child {
     border-right: 1px solid #eee;
@@ -134,20 +154,26 @@ body {
     cursor: default;
 }
 
-#editor {
+#container>div{
+    max-width: 44em;
+    margin: 0 auto;
     font-family: inherit;
     font-size: 100%;
     outline: none;
     background-color: #fff;
     border: none;
     border-bottom: 1px solid #ccc;
-    display: block;
+    display: flex;
+    flex-direction: column;
     text-decoration: none;
+    position: absolute;
+    height: 100%;
 }
 .CodeMirror {
     font-family: "Inconsolata", "SF Mono", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-    height: auto;
+    /*height: auto;*/
     /*height: calc(100vh - 3em);*/
+    flex-grow: 1;
     line-height: 1.5;
 }
 .CodeMirror-cursor{
@@ -195,6 +221,9 @@ body {
 }
 
 @media screen and (max-width: 800px) {
+    #container>div{
+        width: 100%;
+    }
     .CodeMirror {
         padding: 1em;
     }
@@ -206,22 +235,22 @@ body {
         color: #ccc;
     }
     .search-bar {
-	background: #000;
+	      background: #000;
     }
     #search, .search-bar, .search-bar .item{
-	border-color: #333;
+	      border-color: #333;
     }
     .search-bar .item:last-child {
-	border-color: #333;
+	      border-color: #333;
     }
     .cm-indent-guide {
         border-color: #555;
     }
     .cm-tab {
-	border-color: #333;
+	      border-color: #333;
     }
     
     .CodeMirror-cursor{
-	border-color: red !important;
+	      border-color: red !important;
     }
 }

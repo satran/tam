@@ -1,21 +1,16 @@
 import "/_s/codemirror.js";
 import "/_s/taskpaper.js";
-import "/_s/addon/display/panel.js"
-import "/_s/addon/fold/foldcode.js"
-import "/_s/addon/fold/foldgutter.js"
-import "/_s/addon/fold/indent-fold.js"
-import "/_s/addon/hint/show-hint.js"
-import "/_s/addon/hint/tag-hint.js"
+import "/_s/addon/display/panel.js";
+import "/_s/addon/fold/foldcode.js";
+import "/_s/addon/fold/foldgutter.js";
+import "/_s/addon/fold/indent-fold.js";
+import "/_s/addon/hint/show-hint.js";
+import "/_s/addon/hint/tag-hint.js";
 
 
 (function() {
     const filename = "default";
     const lastUpdateKey = "last-updated";
-
-    let conn = new WebSocket("ws://" + document.location.host + "/ws");
-    conn.onclose = function(_) {
-        alert("connection closed, reload window");
-    };
 
     // Load draft from localstorage
     let value = localStorage.getItem(filename);
@@ -23,7 +18,7 @@ import "/_s/addon/hint/tag-hint.js"
         value = "";
     }
 
-    let cm = CodeMirror(document.getElementById("editor"), {
+    let cm = CodeMirror(document.getElementById("container"), {
         value: value,
         mode: "taskpaper",
         lineWrapping: true,
@@ -39,9 +34,44 @@ import "/_s/addon/hint/tag-hint.js"
 	extraKeys: {"Ctrl-Space": "autocomplete"},
         spellcheck: true
     });
-    
+
+    function newAlert(message, refreshFn) {
+        let infoNode = document.createElement('div');
+        infoNode.setAttribute("class", "alert-bar");
+        infoNode.innerHTML = document.getElementById('info-bar-tmpl').innerHTML;
+        $(document.body).append(infoNode);
+        $(infoNode).find(".close").click(() => {
+            $(infoNode).remove();
+        });
+        $(infoNode).find(".message").html(message);
+        $(infoNode).find(".refresh").click((e) => {
+            refreshFn(e, () => $(infoNode).remove());
+        });
+        return infoNode;
+    }
+
+    let conn;
+    function newConn(editor) {
+        let c = new WebSocket("ws://" + document.location.host + "/ws");
+
+        c.onmessage = function(evt) {
+            editor.setValue(evt.data);
+        };
+
+        c.onclose = function(_) {
+            newAlert("Connection lost, refresh to sync", (_, destroy) => {
+                conn = newConn(editor);
+                destroy();
+            });
+        };
+        return c;
+    }
+
+    conn = newConn(cm);
+
     let searchNode = document.createElement('div');
     searchNode.innerHTML = document.getElementById('search-bar-tmpl').innerHTML;
+    searchNode.setAttribute("class", "search-bar");
     cm.addPanel(searchNode, {position: "top"});
     let searchInput = document.getElementById('search');
 
@@ -79,10 +109,6 @@ import "/_s/addon/hint/tag-hint.js"
 
     // DEV hack
     window.cm = cm;
-
-    conn.onmessage = function(evt) {
-        cm.setValue(evt.data);
-    };
 
     let cancel;
     cm.on("changes", () => {
@@ -167,7 +193,7 @@ import "/_s/addon/hint/tag-hint.js"
         showAll(cm);
     });
 
-    document.getElementById("sync-btn").addEventListener("click", function(e) {
+    document.getElementById("sync-btn").addEventListener("click", function(_) {
         conn.send(cm.getValue());
     });
 })();
