@@ -146,8 +146,8 @@ body {
 }
 .CodeMirror {
     font-family: "Inconsolata", "SF Mono", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-    /*height: auto;*/
-    height: calc(100vh - 3em);
+    height: auto;
+    /*height: calc(100vh - 3em);*/
     line-height: 1.5;
 }
 .CodeMirror-cursor{

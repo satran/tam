@@ -112,6 +112,9 @@ import "/_s/addon/hint/tag-hint.js"
     }
 
     function match(line, query) {
+	let today = new Date().toISOString().split('T')[0];
+	query = query.replace("@today", today);
+
         let matched = line.match(query);
         return matched !== null && matched.length > 0;
     }
