@@ -6,6 +6,7 @@ import "/_s/addon/fold/foldgutter.js";
 import "/_s/addon/fold/indent-fold.js";
 import "/_s/addon/hint/show-hint.js";
 import "/_s/addon/hint/tag-hint.js";
+import "/_s/keymap/sublime.js";
 
 
 (function() {
@@ -21,6 +22,7 @@ import "/_s/addon/hint/tag-hint.js";
     let cm = CodeMirror(document.getElementById("container"), {
         value: value,
         mode: "taskpaper",
+        keyMap: "sublime",
         lineWrapping: true,
         autofocus: true,
         autocapitalize: true,
