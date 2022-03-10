@@ -6,6 +6,7 @@ import "/_s/addon/fold/foldgutter.js";
 import "/_s/addon/fold/indent-fold.js";
 import "/_s/addon/hint/show-hint.js";
 import "/_s/addon/hint/tag-hint.js";
+import "/_s/addon/selection/active-line.js"
 import "/_s/keymap/sublime.js";
 
 
@@ -34,6 +35,7 @@ import "/_s/keymap/sublime.js";
         foldGutter: { rangeFinder: CodeMirror.fold.indent },
         gutters: ["CodeMirror-foldgutter"],
 	extraKeys: {"Ctrl-Space": "autocomplete"},
+        styleActiveLine: true,
         spellcheck: true
     });
 
@@ -122,7 +124,10 @@ import "/_s/keymap/sublime.js";
     });
 
     function showAll(editor) {
+        let cursor = editor.getCursor();
         editor.doc.getAllMarks().forEach(marker => marker.clear());
+        editor.focus();
+        editor.setCursor({line: cursor.line, ch: cursor.ch}, {scroll: true});
     }
 
     function getDepth(line) {
