@@ -148,8 +148,12 @@ import "/_s/keymap/sublime.js";
 	let today = new Date().toISOString().split('T')[0];
 	query = query.replace("@today", today);
 
-        let matched = line.match(query);
-        return matched !== null && matched.length > 0;
+	let parts = query.split(" ");
+	for (let part of parts){
+            let matched = line.match(part);
+	    if (matched === null || matched.length == 0) return false;
+	}
+	return true;
     }
 
     function filter(editor, query) {
