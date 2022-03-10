@@ -170,7 +170,7 @@ body {
     height: 100%;
 }
 .CodeMirror {
-    font-family: "Inconsolata", "SF Mono", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     /*height: auto;*/
     /*height: calc(100vh - 3em);*/
     flex-grow: 1;
@@ -178,6 +178,9 @@ body {
 }
 .CodeMirror-cursor{
     border-color: red !important;
+}
+.CodeMirror-activeline-background {
+    background: #e8f2ff;
 }
 
 .cm-s-default .cm-header {
@@ -258,5 +261,8 @@ body {
     
     .CodeMirror-cursor{
 	      border-color: red !important;
+    }
+    .CodeMirror-activeline-background {
+	background: #222;
     }
 }

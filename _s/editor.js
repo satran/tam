@@ -153,12 +153,12 @@ import "/_s/keymap/sublime.js";
     }
 
     function filter(editor, query) {
-        showAll(editor);
+	showAll(editor);
         let headers = [];
-        let lines = editor.getValue().split("\n");
-        for (let i = 0; i < lines.length; i++) {
-            let line = lines[i].trimRight();
-            let depth = getDepth(line);
+	let doc = editor.getDoc();
+	doc.eachLine((l) => {
+	    let line = l.text;
+	    let depth = getDepth(line);
             for (let j = headers.length - 1; j >= 0; j--) {
                 if (headers[j].depth >= depth) {
                     headers.pop();
@@ -168,10 +168,11 @@ import "/_s/keymap/sublime.js";
                 }
             }
             let header = getHeader(line);
+	    let lineNo = l.lineNo();
             if (!match(line, query)){
-                let mark = editor.markText({ line: i, ch: 0 }, { line: i }, { inclusiveRight: true, inclusiveLeft: true, collapsed: true, clearWhenEmpty: false });
+                let mark = editor.markText({ line: lineNo, ch: 0 }, { line: lineNo }, { inclusiveRight: true, inclusiveLeft: true, collapsed: true, clearWhenEmpty: false });
                 if (header.header) {
-                    headers.push({line: i, mark: mark, depth: header.depth, shown: false});
+                    headers.push({line: lineNo, mark: mark, depth: header.depth, shown: false});
                 }
             } else {
                 for (let j = 0; j<headers.length; j++){
@@ -182,7 +183,7 @@ import "/_s/keymap/sublime.js";
                     headers[j].shown = true;
                 }
             }
-        }
+	});
     }
 
     searchInput.addEventListener("keypress", function(e) {
