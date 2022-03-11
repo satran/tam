@@ -203,14 +203,15 @@ body {
     text-decoration: underline;
     cursor: pointer;
 }
-.cm-s-default .cm-task {
+.cm-s-default .cm-task, .cm-s-default .cm-done-task {
     color: inherit;
     cursor: pointer;
-    border-radius: 3px;
-    padding: 0px .25em;
-    border: 1px solid #ccc;
-    line-height: 1;
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+}
+.cm-s-default .cm-done {
+    text-decoration: line-through;
+    color: #999;
+    cursor: pointer;
 }
 
 .cm-function {
@@ -280,5 +281,9 @@ body {
     }
     .cm-s-default .cm-task {
 	border-color: #555;
+    }
+    .cm-s-default .cm-done {
+	text-decoration: line-through;
+	color: #555;
     }
 }

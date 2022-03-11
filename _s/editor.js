@@ -105,7 +105,7 @@ import "/_s/keymap/sublime.js";
         } else if (et.hasClass('cm-url')) {
             let url = $(e.target).text();
             window.open(url);
-        } else if (et.hasClass('cm-task')) {
+        } else if (et.hasClass('cm-task') || et.hasClass('cm-done')) {
 	    let lineCh = editor.coordsChar({ left: e.clientX, top: e.clientY });
 	    let line = editor.getLine(lineCh.line);
 	    let done = line.replace(/(^\s*)([\-x])(.*)/, (...args) => {

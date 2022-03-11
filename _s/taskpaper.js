@@ -3,7 +3,8 @@ import "/_s/simple.js";
 CodeMirror.defineSimpleMode("taskpaper", {
     start: [
         { regex: /(.*):$/, token: "header", sol: true, indent: true },
-        { regex: /(\s*)([\-x]) /, token: [null, "task", null], sol: true },
+        { regex: /(\s*)(\-) /, token: [null, "task", null], sol: true },
+	{ regex: /(\s*)(x .*)/, token: [null, "done"], sol: true },
         { regex: /search\((.*)\)/, token: "search" },
         { regex: /(#[a-zA-Z_\-\.\/]+)/, token: ["tag"]},
         { regex: /(@[0-9a-zA-Z_\-\.\/\(\),]*)/, token: ["function"]},
