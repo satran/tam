@@ -30,8 +30,8 @@ import "/_s/keymap/sublime.js";
         autocorrect: true,
         cursorBlinkRate: 0,
         indentWithTabs: true,
-        tabSize: 2,
-        indentUnit: 2,
+        tabSize: 4,
+        indentUnit: 4,
         foldGutter: { rangeFinder: CodeMirror.fold.indent },
         gutters: ["CodeMirror-foldgutter"],
 	extraKeys: {"Ctrl-Space": "autocomplete"},
@@ -105,7 +105,23 @@ import "/_s/keymap/sublime.js";
         } else if (et.hasClass('cm-url')) {
             let url = $(e.target).text();
             window.open(url);
-        }
+        } else if (et.hasClass('cm-task')) {
+	    let lineCh = editor.coordsChar({ left: e.clientX, top: e.clientY });
+	    let line = editor.getLine(lineCh.line);
+	    let done = line.replace(/(^\s*)([\-x])(.*)/, (...args) => {
+		if (args.length < 4) { // we need [whole match, tabs, task, text]
+		    return;
+		}
+		let match = args[2];
+		if (match == '-') {
+		    match = 'x'
+		} else if (match == 'x') {
+		    match = '-'
+		}
+		return args[1] + match + args[3];
+	    });
+	    cm.doc.replaceRange(done, {line: lineCh.line, ch: 0}, {line: lineCh.line});
+	}
     }
     cm.on("mousedown", gotoElement);
     cm.on("touchstart", gotoElement);

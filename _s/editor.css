@@ -92,8 +92,8 @@ a:visited{
 }
 
 body {
-    /*font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
-    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    /*font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;*/
     color: #333333;
     /* background: #fffcf9; */
     /*font-size: 20px;*/
@@ -170,7 +170,8 @@ body {
     height: 100%;
 }
 .CodeMirror {
-    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    /*font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;*/
     /*height: auto;*/
     /*height: calc(100vh - 3em);*/
     flex-grow: 1;
@@ -191,7 +192,6 @@ body {
     text-decoration: underline;
     cursor: pointer;
 }
-
 .cm-s-default .cm-search {
     color: inherit;
     text-decoration: underline;
@@ -203,6 +203,16 @@ body {
     text-decoration: underline;
     cursor: pointer;
 }
+.cm-s-default .cm-task {
+    color: inherit;
+    cursor: pointer;
+    border-radius: 3px;
+    padding: 0px .25em;
+    border: 1px solid #ccc;
+    line-height: 1;
+    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+}
+
 .cm-function {
     color: inherit;
     text-decoration: underline;
@@ -236,6 +246,9 @@ body {
     .CodeMirror {
         padding: 1em;
     }
+    .CodeMirror-foldgutter {
+	padding-right: .25em;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -256,13 +269,16 @@ body {
         border-color: #555;
     }
     .cm-tab {
-	      border-color: #333;
+	border-color: #333;
     }
     
     .CodeMirror-cursor{
-	      border-color: red !important;
+	border-color: red !important;
     }
     .CodeMirror-activeline-background {
 	background: #222;
+    }
+    .cm-s-default .cm-task {
+	border-color: #555;
     }
 }
