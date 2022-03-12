@@ -87,6 +87,27 @@ import "/_s/keymap/sublime.js";
     //});
     //cm.refresh();
 
+    function narrowToHeading(editor, line) {
+	showAll(editor);
+	if (line > 0) {
+	    editor.markText({ line: 0, ch: 0 }, { line: line-1 }, { inclusiveRight: true, inclusiveLeft: true, collapsed: true, clearWhenEmpty: false });
+	}
+	let end = editor.lineCount();
+	if (line >= end) {
+	    return;
+	}
+	let headerDepth = getDepth(editor.getLine(line));
+	let start = line+1
+	editor.doc.eachLine(start, end, (l) => {
+	    let depth = getDepth(l.text);
+	    if (depth <= headerDepth) return true
+	    start++;
+	});
+	if (start <= end) {
+	    editor.markText({ line: start, ch: 0 }, { line: end }, { inclusiveRight: true, inclusiveLeft: true, collapsed: true, clearWhenEmpty: false });
+	}
+    }
+    
     function gotoElement(editor, e) {
         var et = $(e.target);
 
@@ -105,6 +126,9 @@ import "/_s/keymap/sublime.js";
         } else if (et.hasClass('cm-url')) {
             let url = $(e.target).text();
             window.open(url);
+	} else if (et.hasClass('cm-header')) {
+	    let line = editor.coordsChar({ left: e.clientX, top: e.clientY });
+	    narrowToHeading(editor, line.line);
         } else if (et.hasClass('cm-task') || et.hasClass('cm-done')) {
 	    let lineCh = editor.coordsChar({ left: e.clientX, top: e.clientY });
 	    let line = editor.getLine(lineCh.line);

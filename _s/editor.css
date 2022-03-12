@@ -168,6 +168,8 @@ body {
     text-decoration: none;
     position: absolute;
     height: 100%;
+    left: 0;
+    right: 0;
 }
 .CodeMirror {
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -186,6 +188,7 @@ body {
 
 .cm-s-default .cm-header {
     color: inherit;
+    cursor: pointer;
 }
 .cm-s-default .cm-tag {
     color: inherit;
