@@ -110,7 +110,6 @@ func (c *Client) write() {
 			if err != nil {
 				return
 			}
-			println("write to ", c.ID)
 			w.Write(message.data)
 		case <-ticker.C:
 			c.conn.SetWriteDeadline(time.Now().Add(writeWait))
@@ -149,7 +148,6 @@ func (c *Client) read() {
 			}
 			break
 		}
-		println("message read", c.ID)
 		c.hub.broadcast <- &Message{
 			data:     message,
 			clientID: c.ID,

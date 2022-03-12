@@ -48,8 +48,8 @@ func Server(opts ...Opts) (*http.Server, error) {
 	} else {
 		http.Handle("/_s/", http.FileServer(http.FS(contents)))
 	}
-	http.HandleFunc("/editor/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "templates/editor.html")
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "templates/index.html")
 	})
 	http.HandleFunc("/ws", serveWS())
 	return srv, nil

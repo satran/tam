@@ -1,4 +1,4 @@
-import "/_s/simple.js";
+import "/_s/addon/mode/simple.js";
 
 CodeMirror.defineSimpleMode("taskpaper", {
     start: [
