@@ -98,10 +98,6 @@ body {
     /* background: #fffcf9; */
     /*font-size: 20px;*/
 }
-#container {
-    max-width: 44em;
-    margin: 0 auto;
-}
 .alert-bar {
     display: flex;
     margin-bottom: 1rem;
@@ -115,11 +111,18 @@ body {
     max-width: 44em;
     left: 0;
     right: 0;
+    z-index: 2000;
 }
 .search-bar {
     display: flex;
     align-items: baseline;
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    left: 0;
+    right: 0;
+    background: #fff;
 }
 .search-bar .item , .alert-bar .item{
     padding: .5em;
@@ -154,27 +157,18 @@ body {
     cursor: default;
 }
 
-#container>div{
+#container{
     max-width: 44em;
     margin: 0 auto;
     font-family: inherit;
     font-size: 100%;
-    outline: none;
     background-color: #fff;
     border: none;
     border-bottom: 1px solid #ccc;
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    position: absolute;
-    height: 100%;
-    left: 0;
-    right: 0;
 }
 .CodeMirror {
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    /*font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;*/
-    /*height: auto;*/
+    height: auto;
     /*height: calc(100vh - 3em);*/
     flex-grow: 1;
     line-height: 1.5;
@@ -246,19 +240,17 @@ body {
 */
 
 @media screen and (max-width: 800px) {
-    #container>div{
-        width: 100%;
-    }
-    .CodeMirror {
-        padding: 1em;
+    #container{
+        width: calc(100% - 1em);
+        padding: .5em;
     }
     .CodeMirror-foldgutter {
-	padding-right: .25em;
+	      padding-right: .25em;
     }
 }
 
 @media (prefers-color-scheme: dark) {
-    body, .CodeMirror, #search{
+    body, #container, .CodeMirror, #search{
         background: #000;
         color: #ccc;
     }
@@ -275,20 +267,19 @@ body {
         border-color: #555;
     }
     .cm-tab {
-	border-color: #333;
+	      border-color: #333;
     }
-    
     .CodeMirror-cursor{
-	border-color: red !important;
+	      border-color: red !important;
     }
     .CodeMirror-activeline-background {
-	background: #222;
+	      background: #222;
     }
     .cm-s-default .cm-task {
-	border-color: #555;
+	      border-color: #555;
     }
     .cm-s-default .cm-done {
-	text-decoration: line-through;
-	color: #555;
+	      text-decoration: line-through;
+	      color: #555;
     }
 }

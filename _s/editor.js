@@ -1,10 +1,10 @@
 import "/_s/codemirror.js";
 import "/_s/taskpaper.js";
-import "/_s/addon/display/panel.js";
 import "/_s/addon/hint/show-hint.js";
 import "/_s/addon/hint/tag-hint.js";
 import "/_s/addon/selection/active-line.js";
 import "/_s/keymap/sublime.js";
+import "/_s/addon/scroll/scrollpastend.js";
 
 
 (function() {
@@ -31,6 +31,7 @@ import "/_s/keymap/sublime.js";
         indentUnit: 4,
         extraKeys: { "Ctrl-Space": "autocomplete" },
         styleActiveLine: true,
+        scrollPastEnd: true,
         spellcheck: true
     });
 
@@ -68,10 +69,6 @@ import "/_s/keymap/sublime.js";
 
     conn = newConn(cm);
 
-    let searchNode = document.createElement('div');
-    searchNode.innerHTML = document.getElementById('search-bar-tmpl').innerHTML;
-    searchNode.setAttribute("class", "search-bar");
-    cm.addPanel(searchNode, { position: "top" });
     let searchInput = document.getElementById('search');
 
     //var charWidth = cm.defaultCharWidth(), basePadding = 4;
@@ -92,10 +89,10 @@ import "/_s/keymap/sublime.js";
             return;
         }
         let headerDepth = getDepth(editor.getLine(line));
-        let start = line + 1
+        let start = line + 1;
         editor.doc.eachLine(start, end, (l) => {
             let depth = getDepth(l.text);
-            if (depth <= headerDepth) return true
+            if (depth <= headerDepth) return true;
             start++;
         });
         if (start <= end) {
@@ -133,9 +130,9 @@ import "/_s/keymap/sublime.js";
                 }
                 let match = args[2];
                 if (match == '-') {
-                    match = 'x'
+                    match = 'x';
                 } else if (match == 'x') {
-                    match = '-'
+                    match = '-';
                 }
                 return args[1] + match + args[3];
             });
