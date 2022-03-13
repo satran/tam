@@ -99,6 +99,14 @@ import "/_s/keymap/sublime.js";
         }
     }
 
+    function getLineFromEvent(editor, e) {
+        if (e.touches !== undefined && e.touches.length > 0) {
+            return editor.lineAtHeight(e.touches[0].clientY, 'window');
+        } else {
+            return editor.lineAtHeight(e.clientY, 'window');
+        }
+    }
+
     function gotoElement(editor, e) {
         var et = $(e.target);
 
@@ -118,11 +126,12 @@ import "/_s/keymap/sublime.js";
             let url = $(e.target).text();
             window.open(url);
         } else if (et.hasClass('cm-header')) {
-            let line = editor.coordsChar({ left: e.clientX, top: e.clientY }, 'window');
-            narrowToHeading(editor, line.line);
+            let line = getLineFromEvent(editor, e);
+            console.log(line);
+            narrowToHeading(editor, line);
         } else if (et.hasClass('cm-task') || et.hasClass('cm-done')) {
-            let lineCh = editor.coordsChar({ left: e.clientX, top: e.clientY }, 'window');
-            let line = editor.getLine(lineCh.line);
+            let lineNo = getLineFromEvent(editor, e);
+            let line = editor.getLine(lineNo);
             let done = line.replace(/(^\s*)([\-x])(.*)/, (...args) => {
                 if (args.length < 4) { // we need [whole match, tabs, task, text]
                     return;
@@ -135,7 +144,7 @@ import "/_s/keymap/sublime.js";
                 }
                 return args[1] + match + args[3];
             });
-            cm.doc.replaceRange(done, { line: lineCh.line, ch: 0 }, { line: lineCh.line });
+            cm.doc.replaceRange(done, { line: lineNo, ch: 0 }, { line: lineNo });
         }
     }
     cm.on("mousedown", gotoElement);
