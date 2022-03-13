@@ -4,7 +4,6 @@ import "/_s/addon/hint/show-hint.js";
 import "/_s/addon/hint/tag-hint.js";
 import "/_s/addon/selection/active-line.js";
 import "/_s/keymap/sublime.js";
-import "/_s/addon/scroll/scrollpastend.js";
 
 
 (function() {
@@ -31,8 +30,8 @@ import "/_s/addon/scroll/scrollpastend.js";
         indentUnit: 4,
         extraKeys: { "Ctrl-Space": "autocomplete" },
         styleActiveLine: true,
-        scrollPastEnd: true,
-        spellcheck: true
+        spellcheck: true,
+        //viewportMargin: Infinity,
     });
 
     function newAlert(message, refreshFn) {
@@ -119,10 +118,10 @@ import "/_s/addon/scroll/scrollpastend.js";
             let url = $(e.target).text();
             window.open(url);
         } else if (et.hasClass('cm-header')) {
-            let line = editor.coordsChar({ left: e.clientX, top: e.clientY });
+            let line = editor.coordsChar({ left: e.clientX, top: e.clientY }, 'window');
             narrowToHeading(editor, line.line);
         } else if (et.hasClass('cm-task') || et.hasClass('cm-done')) {
-            let lineCh = editor.coordsChar({ left: e.clientX, top: e.clientY });
+            let lineCh = editor.coordsChar({ left: e.clientX, top: e.clientY }, 'window');
             let line = editor.getLine(lineCh.line);
             let done = line.replace(/(^\s*)([\-x])(.*)/, (...args) => {
                 if (args.length < 4) { // we need [whole match, tabs, task, text]

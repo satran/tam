@@ -116,6 +116,7 @@ body {
 .search-bar {
     display: flex;
     align-items: baseline;
+    justify-content: center;
     border-bottom: 1px solid #eee;
     position: sticky;
     top: 0;
@@ -123,11 +124,11 @@ body {
     left: 0;
     right: 0;
     background: #fff;
+    padding: .25em;
 }
 .search-bar .item , .alert-bar .item{
-    padding: .5em;
+    padding: 1em;
     border: none;
-    border-left: 1px solid #eee;
 }
 .alert-bar .item{
     border-color: #ffecb5;
@@ -135,20 +136,18 @@ body {
 .alert-bar .message {
     flex-grow: 1;
 }
-.search-bar .item:last-child {
-    border-right: 1px solid #eee;
-}
 #search {
     flex-grow: 1;
     font-family: inherit;
     outline: none;
     background-color: #fff;
-    border: none;
-    border-left: 1px solid #eee;
-    border-radius: 0;
+    border: 1px solid #eee;
+    border-radius: 5em;
     display: block;
     text-decoration: none;
     font-size: inherit;
+    max-width: 33em;
+    padding: .5em 1em;
 }
 #search-clear {
     cursor: default;
