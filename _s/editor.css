@@ -236,12 +236,14 @@ body {
     background-repeat: no-repeat;
     border-left: 1px solid #eee;
 }
+/*
 .CodeMirror-foldgutter-open:after {
     content: "\25CB";
 }
 .CodeMirror-foldgutter-folded:after {
     content: "\25C9";
 }
+*/
 
 @media screen and (max-width: 800px) {
     #container>div{

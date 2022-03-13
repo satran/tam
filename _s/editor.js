@@ -1,12 +1,9 @@
 import "/_s/codemirror.js";
 import "/_s/taskpaper.js";
 import "/_s/addon/display/panel.js";
-import "/_s/addon/fold/foldcode.js";
-import "/_s/addon/fold/foldgutter.js";
-import "/_s/addon/fold/indent-fold.js";
 import "/_s/addon/hint/show-hint.js";
 import "/_s/addon/hint/tag-hint.js";
-import "/_s/addon/selection/active-line.js"
+import "/_s/addon/selection/active-line.js";
 import "/_s/keymap/sublime.js";
 
 
@@ -32,9 +29,7 @@ import "/_s/keymap/sublime.js";
         indentWithTabs: true,
         tabSize: 4,
         indentUnit: 4,
-        foldGutter: { rangeFinder: CodeMirror.fold.indent },
-        gutters: ["CodeMirror-foldgutter"],
-	extraKeys: {"Ctrl-Space": "autocomplete"},
+        extraKeys: { "Ctrl-Space": "autocomplete" },
         styleActiveLine: true,
         spellcheck: true
     });
@@ -76,7 +71,7 @@ import "/_s/keymap/sublime.js";
     let searchNode = document.createElement('div');
     searchNode.innerHTML = document.getElementById('search-bar-tmpl').innerHTML;
     searchNode.setAttribute("class", "search-bar");
-    cm.addPanel(searchNode, {position: "top"});
+    cm.addPanel(searchNode, { position: "top" });
     let searchInput = document.getElementById('search');
 
     //var charWidth = cm.defaultCharWidth(), basePadding = 4;
@@ -88,26 +83,26 @@ import "/_s/keymap/sublime.js";
     //cm.refresh();
 
     function narrowToHeading(editor, line) {
-	showAll(editor);
-	if (line > 0) {
-	    editor.markText({ line: 0, ch: 0 }, { line: line-1 }, { inclusiveRight: true, inclusiveLeft: true, collapsed: true, clearWhenEmpty: false });
-	}
-	let end = editor.lineCount();
-	if (line >= end) {
-	    return;
-	}
-	let headerDepth = getDepth(editor.getLine(line));
-	let start = line+1
-	editor.doc.eachLine(start, end, (l) => {
-	    let depth = getDepth(l.text);
-	    if (depth <= headerDepth) return true
-	    start++;
-	});
-	if (start <= end) {
-	    editor.markText({ line: start, ch: 0 }, { line: end }, { inclusiveRight: true, inclusiveLeft: true, collapsed: true, clearWhenEmpty: false });
-	}
+        showAll(editor);
+        if (line > 0) {
+            editor.markText({ line: 0, ch: 0 }, { line: line - 1 }, { inclusiveRight: true, inclusiveLeft: true, collapsed: true, clearWhenEmpty: false });
+        }
+        let end = editor.lineCount();
+        if (line >= end) {
+            return;
+        }
+        let headerDepth = getDepth(editor.getLine(line));
+        let start = line + 1
+        editor.doc.eachLine(start, end, (l) => {
+            let depth = getDepth(l.text);
+            if (depth <= headerDepth) return true
+            start++;
+        });
+        if (start <= end) {
+            editor.markText({ line: start, ch: 0 }, { line: end }, { inclusiveRight: true, inclusiveLeft: true, collapsed: true, clearWhenEmpty: false });
+        }
     }
-    
+
     function gotoElement(editor, e) {
         var et = $(e.target);
 
@@ -126,26 +121,26 @@ import "/_s/keymap/sublime.js";
         } else if (et.hasClass('cm-url')) {
             let url = $(e.target).text();
             window.open(url);
-	} else if (et.hasClass('cm-header')) {
-	    let line = editor.coordsChar({ left: e.clientX, top: e.clientY });
-	    narrowToHeading(editor, line.line);
+        } else if (et.hasClass('cm-header')) {
+            let line = editor.coordsChar({ left: e.clientX, top: e.clientY });
+            narrowToHeading(editor, line.line);
         } else if (et.hasClass('cm-task') || et.hasClass('cm-done')) {
-	    let lineCh = editor.coordsChar({ left: e.clientX, top: e.clientY });
-	    let line = editor.getLine(lineCh.line);
-	    let done = line.replace(/(^\s*)([\-x])(.*)/, (...args) => {
-		if (args.length < 4) { // we need [whole match, tabs, task, text]
-		    return;
-		}
-		let match = args[2];
-		if (match == '-') {
-		    match = 'x'
-		} else if (match == 'x') {
-		    match = '-'
-		}
-		return args[1] + match + args[3];
-	    });
-	    cm.doc.replaceRange(done, {line: lineCh.line, ch: 0}, {line: lineCh.line});
-	}
+            let lineCh = editor.coordsChar({ left: e.clientX, top: e.clientY });
+            let line = editor.getLine(lineCh.line);
+            let done = line.replace(/(^\s*)([\-x])(.*)/, (...args) => {
+                if (args.length < 4) { // we need [whole match, tabs, task, text]
+                    return;
+                }
+                let match = args[2];
+                if (match == '-') {
+                    match = 'x'
+                } else if (match == 'x') {
+                    match = '-'
+                }
+                return args[1] + match + args[3];
+            });
+            cm.doc.replaceRange(done, { line: lineCh.line, ch: 0 }, { line: lineCh.line });
+        }
     }
     cm.on("mousedown", gotoElement);
     cm.on("touchstart", gotoElement);
@@ -167,7 +162,7 @@ import "/_s/keymap/sublime.js";
         let cursor = editor.getCursor();
         editor.doc.getAllMarks().forEach(marker => marker.clear());
         editor.focus();
-        editor.setCursor({line: cursor.line, ch: cursor.ch}, {scroll: true});
+        editor.setCursor({ line: cursor.line, ch: cursor.ch }, { scroll: true });
     }
 
     function getDepth(line) {
@@ -185,50 +180,70 @@ import "/_s/keymap/sublime.js";
     }
 
     function match(line, query) {
-	let today = new Date().toISOString().split('T')[0];
-	query = query.replace("@today", today);
+        let today = new Date().toISOString().split('T')[0];
+        query = query.replace("@today", today);
 
-	let parts = query.split(" ");
-	for (let part of parts){
+        let parts = query.split(" ");
+        for (let part of parts) {
             let matched = line.match(part);
-	    if (matched === null || matched.length == 0) return false;
-	}
-	return true;
+            if (matched === null || matched.length == 0) return false;
+        }
+        return true;
     }
 
     function filter(editor, query) {
-	showAll(editor);
+        showAll(editor);
         let headers = [];
-	let doc = editor.getDoc();
-	doc.eachLine((l) => {
-	    let line = l.text;
-	    let depth = getDepth(line);
+        let doc = editor.getDoc();
+        doc.eachLine((l) => {
+            let line = l.text;
+            let depth = getDepth(line);
             for (let j = headers.length - 1; j >= 0; j--) {
                 if (headers[j].depth >= depth) {
                     headers.pop();
                     continue;
-                }else {
+                } else {
                     break;
                 }
             }
             let header = getHeader(line);
-	    let lineNo = l.lineNo();
-            if (!match(line, query)){
+            let lineNo = l.lineNo();
+            if (!match(line, query)) {
                 let mark = editor.markText({ line: lineNo, ch: 0 }, { line: lineNo }, { inclusiveRight: true, inclusiveLeft: true, collapsed: true, clearWhenEmpty: false });
                 if (header.header) {
-                    headers.push({line: lineNo, mark: mark, depth: header.depth, shown: false});
+                    headers.push({ line: lineNo, mark: mark, depth: header.depth, shown: false });
                 }
             } else {
-                for (let j = 0; j<headers.length; j++){
-                    if (headers[j].shown){
+                for (let j = 0; j < headers.length; j++) {
+                    if (headers[j].shown) {
                         continue;
                     }
                     headers[j].mark.clear();
                     headers[j].shown = true;
                 }
             }
-	});
+        });
     }
+
+    let done = false;
+    let donemarks = [];
+    document.getElementById("toggle-done").addEventListener("click", function(e) {
+        if (!done) {
+            cm.eachLine((l) => {
+                let line = l.text;
+                if (!line.match(/^\s*x /)) return;
+                let lineNo = l.lineNo();
+                let mark = cm.markText({ line: lineNo, ch: 0 }, { line: lineNo }, { inclusiveRight: true, inclusiveLeft: true, collapsed: true, clearWhenEmpty: false });
+                donemarks.push(mark);
+            });
+        } else {
+            for (let mark of donemarks) {
+                mark.clear();
+            }
+            donemarks = [];
+        }
+        done = !done;
+    });
 
     searchInput.addEventListener("keypress", function(e) {
         if (e.code !== "Enter") return;
