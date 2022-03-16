@@ -3,7 +3,10 @@ package main
 import (
 	"embed"
 	"html/template"
+	"io"
+	"log"
 	"net/http"
+	"os"
 )
 
 type options struct {
@@ -50,6 +53,19 @@ func Server(opts ...Opts) (*http.Server, error) {
 	}
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "templates/index.html")
+	})
+	http.HandleFunc("/doc/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodGet {
+			http.ServeFile(w, r, "data.txt")
+		} else if r.Method == http.MethodPut {
+			f, err := os.OpenFile("data.txt", os.O_WRONLY|os.O_TRUNC, os.ModePerm)
+			if err != nil {
+				log.Println(err)
+				http.Error(w, err.Error(), http.StatusConflict)
+				return
+			}
+			io.Copy(f, r.Body)
+		}
 	})
 	http.HandleFunc("/ws", serveWS())
 	return srv, nil

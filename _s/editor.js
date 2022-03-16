@@ -4,6 +4,8 @@ import "/_s/addon/hint/show-hint.js";
 import "/_s/addon/hint/tag-hint.js";
 import "/_s/addon/selection/active-line.js";
 import "/_s/keymap/sublime.js";
+import "/_s/addon/merge/merge.js"
+
 
 
 (function() {
@@ -154,12 +156,16 @@ import "/_s/keymap/sublime.js";
     // DEV hack
     window.cm = cm;
 
+    function save(value) {
+        localStorage.setItem(filename, value);
+        localStorage.setItem(lastUpdateKey, new Date().getTime());
+    }
+
     let cancel;
     cm.on("changes", () => {
         if (cancel) clearTimeout(cancel);
         cancel = setTimeout(() => {
-            localStorage.setItem(filename, cm.getValue());
-            localStorage.setItem(lastUpdateKey, new Date().getTime());
+            save(cm.getValue());
         }, 5000);
     });
 
@@ -265,8 +271,59 @@ import "/_s/keymap/sublime.js";
         showAll(cm);
     });
 
-    document.getElementById("sync-btn").addEventListener("click", function(_) {
+    document.getElementById("push-btn").addEventListener("click", function(_) {
         conn.send(cm.getValue());
     });
-})();
 
+    function connect(args){
+        console.log(args);
+    }
+
+    function mergeView(remote) {
+        let dmp = new diff_match_patch();
+        if (dmp.patch_make(cm.getValue(), remote).length == 0){
+            // no difference
+            return;
+        }
+        let target = document.getElementById("merge-editor");
+        $("#merge-dialog").show();
+        let dv = CodeMirror.MergeView(target, {
+            value: cm.getValue(),
+            orig: remote,
+            lineNumbers: false,
+            mode: "taskpaper",
+            highlightDifferences: true,
+            collapseIdentical: true
+        });
+        window.dv = dv;
+        document.getElementById("merge-clear-btn").addEventListener("click", function(_) {
+            $("#merge-dialog").hide();
+            $("#merge-editor").html('');
+        });
+
+        document.getElementById("merge-btn").addEventListener("click", function(_) {
+            let value = dv.editor().getValue();
+            cm.setValue(value);
+            save(value);
+            fetch('/doc/', {
+                method: 'PUT',
+                body: value,
+            })
+                .then(_ => {
+                    $("#merge-dialog").hide();
+                    $("#merge-editor").html('');
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        });
+    }
+    document.getElementById("sync-btn").addEventListener("click", function(_) {
+        fetch("/doc/")
+            .then(data => {
+                data.text().then(txt => mergeView(txt));
+            }).catch(error => {
+                console.log(error);
+            });
+    });
+})();
