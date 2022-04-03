@@ -210,3 +210,6 @@ body {
 .card .content p{
     margin: 1em 0;
 }
+.card .content a{
+    color: inherit;
+}

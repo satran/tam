@@ -99,6 +99,16 @@ var CardEditView = Backbone.View.extend({
     }
 });
 
+
+
+function convertBracesToLinks(match, p1, p2, offset, string) {
+    return '<a href="#view/' + p1 +'">' + p2 + '</a>';
+}
+
+function convertBracesToLinksWithoutTitle(match, p1, offset, string) {
+    return '<a href="#view/' + p1 +'">' + p1 + '</a>';
+}
+
 var CardView = Backbone.View.extend({
     className: "card",
     template: _.template($('#card-view-tmpl').html()),
@@ -110,7 +120,10 @@ var CardView = Backbone.View.extend({
 
     render: function() {
 	let attr = this.model;
-	attr.content = marked.parse(attr.content);
+	let content = attr.content.replaceAll(/\[\[([^\[\]\|]*)\]\]/g , convertBracesToLinksWithoutTitle);
+	content = content.replaceAll(/\[\[([^\[\]\|]*)\|([^\[\]\|]*)\]\]/g , convertBracesToLinks);
+	content = marked.parse(content);
+	attr.content = content;
 	this.$el.html(this.template({card: attr}));
 	return this;
     }
@@ -182,3 +195,11 @@ let search = new SearchBarView({db: db, container: $("#container")});
 $("#search-bar").html(search.render().el);
 
 Backbone.history.start();
+
+
+window.replacer = function(match, p1, p2, offset, string) {
+    // p1 is nondigits, p2 digits, and p3 non-alphanumerics
+    return [p1, p2].join(' - ');
+}
+
+
