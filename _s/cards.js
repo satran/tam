@@ -144,7 +144,19 @@ var Router = Backbone.Router.extend({
     },
 
     index: function() {
-	console.log("index, not implemented");
+	let parent = this;
+	const settingsID = "#:settings";
+	this.db.get(settingsID).then(function (doc) {
+	    if (doc.DefaultCard !== undefined) {
+		parent.view(doc.DefaultCard);
+		return;
+	    } else {
+		parent.view("Start");
+	    }
+	}).catch(function (err) {
+	    console.log(err);
+	    parent.view("Start");
+	});
     },
 
     newCard: function() {

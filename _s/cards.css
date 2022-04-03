@@ -94,7 +94,7 @@ a:visited{
 body {
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     color: #333333;
-    background: #fffcf9;
+    background: #fbf7f0;
     font-size: 100%;
 }
 #search-bar>div {
@@ -187,7 +187,8 @@ body {
     font-size: 100%;
 }
 .card.edit, .card.edit header {
-    background: #fdf6e3;
+    background: #fffcf9;
+    /*background: #fdf6e3;*/
     color: #002b36;
 }
 .card.edit header .btn {
