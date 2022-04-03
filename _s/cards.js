@@ -21,65 +21,80 @@ var SearchBarView = Backbone.View.extend({
     }
 });
 
-var CardNewView = Backbone.View.extend({
-    className: "card new",
-    template: _.template($('#card-new-view-tmpl').html()),
-    events: {
-	"click .save": "save",
-	"click .cancel": "back"
-    },
-
-    initialize: function(options) {
-	this.model = options.model;
+var Card = Backbone.Model.extend({
+    idAttribute: "_id",
+    initialize: function(attributes, options) {
 	this.db = options.db;
     },
 
-    save: function(){
+    save: function(arg){
+	let callback = console.log;
+	let attrs;
+	if (typeof arg === "function") {
+	    callback = arg;
+	} else if (typeof arg === "object") {
+	    attrs = arg;
+	}
+	if (attrs === undefined || attrs === null) {
+	    attrs = this.attributes;
+	}
+	if (attrs._id === undefined){
+	    attrs._id = this.attributes._id;
+	}
+	if (attrs._rev === undefined){
+	    attrs._rev = this.attributes._rev;
+	}
 	let parent = this;
-	this.db.post({
-	    content: this.jar.toString()
-	}).then(function (response) {
-	    window.location = '#view/'+response.id;
+	this.db.put(attrs).then(function (response) {
+	    callback(response.id);
 	}).catch(function (err) {
 	    console.log(err);
 	});
-    },
-
-    render: function() {
-	this.$el.html(this.template({card: this.model}));
-	this.jar = CodeJar(this.$el.find(".editor")[0], highlight);
-	return this;
     }
-});
+})
 
 var CardEditView = Backbone.View.extend({
     className: "card edit",
     template: _.template($('#card-edit-view-tmpl').html()),
     events: {
-	"click .save": "save"
+	"click .cancel": "cancel",
+	"click .save": "save",
+	"keydown .title": "setTitle",
     },
 
-    initialize: function(options) {
-	this.model = options.model;
+    initialize: function(model, options) {
+	this.model = model;
 	this.db = options.db;
     },
 
-    save: function(){
-	let parent = this;
-	this.db.put({
-	    _id: parent.model._id,
-	    _rev: parent.model._rev,
-	    content: this.jar.toString()
-	}).then(function (response) {
-	    window.location = '#view/'+parent.model._id;
-	}).catch(function (err) {
-	    console.log(err);
-	});
+    cancel: function() {
+	if (this.model.attributes._rev === undefined) {
+	    // This is rendering a new document
+	    window.history.back();
+	} else {
+	    window.location = "#view/" + this.model.id;
+	}
+    },
+
+    setTitle: function(e) {
+	this.model.set('_id', e.target.value);
+    },
+
+    save: function() {
+	this.model.save((id) => {window.location = "#view/"+id});
     },
 
     render: function() {
-	this.$el.html(this.template({card: this.model}));
+	this.$el.html(this.template({card: this.model.attributes}));
 	this.jar = CodeJar(this.$el.find(".editor")[0], highlight);
+	let parent = this;
+	let cancel;
+	this.jar.onUpdate(code => {
+	    if (cancel) clearTimeout(cancel);
+            cancel = setTimeout(() => {
+		parent.model.set('content', code);
+            }, 500);
+	});
 	return this;
     }
 });
@@ -120,14 +135,16 @@ var Router = Backbone.Router.extend({
     },
 
     newCard: function() {
-	let v = new CardNewView({db: parent.db});
+	let model = new Card({}, {db: this.db});
+	let v = new CardEditView(model, {db: this.db});
 	this.el.html(v.render().$el);
     },
     
     edit: function(id) {
 	let parent = this;
 	this.db.get(id).then(function (doc) {
-	    let v = new CardEditView({model: doc, db: parent.db});
+	    let model = new Card(doc, {db: parent.db});
+	    let v = new CardEditView(model, {db: parent.db});
 	    parent.el.html(v.render().$el);
 	}).catch(function (err) {
 	    console.log(err);

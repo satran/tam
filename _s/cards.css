@@ -110,7 +110,6 @@ body {
 }
 #search-bar .search {
     flex-grow: 1;
-    flex-grow: 1;
     font-family: inherit;
     outline: none;
     background-color: #fff;
@@ -120,6 +119,11 @@ body {
     text-decoration: none;
     font-size: inherit;
     padding: .5em 1em;
+}
+/* This is for the svg icons to scale with size */
+.bi {
+    width: 1em;
+    height: 1em;
 }
 .card {
     display:flex;
@@ -143,14 +147,36 @@ body {
     border-radius: 6px 6px 0 0; 
     display: flex;
     justify-content: flex-end;
+    font-size: 1.5em;
 }
 .card header .btn {
-    padding: .5em 1em;
+    padding: .5em;
     border-left: 1px solid #efefef;
     display: inline-block;
     text-decoration: none;
     color: inherit;
     cursor: pointer;
+}
+.card header .title {
+    padding: .5em;
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+    flex-grow: 1;
+}
+.card header input.title {
+    flex-grow: 1;
+    font-family: inherit;
+    border: none;
+    outline: none;
+    border-radius: 0;
+    text-decoration: none;
+    font-size: inherit;
+    padding: .5em;
+    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    font-size: 100%;
+    background: inherit;
 }
 .card .content, .card .editor {
     flex-grow: 1;
