@@ -54,6 +54,12 @@ func Server(opts ...Opts) (*http.Server, error) {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "templates/index.html")
 	})
+	http.HandleFunc("/codejar/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "templates/codejar.html")
+	})
+	http.HandleFunc("/cards/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "templates/cards.html")
+	})
 	http.HandleFunc("/doc/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet {
 			http.ServeFile(w, r, "data.txt")

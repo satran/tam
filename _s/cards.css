@@ -1,0 +1,187 @@
+/* --- CSS reset from --- */
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+body {
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+}
+ol, ul {
+    padding-left: 1.5em;
+    /*list-style: unset;*/
+}
+blockquote {
+    border-left: 2px solid;
+    padding-left: 1em;
+}
+blockquote, q {
+    quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 2em;
+    width: 100%;
+}
+th {
+    border-bottom: 2px solid #efefef;
+    font-weight: bold;
+    text-align: left;
+}
+td { border-bottom: 1px solid #efefef; }
+caption, th, td {
+    padding: 4px 10px 4px 0;
+}
+caption {
+    background: #f1f1f1;
+    padding: 10px 0;
+    margin-bottom: 1em;
+}
+
+tr,td,th {
+    vertical-align: middle;
+}
+
+/* Use this if you use span-x classes on th/td. */
+table .last { padding-right: 0; }
+
+strong {
+    font-weight: bold;
+}
+
+em {
+    font-style: italic;
+}
+
+a:visited{
+    color: inherit;
+}
+
+body {
+    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    color: #333333;
+    background: #fffcf9;
+    font-size: 100%;
+}
+#search-bar>div {
+    display: flex;
+    max-width: 44em;
+    margin: 0 auto;
+    padding: .5em;
+    letter-spacing: normal;
+    line-height: 1.5;
+}
+#search-bar .item {
+    padding: .5em;
+}
+#search-bar .search {
+    flex-grow: 1;
+    flex-grow: 1;
+    font-family: inherit;
+    outline: none;
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 5em;
+    display: block;
+    text-decoration: none;
+    font-size: inherit;
+    padding: .5em 1em;
+}
+.card {
+    display:flex;
+    flex-direction: column;
+    font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    font-size: 100%;
+    border-radius: 6px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    letter-spacing: normal;
+    line-height: 1.5;
+    margin: 1em auto;
+    max-width: 44rem;
+    background: #fff;
+    color: #002b36;
+}
+.card header {
+    position: sticky;
+    top: 0;
+    border-bottom: 1px solid #efefef;
+    background: #fff;
+    border-radius: 6px 6px 0 0; 
+    display: flex;
+    justify-content: flex-end;
+}
+.card header .btn {
+    padding: .5em 1em;
+    border-left: 1px solid #efefef;
+    display: inline-block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+.card .content, .card .editor {
+    flex-grow: 1;
+    padding: 1em;
+}
+.card .editor {
+    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    font-size: 100%;
+}
+.card.edit, .card.edit header {
+    background: #fdf6e3;
+    color: #002b36;
+}
+.card.edit header .btn {
+    border-color: #eee8d5;
+}
+
+.card .content h1, .card .content h2, .card .content h3, .card .content h4, .card .content h5, .card .content h6 {
+    font-weight: bold;
+    margin: .5em 0;
+}
+.card .content h1{
+    font-size: 1.5em;
+}
+.card .content h2{
+    font-size: 1.3em;
+}
+.card .content h3{
+    font-size: 1.1em;
+}
+.card .content p{
+    margin: 1em 0;
+}
