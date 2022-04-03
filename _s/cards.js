@@ -77,7 +77,7 @@ var CardEditView = Backbone.View.extend({
     },
 
     setTitle: function(e) {
-	this.model.set('_id', e.target.value);
+	this.model.set('_id', e.target.value.trim());
     },
 
     save: function() {
@@ -147,7 +147,13 @@ var Router = Backbone.Router.extend({
 	    let v = new CardEditView(model, {db: parent.db});
 	    parent.el.html(v.render().$el);
 	}).catch(function (err) {
-	    console.log(err);
+	    if (err.status !== 404) {
+		console.log(err);
+		return;
+	    }
+	    let model = new Card({_id: id}, {db: parent.db});
+	    let v = new CardEditView(model, {db: parent.db});
+	    parent.el.html(v.render().$el);
 	});
     },
         
@@ -157,7 +163,12 @@ var Router = Backbone.Router.extend({
 	    let v = new CardView({model: doc, db: parent.db});
 	    parent.el.html(v.render().$el);
 	}).catch(function (err) {
-	    console.log(err);
+	    if (err.status !== 404) {
+		console.log(err);
+		return;
+	    }
+	    let v = new CardView({model: {_id: id, content: "_Card doesn't exist, edit it to create it._"}, db: parent.db});
+	    parent.el.html(v.render().$el);
 	});
     },
     
