@@ -1,4 +1,4 @@
-import {CodeJar} from 'https://medv.io/codejar/codejar.js';
+import {CodeJar} from '/_s/codejar.js';
 
 const highlight = (editor) => {
     let code = editor.innerHTML;
