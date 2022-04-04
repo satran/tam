@@ -216,3 +216,21 @@ body {
 .card .content a{
     color: inherit;
 }
+
+
+input[type="checkbox"]{
+    appearance: none;
+    background-color: #fff;
+    margin: 0;
+    font-size: .8em;
+    color: currentColor;
+    width: 1.15em;
+    height: 1.15em;
+    border: 1px solid #999;
+    border-radius: 0.15em;
+    transform: translateY(-0.075em);
+}
+input[type="checkbox"]:checked{
+    border: .1em solid #999;
+    background-color: #bbb;
+}
