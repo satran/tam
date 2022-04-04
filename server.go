@@ -6,6 +6,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
 	"os"
 )
 
@@ -73,6 +75,26 @@ func Server(opts ...Opts) (*http.Server, error) {
 			io.Copy(f, r.Body)
 		}
 	})
+
+	username := os.Getenv("DBUSER")
+	password := os.Getenv("DBPASS")
+	remote, err := url.Parse("http://localhost:5984")
+	if err != nil {
+		panic(err)
+	}
+	proxyH := func(p *httputil.ReverseProxy) func(http.ResponseWriter, *http.Request) {
+		return func(w http.ResponseWriter, r *http.Request) {
+			log.Println(r.URL)
+			r.Host = remote.Host
+			w.Header().Set("X-Ben", "Rad")
+			r.SetBasicAuth(username, password)
+			p.ServeHTTP(w, r)
+		}
+	}
+
+	proxy := httputil.NewSingleHostReverseProxy(remote)
+	http.Handle("/db/", http.StripPrefix("/db/", http.HandlerFunc(proxyH(proxy))))
+
 	http.HandleFunc("/ws", serveWS())
 	return srv, nil
 }
