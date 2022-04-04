@@ -7,6 +7,7 @@ const highlight = (editor) => {
 };
 
 const db = new PouchDB('cards');
+window.db = db;
 const remoteDB = new PouchDB('http://' + window.location.host + '/db/cards');
 
 db.sync(remoteDB, {
@@ -44,10 +45,34 @@ var SearchBarView = Backbone.View.extend({
     }
 });
 
+function clone(obj) {
+    if (null == obj || "object" != typeof obj) return obj;
+    var copy = obj.constructor();
+    for (var attr in obj) {
+        if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
+    }
+    return copy;
+}
+
 var Card = Backbone.Model.extend({
     idAttribute: "_id",
     initialize: function(attributes, options) {
 	this.db = options.db;
+    },
+
+    rename: function(newid, success) {
+	let attrs = clone(this.attributes);
+	attrs._id = newid;
+	delete(attrs._rev);
+	let parent = this;
+	this.db.put(attrs).then(function (response) {
+	    parent.db.remove(parent.attributes).then((_)=>{
+		success(response.id);
+	    })
+	}).catch(function (err) {
+	    console.log(err);
+	});
+
     },
 
     save: function(arg){
@@ -98,14 +123,13 @@ var CardEditView = Backbone.View.extend({
 	}
     },
 
-    setTitle: function(e) {
-	let c = String.fromCharCode(e.keyCode);
-	let title = e.target.value + c;
-	this.model.set('_id', title.trim());
-    },
-
     save: function() {
 	let title = this.$el.find(".title").val();
+	if (title !== this.model.id) {
+	    // rename file
+	    this.model.rename(title, (id) => {window.location = "#view/"+id});
+	    return;
+	}
 	this.model.set('_id', title.trim());
 	this.model.save((id) => {window.location = "#view/"+id});
     },

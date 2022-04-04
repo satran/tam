@@ -108,6 +108,7 @@ body {
 }
 #search-bar .item {
     padding: .5em;
+    color: inherit;
 }
 #search-bar .search {
     flex-grow: 1;
