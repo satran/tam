@@ -94,7 +94,8 @@ a:visited{
 body {
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     color: #333333;
-    background: #fbf7f0;
+    /*background: #fbf7f0;*/
+    background: #fffcf9;
     font-size: 100%;
 }
 #search-bar>div {
@@ -131,7 +132,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 100%;
     border-radius: 6px;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 2px 0 #ccc;
     letter-spacing: normal;
     line-height: 1.5;
     margin: 1em auto;
@@ -147,23 +148,25 @@ body {
     border-radius: 6px 6px 0 0; 
     display: flex;
     justify-content: flex-end;
-    font-size: 1.5em;
+}
+.card header .btns {
+    padding: .5em;
+    display: flex;
+    align-items: center;
 }
 .card header .btn {
-    padding: .5em;
-    border-left: 1px solid #efefef;
-    display: inline-block;
     text-decoration: none;
     color: inherit;
     cursor: pointer;
+    padding: .5em;
 }
 .card header .title {
     padding: .5em;
-    display: inline-block;
     text-decoration: none;
     color: inherit;
     font-weight: bold;
     flex-grow: 1;
+    font-size: 1.5em;
 }
 .card header input.title {
     flex-grow: 1;
@@ -188,7 +191,6 @@ body {
 }
 .card.edit, .card.edit header {
     background: #fffcf9;
-    /*background: #fdf6e3;*/
     color: #002b36;
 }
 .card.edit header .btn {

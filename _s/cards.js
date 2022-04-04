@@ -7,12 +7,35 @@ const highlight = (editor) => {
 };
 
 const db = new PouchDB('cards');
+const remoteDB = new PouchDB('http://' + window.location.host + '/db/cards');
+
+db.sync(remoteDB, {
+    live: true
+}).on('change', function (change) {
+    console.log(change);
+}).on('error', function (err) {
+    console.log(err);
+});
+
 
 var SearchBarView = Backbone.View.extend({
     template: _.template($('#search-bar-tmpl').html()),
 
+    events: {
+	'click .sync': "sync"
+    },
+
     initialize: function(options) {
 	this.db = options.db;
+	this.remotedb = options.remotedb;
+    },
+
+    sync: function(){
+	this.db.sync(this.remotedb).on('change', function (change) {
+	    console.log(change);
+	}).on('error', function (err) {
+	    console.log(err);
+	});
     },
 
     render: function() {
@@ -59,7 +82,6 @@ var CardEditView = Backbone.View.extend({
     events: {
 	"click .cancel": "cancel",
 	"click .save": "save",
-	"keydown .title": "setTitle",
     },
 
     initialize: function(model, options) {
@@ -77,10 +99,14 @@ var CardEditView = Backbone.View.extend({
     },
 
     setTitle: function(e) {
-	this.model.set('_id', e.target.value.trim());
+	let c = String.fromCharCode(e.keyCode);
+	let title = e.target.value + c;
+	this.model.set('_id', title.trim());
     },
 
     save: function() {
+	let title = this.$el.find(".title").val();
+	this.model.set('_id', title.trim());
 	this.model.save((id) => {window.location = "#view/"+id});
     },
 
@@ -116,13 +142,21 @@ var CardView = Backbone.View.extend({
     initialize: function(options) {
 	this.model = options.model;
 	this.db = options.db;
+	this.parser = new showdown.Converter({
+	    simplifiedAutoLink: true,
+	    tables: true,
+	    tasklists: true,
+	    smartIndentationFix: true,
+	    simpleLineBreaks: true,
+	    ellipsis: false
+	});
     },
 
     render: function() {
 	let attr = this.model;
 	let content = attr.content.replaceAll(/\[\[([^\[\]\|]*)\]\]/g , convertBracesToLinksWithoutTitle);
 	content = content.replaceAll(/\[\[([^\[\]\|]*)\|([^\[\]\|]*)\]\]/g , convertBracesToLinks);
-	content = marked.parse(content);
+	content = this.parser.makeHtml(content);
 	attr.content = content;
 	this.$el.html(this.template({card: attr}));
 	return this;
@@ -203,7 +237,7 @@ var Router = Backbone.Router.extend({
 });
 
 window.app = new Router({db: db, el: $("#container")});
-let search = new SearchBarView({db: db, container: $("#container")});
+let search = new SearchBarView({db: db, remotedb: remoteDB, container: $("#container")});
 $("#search-bar").html(search.render().el);
 
 Backbone.history.start();
