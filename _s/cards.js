@@ -1,34 +1,24 @@
 import {CodeJar} from '/_s/codejar.js';
 
-const highlight = (editor) => {
-    let code = editor.innerHTML;
-    // code = code.replace(/(\n?)(\s*.*:\n)/g, '$1<span class="header">$2</span>');
-    editor.innerHTML = code
-};
-
-const db = new PouchDB('cards');
-window.db = db;
-const remoteDB = new PouchDB('http://' + window.location.host + '/db/cards');
-
-db.sync(remoteDB, {
-    live: true
-}).on('change', function (change) {
-    console.log(change);
-}).on('error', function (err) {
-    console.log(err);
-});
-
-
 var SearchBarView = Backbone.View.extend({
     template: _.template($('#search-bar-tmpl').html()),
 
     events: {
-	'click .sync': "sync"
+	'click .sync': "sync",
+	'keypress .search': "search"
     },
 
     initialize: function(options) {
 	this.db = options.db;
 	this.remotedb = options.remotedb;
+    },
+
+    search: function(e) {
+	if (e.keyCode !== 13) {
+	    return;
+	}
+	let search = e.target.value;
+	window.location = "#search/" + search;
     },
 
     sync: function(){
@@ -101,6 +91,26 @@ var Card = Backbone.Model.extend({
     }
 })
 
+var CardSummaryView = Backbone.View.extend({
+    className: "card-summary",
+    template: _.template($('#card-summary-view-tmpl').html()),
+    
+    initialize: function(model, options) {
+	this.model = model;
+    },
+    
+    render: function() {
+	this.$el.html(this.template({card: this.model}));
+	return this;
+    }
+});
+
+const highlight = (editor) => {
+    let code = editor.innerHTML;
+    // code = code.replace(/(\n?)(\s*.*:\n)/g, '$1<span class="header">$2</span>');
+    editor.innerHTML = code
+};
+
 var CardEditView = Backbone.View.extend({
     className: "card edit",
     template: _.template($('#card-edit-view-tmpl').html()),
@@ -125,7 +135,7 @@ var CardEditView = Backbone.View.extend({
 
     save: function() {
 	let title = this.$el.find(".title").val();
-	if (title !== this.model.id) {
+	if (this.model.id && title !== this.model.id) {
 	    // rename file
 	    this.model.rename(title, (id) => {window.location = "#view/"+id});
 	    return;
@@ -136,7 +146,14 @@ var CardEditView = Backbone.View.extend({
 
     render: function() {
 	this.$el.html(this.template({card: this.model.attributes}));
-	this.jar = CodeJar(this.$el.find(".editor")[0], highlight);
+	this.jar = CodeJar(
+	    this.$el.find(".editor")[0],
+	    highlight,
+	    {
+		indentOn: /[({\[\-]$/,
+		spellcheck: true
+	    }
+	);
 	let parent = this;
 	let cancel;
 	this.jar.onUpdate(code => {
@@ -166,6 +183,7 @@ var CardView = Backbone.View.extend({
     initialize: function(options) {
 	this.model = options.model;
 	this.db = options.db;
+	this.index = options.index;
 	this.parser = new showdown.Converter({
 	    simplifiedAutoLink: true,
 	    tables: true,
@@ -176,9 +194,24 @@ var CardView = Backbone.View.extend({
 	});
     },
 
+    eval: function(content) {
+	let tmpl = _.template(content);
+	return tmpl({card: this.model, search: _.bind(this.search, this)});
+    },
+
+    search: function(query) {
+	let ret = [];
+	let rows = this.index.search(query);
+	for (let i=0; i<rows.length; i++) {
+	    ret.push({title: rows[i].ref})
+	}
+	return ret;
+    },
+
     render: function() {
-	let attr = this.model;
-	let content = attr.content.replaceAll(/\[\[([^\[\]\|]*)\]\]/g , convertBracesToLinksWithoutTitle);
+	let attr = clone(this.model);
+	let content = this.eval(attr.content);
+	content = content.replaceAll(/\[\[([^\[\]\|]*)\]\]/g , convertBracesToLinksWithoutTitle);
 	content = content.replaceAll(/\[\[([^\[\]\|]*)\|([^\[\]\|]*)\]\]/g , convertBracesToLinks);
 	content = this.parser.makeHtml(content);
 	attr.content = content;
@@ -191,17 +224,18 @@ var Router = Backbone.Router.extend({
     initialize: function(options) {
     	this.db = db;
     	this.el = options.el;
+	this.index = options.index;
     },
 
     routes: {
-	"": "index",
+	"": "root",
 	"edit/:id": "edit",
 	"view/:id": "view",
 	"new": "newCard",
 	"search/:query": "search"
     },
 
-    index: function() {
+    root: function() {
 	let parent = this;
 	const settingsID = "#:settings";
 	this.db.get(settingsID).then(function (doc) {
@@ -239,37 +273,64 @@ var Router = Backbone.Router.extend({
 	    parent.el.html(v.render().$el);
 	});
     },
-        
+    
     view: function(id) {
 	let parent = this;
 	this.db.get(id).then(function (doc) {
-	    let v = new CardView({model: doc, db: parent.db});
+	    let v = new CardView({model: doc, db: parent.db, index: parent.index});
 	    parent.el.html(v.render().$el);
 	}).catch(function (err) {
 	    if (err.status !== 404) {
 		console.log(err);
 		return;
 	    }
-	    let v = new CardView({model: {_id: id, content: "_Card doesn't exist, edit it to create it._"}, db: parent.db});
+	    let v = new CardView({model: {_id: id, content: "_Card doesn't exist, edit it to create it._"}, db: parent.db, index: parent.index});
 	    parent.el.html(v.render().$el);
 	});
     },
     
     search: function(query) {
-	console.log("search, not implemented");
+	let that = this;
+	this.el.html('');
+	index.search(query).forEach(card => {
+	    let v = new CardSummaryView({_id: card.ref});
+	    that.el.append(v.render().$el);
+	});
     }
 });
 
-window.app = new Router({db: db, el: $("#container")});
-let search = new SearchBarView({db: db, remotedb: remoteDB, container: $("#container")});
-$("#search-bar").html(search.render().el);
+function loadApp(db, remoteDB, index) {
+    window.app = new Router({db: db, el: $("#container"), index: index});
+    let search = new SearchBarView({
+	db: db,
+	remotedb: remoteDB,
+	container: $("#container")
+    });
+    $("#search-bar").html(search.render().el);
 
-Backbone.history.start();
-
-
-window.replacer = function(match, p1, p2, offset, string) {
-    // p1 is nondigits, p2 digits, and p3 non-alphanumerics
-    return [p1, p2].join(' - ');
+    Backbone.history.start();
 }
 
+const db = new PouchDB('cards');
+window.db = db;
+const remoteDB = new PouchDB('http://' + window.location.host + '/db/cards');
+
+db.sync(remoteDB, {
+    live: true
+}).on('change', function (change) {
+    console.log(change);
+}).on('error', function (err) {
+    console.log(err);
+});
+
+db.allDocs({include_docs: true}).then(r => {
+    let index = lunr(function() {
+	this.ref('_id');
+	this.field('_id');
+	this.field('content');
+	r.rows.forEach((d) => {this.add(d.doc)}, this);	
+    });
+    window.index = index;
+    loadApp(db, remoteDB, index);
+});
 

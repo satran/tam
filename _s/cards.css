@@ -133,7 +133,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 100%;
     border-radius: 6px;
-    box-shadow: 0 2px 2px 0 #ccc;
+    box-shadow: 0 0 2px 0 #ccc;
     letter-spacing: normal;
     line-height: 1.5;
     margin: 1em auto;
@@ -176,10 +176,8 @@ body {
     outline: none;
     border-radius: 0;
     text-decoration: none;
-    font-size: inherit;
     padding: .5em;
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-    font-size: 100%;
     background: inherit;
 }
 .card .content, .card .editor {
@@ -189,9 +187,10 @@ body {
 .card .editor {
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     font-size: 100%;
+    tab-size: 4;
 }
 .card.edit, .card.edit header {
-    background: #fffcf9;
+    /*background: #fffcf9;*/
     color: #002b36;
 }
 .card.edit header .btn {
@@ -203,10 +202,10 @@ body {
     margin: .5em 0;
 }
 .card .content h1{
-    font-size: 1.5em;
+    font-size: 1.3em;
 }
 .card .content h2{
-    font-size: 1.3em;
+    font-size: 1.2em;
 }
 .card .content h3{
     font-size: 1.1em;
@@ -218,7 +217,25 @@ body {
     color: inherit;
 }
 
+.card-summary {
+    display: flex;
+    max-width: 44em;
+    margin: 0 auto;
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+    letter-spacing: normal;
+    line-height: 1.5;
+}
+.card-summary .title {
+    flex-grow: 1;
+}
+.card-summary .title, .card-summary .btn {
+    padding: 1em;
+    text-decoration: none;
+    color: inherit;
+}
 
+/*
 input[type="checkbox"]{
     appearance: none;
     background-color: #fff;
@@ -235,3 +252,4 @@ input[type="checkbox"]:checked{
     border: .1em solid #999;
     background-color: #bbb;
 }
+*/
