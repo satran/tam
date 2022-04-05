@@ -325,10 +325,15 @@ db.sync(remoteDB, {
 
 db.allDocs({include_docs: true}).then(r => {
     let index = lunr(function() {
-	this.ref('_id');
-	this.field('_id');
+	this.ref('title');
+	this.field('title');
 	this.field('content');
-	r.rows.forEach((d) => {this.add(d.doc)}, this);	
+	r.rows.forEach((d) => {
+	    let doc = d.doc;
+	    doc.title = doc._id; // just to make the search easier
+	    delete doc._id;
+	    this.add(doc);
+	}, this);
     });
     window.index = index;
     loadApp(db, remoteDB, index);

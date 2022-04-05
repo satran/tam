@@ -90,6 +90,10 @@ em {
 a:visited{
     color: inherit;
 }
+hr {
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
 
 body {
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
@@ -161,6 +165,23 @@ body {
     cursor: pointer;
     padding: .5em;
 }
+.card header .btn.save {
+  display: inline-block;
+  padding: 0.25em 1em;
+  border-radius: 1.5em;
+  vertical-align: middle;
+  text-decoration: none;
+  text-align: center;
+  white-space: normal;
+  cursor: pointer;
+  outline-offset: 0.4em;
+  background: #2da562;
+  color: #fff;
+  margin: .25em;
+}
+.card header .btn.cancel {
+    text-decoration: underline;
+}
 .card header .title {
     padding: .5em;
     text-decoration: none;
@@ -169,8 +190,9 @@ body {
     flex-grow: 1;
     font-size: 1.5em;
 }
-.card header input.title {
+.card input.title {
     flex-grow: 1;
+    font-size: 1.5em;
     font-family: inherit;
     border: none;
     outline: none;
@@ -179,6 +201,7 @@ body {
     padding: .5em;
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     background: inherit;
+    border-bottom: 1px solid #efefef;
 }
 .card .content, .card .editor {
     flex-grow: 1;
