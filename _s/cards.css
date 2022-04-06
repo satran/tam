@@ -190,10 +190,8 @@ body {
     flex-grow: 1;
     font-size: 1.5em;
 }
-.card input.title {
+.card input.title, .card input.item.tags {
     flex-grow: 1;
-    font-size: 1.5em;
-    font-family: inherit;
     border: none;
     outline: none;
     border-radius: 0;
@@ -201,7 +199,28 @@ body {
     padding: .5em;
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     background: inherit;
-    border-bottom: 1px solid #efefef;
+}
+.card input.title {
+    font-size: 1.5em;
+}
+.card input.item.tags {
+    border-top: 1px solid #eecc66ad;
+    border-bottom: 1px solid #eecc66ad;
+    background: #eecc6647;
+}
+.card .tags {
+    display: flex;
+    padding: 0 .5em;
+}
+.card .tags .tag {
+    background: #f4de9b;
+    border: 1px solid #ec6;
+    margin: .25em;
+    padding: .15em .5em;
+    font-size: .8em;
+    border-radius: .5em;
+    color: black;
+    text-decoration: none;
 }
 .card .content, .card .editor {
     flex-grow: 1;

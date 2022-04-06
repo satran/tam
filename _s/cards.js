@@ -135,6 +135,12 @@ var CardEditView = Backbone.View.extend({
 
     save: function() {
 	let title = this.$el.find(".title").val();
+	let tags = this.$el.find(".tags").val().trim();
+	if (tags.length>0){
+	    this.model.set("tags", tags.split(" "));
+	} else {
+	    this.model.set("tags", undefined);
+	}
 	if (this.model.id && title !== this.model.id) {
 	    // rename file
 	    this.model.rename(title, (id) => {window.location = "#view/"+id});
@@ -328,6 +334,7 @@ db.allDocs({include_docs: true}).then(r => {
 	this.ref('title');
 	this.field('title');
 	this.field('content');
+	this.field('tags');
 	r.rows.forEach((d) => {
 	    let doc = d.doc;
 	    doc.title = doc._id; // just to make the search easier
