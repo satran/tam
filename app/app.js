@@ -1,5 +1,5 @@
-import {CodeJar} from '/_s/codejar.js';
-import Fuse from '/_s/fuse.js';
+import {CodeJar} from './codejar.js';
+import Fuse from './fuse.js';
 
 const queryOptions = {keywords: ['title', 'tags', 'content']}
 function parseQuery(query) {
@@ -354,18 +354,6 @@ db.allDocs({include_docs: true}).then(r => {
 	    index.add(doc);
 	})
     })
-    //let index = lunr(function() {
-    //	this.ref('title');
-    //	this.field('title');
-    //	this.field('content');
-    //	this.field('tags');
-    //	r.rows.forEach((d) => {
-    //	    let doc = d.doc;
-    //	    doc.title = doc._id; // just to make the search easier
-    //	    delete doc._id;
-    //	    this.add(doc);
-    //	}, this);
-    //});
     window.index = index;
     loadApp(db, remoteDB, index);
 });
