@@ -324,10 +324,9 @@ var Router = Backbone.Router.extend({
 
     root: function() {
 	let that = this;
-	const settingsID = "#:settings";
-	this.db.get(settingsID).then(function (doc) {
-	    if (doc.DefaultCard !== undefined) {
-		that.view(doc.DefaultCard);
+	this.db.get(keys.settings).then(function (doc) {
+	    if (doc.fields["start-card"].value) {
+		that.view(doc.fields["start-card"].value);
 		return;
 	    } else {
 		that.view("Start");
