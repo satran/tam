@@ -131,19 +131,24 @@ body {
     width: 1em;
     height: 1em;
 }
+#container {
+    margin-bottom: 70vh;
+}
 .card {
     display:flex;
     flex-direction: column;
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 100%;
     border-radius: 6px;
-    box-shadow: 0 0 2px 0 #ccc;
+    box-shadow: 0 0px 5px -5px #888;
+    border: 1px solid #efefef;
     letter-spacing: normal;
     line-height: 1.5;
     margin: 1em auto;
     max-width: 44rem;
     background: #fff;
     color: #002b36;
+    padding: 2em;
 }
 .card header {
     position: sticky;
@@ -164,6 +169,9 @@ body {
     color: inherit;
     cursor: pointer;
     padding: .5em;
+}
+.card header .spacer {
+    flex-grow: 1;
 }
 .card header .btn.save {
   display: inline-block;
@@ -204,15 +212,19 @@ body {
 }
 .card input.title {
     font-size: 1.5em;
+    background: #eecc6612;
+    margin: 0;
 }
 .card input.item.tags {
-    border-top: 1px solid #eecc66ad;
-    border-bottom: 1px solid #eecc66ad;
-    background: #eecc6647;
+    /*border-bottom: 1px solid #eecc66ad;*/
+    /*background: #eecc6647;*/
+    background: #eecc6612;
+    margin: .25em 0;
 }
 .card .tags {
     display: flex;
     padding: 0 .5em;
+    margin: .25em;
     justify-content: center;
     text-align: center;
 }
@@ -221,19 +233,21 @@ body {
     border: 1px solid #ec6;
     margin: .25em;
     padding: .1em .25em;
-    font-size: .8em;
+    font-size: .7em;
+    font-weight: bold;
     border-radius: .5em;
     color: #907421;
     text-decoration: none;
 }
 .card .content, .card .editor {
     flex-grow: 1;
-    padding: 1em;
+    padding: 0 1em 1em;
 }
 .card .editor {
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     font-size: 100%;
     tab-size: 4;
+    background: #eecc6612;
 }
 .card.edit, .card.edit header {
      color: #002b36;
@@ -298,3 +312,11 @@ input[type="checkbox"]:checked{
     background-color: #bbb;
 }
 */
+
+@media screen and (max-width: 800px) {
+    .card {
+	width: 100%;
+	padding: 0;
+	border-radius: 0;
+    }
+}

@@ -14,6 +14,7 @@ var SearchBarView = Backbone.View.extend({
 
     events: {
 	'click .sync': "sync",
+	'click .back': "back",
 	'keypress .search': "search"
     },
 
@@ -30,6 +31,10 @@ var SearchBarView = Backbone.View.extend({
 	window.location = "#search/" + search;
     },
 
+    back: function() {
+	window.history.back();
+    },
+    
     sync: function(){
 	this.db.sync(this.remotedb).on('change', function (change) {
 	    console.log(change);
