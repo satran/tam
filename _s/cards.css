@@ -148,11 +148,11 @@ body {
 .card header {
     position: sticky;
     top: 0;
-    border-bottom: 1px solid #efefef;
     background: #fff;
     border-radius: 6px 6px 0 0; 
     display: flex;
     justify-content: flex-end;
+    padding: .25em;
 }
 .card header .btns {
     padding: .5em;
@@ -182,13 +182,15 @@ body {
 .card header .btn.cancel {
     text-decoration: underline;
 }
-.card header .title {
-    padding: .5em;
+.card .title {
+    margin: 0 1em;
     text-decoration: none;
     color: inherit;
     font-weight: bold;
     flex-grow: 1;
     font-size: 1.5em;
+    border-bottom: 1px solid #efefef;
+    text-align: center;
 }
 .card input.title, .card input.item.tags {
     flex-grow: 1;
@@ -211,15 +213,17 @@ body {
 .card .tags {
     display: flex;
     padding: 0 .5em;
+    justify-content: center;
+    text-align: center;
 }
 .card .tags .tag {
     background: #f4de9b;
     border: 1px solid #ec6;
     margin: .25em;
-    padding: .15em .5em;
+    padding: .1em .25em;
     font-size: .8em;
     border-radius: .5em;
-    color: black;
+    color: #907421;
     text-decoration: none;
 }
 .card .content, .card .editor {
@@ -232,8 +236,7 @@ body {
     tab-size: 4;
 }
 .card.edit, .card.edit header {
-    /*background: #fffcf9;*/
-    color: #002b36;
+     color: #002b36;
 }
 .card.edit header .btn {
     border-color: #eee8d5;

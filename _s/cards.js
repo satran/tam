@@ -1,4 +1,13 @@
 import {CodeJar} from '/_s/codejar.js';
+import Fuse from '/_s/fuse.js';
+
+const queryOptions = {keywords: ['title', 'tags', 'content']}
+function parseQuery(query) {
+    let parsed = parse(query, queryOptions);
+    delete(parsed.exclude);
+    delete(parsed.offsets);
+    return parsed;
+}
 
 var SearchBarView = Backbone.View.extend({
     template: _.template($('#search-bar-tmpl').html()),
@@ -172,8 +181,6 @@ var CardEditView = Backbone.View.extend({
     }
 });
 
-
-
 function convertBracesToLinks(match, p1, p2, offset, string) {
     return '<a href="#view/' + p1 +'">' + p2 + '</a>';
 }
@@ -207,9 +214,9 @@ var CardView = Backbone.View.extend({
 
     search: function(query) {
 	let ret = [];
-	let rows = this.index.search(query);
+	let rows = this.index.search(parseQuery(query));
 	for (let i=0; i<rows.length; i++) {
-	    ret.push({title: rows[i].ref})
+	    ret.push({title: rows[i].item.title})
 	}
 	return ret;
     },
@@ -298,8 +305,8 @@ var Router = Backbone.Router.extend({
     search: function(query) {
 	let that = this;
 	this.el.html('');
-	index.search(query).forEach(card => {
-	    let v = new CardSummaryView({_id: card.ref});
+	index.search(parseQuery(query)).forEach(card => {
+	    let v = new CardSummaryView({_id: card.item.title});
 	    that.el.append(v.render().$el);
 	});
     }
@@ -330,18 +337,30 @@ db.sync(remoteDB, {
 });
 
 db.allDocs({include_docs: true}).then(r => {
-    let index = lunr(function() {
-	this.ref('title');
-	this.field('title');
-	this.field('content');
-	this.field('tags');
-	r.rows.forEach((d) => {
+    let index = new Fuse([], {
+	keys: ['title', 'content', 'tags'],
+	threshold: 0
+    });
+    db.allDocs({include_docs: true}).then(r => {
+	r.rows.forEach(d => {
 	    let doc = d.doc;
 	    doc.title = doc._id; // just to make the search easier
 	    delete doc._id;
-	    this.add(doc);
-	}, this);
-    });
+	    index.add(doc);
+	})
+    })
+    //let index = lunr(function() {
+    //	this.ref('title');
+    //	this.field('title');
+    //	this.field('content');
+    //	this.field('tags');
+    //	r.rows.forEach((d) => {
+    //	    let doc = d.doc;
+    //	    doc.title = doc._id; // just to make the search easier
+    //	    delete doc._id;
+    //	    this.add(doc);
+    //	}, this);
+    //});
     window.index = index;
     loadApp(db, remoteDB, index);
 });
