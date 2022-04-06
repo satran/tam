@@ -1,6 +1,29 @@
 import {CodeJar} from './codejar.js';
 import Fuse from './fuse.js';
 
+const keys = {
+    settings: "@:/settings"
+}
+const defaultConfig = {
+    "settings": {
+	"_id": keys.settings,
+	"fields": {
+	    "remote-database": {
+		"key": "Remote Database",
+		"value": ""
+	    },
+	    "start-card": {
+		"key": "Start Card",
+		"value": "Start"
+	    }
+	}
+    }
+}
+function getDefaultConfig(id) {
+    if (!defaultConfig.hasOwnProperty(id)) return {};
+    return defaultConfig[id];
+}
+
 const queryOptions = {keywords: ['title', 'tags', 'content']}
 function parseQuery(query) {
     let parsed = parse(query, queryOptions);
@@ -8,6 +31,35 @@ function parseQuery(query) {
     delete(parsed.offsets);
     return parsed;
 }
+
+var ConfigCardView = Backbone.View.extend({
+    className: "card config",
+    template: _.template($('#config-card-view-tmpl').html()),
+    events: {
+	"click .save": "save"
+    },
+    
+    initialize: function(options) {
+	this.model = options.model;
+	this.db = options.db;
+    },
+
+    save: function() {
+	let fields = this.$el.find("input.field-value");
+	for (let i=0; i<fields.length; i++) {
+	    let value = fields[i].value;
+	    let key = fields[i].dataset["key"];
+	    this.model.fields[key].value = value;
+	}
+	this.db.put(this.model).then(r => console.log(r));
+    },
+    
+    render: function() {
+	this.$el.html(this.template({model: this.model}));
+	return this;
+    }
+});
+
 
 var SearchBarView = Backbone.View.extend({
     template: _.template($('#search-bar-tmpl').html()),
@@ -68,9 +120,9 @@ var Card = Backbone.Model.extend({
 	let attrs = clone(this.attributes);
 	attrs._id = newid;
 	delete(attrs._rev);
-	let parent = this;
+	let that = this;
 	this.db.put(attrs).then(function (response) {
-	    parent.db.remove(parent.attributes).then((_)=>{
+	    that.db.remove(that.attributes).then((_)=>{
 		success(response.id);
 	    })
 	}).catch(function (err) {
@@ -96,7 +148,7 @@ var Card = Backbone.Model.extend({
 	if (attrs._rev === undefined){
 	    attrs._rev = this.attributes._rev;
 	}
-	let parent = this;
+	let that = this;
 	this.db.put(attrs).then(function (response) {
 	    callback(response.id);
 	}).catch(function (err) {
@@ -174,12 +226,12 @@ var CardEditView = Backbone.View.extend({
 		spellcheck: true
 	    }
 	);
-	let parent = this;
+	let that = this;
 	let cancel;
 	this.jar.onUpdate(code => {
 	    if (cancel) clearTimeout(cancel);
             cancel = setTimeout(() => {
-		parent.model.set('content', code);
+		that.model.set('content', code);
             }, 500);
 	});
 	return this;
@@ -238,6 +290,7 @@ var CardView = Backbone.View.extend({
     }
 });
 
+
 var Router = Backbone.Router.extend({
     initialize: function(options) {
     	this.db = db;
@@ -247,25 +300,41 @@ var Router = Backbone.Router.extend({
 
     routes: {
 	"": "root",
+	"@:/:id": "config",
 	"edit/:id": "edit",
 	"view/:id": "view",
 	"new": "newCard",
 	"search/:query": "search"
     },
 
+    config: function(id) {
+	let that = this;
+	this.db.get("@:/"+id).then(function (doc) {
+	    let v = new ConfigCardView({model: doc, db: that.db});
+	    that.el.html(v.render().$el);
+	}).catch(function (err) {
+	    if (err.status !== 404) {
+		console.log(err);
+		return;
+	    }
+	    let v = new ConfigCardView({model: defaultConfig[id], db: that.db});
+	    that.el.html(v.render().$el);
+	});
+    },
+
     root: function() {
-	let parent = this;
+	let that = this;
 	const settingsID = "#:settings";
 	this.db.get(settingsID).then(function (doc) {
 	    if (doc.DefaultCard !== undefined) {
-		parent.view(doc.DefaultCard);
+		that.view(doc.DefaultCard);
 		return;
 	    } else {
-		parent.view("Start");
+		that.view("Start");
 	    }
 	}).catch(function (err) {
 	    console.log(err);
-	    parent.view("Start");
+	    that.view("Start");
 	});
     },
 
@@ -276,34 +345,34 @@ var Router = Backbone.Router.extend({
     },
     
     edit: function(id) {
-	let parent = this;
+	let that = this;
 	this.db.get(id).then(function (doc) {
-	    let model = new Card(doc, {db: parent.db});
-	    let v = new CardEditView(model, {db: parent.db});
-	    parent.el.html(v.render().$el);
+	    let model = new Card(doc, {db: that.db});
+	    let v = new CardEditView(model, {db: that.db});
+	    that.el.html(v.render().$el);
 	}).catch(function (err) {
 	    if (err.status !== 404) {
 		console.log(err);
 		return;
 	    }
-	    let model = new Card({_id: id}, {db: parent.db});
-	    let v = new CardEditView(model, {db: parent.db});
-	    parent.el.html(v.render().$el);
+	    let model = new Card({_id: id}, {db: that.db});
+	    let v = new CardEditView(model, {db: that.db});
+	    that.el.html(v.render().$el);
 	});
     },
     
     view: function(id) {
-	let parent = this;
+	let that = this;
 	this.db.get(id).then(function (doc) {
-	    let v = new CardView({model: doc, db: parent.db, index: parent.index});
-	    parent.el.html(v.render().$el);
+	    let v = new CardView({model: doc, db: that.db, index: that.index});
+	    that.el.html(v.render().$el);
 	}).catch(function (err) {
 	    if (err.status !== 404) {
 		console.log(err);
 		return;
 	    }
-	    let v = new CardView({model: {_id: id, content: "_Card doesn't exist, edit it to create it._"}, db: parent.db, index: parent.index});
-	    parent.el.html(v.render().$el);
+	    let v = new CardView({model: {_id: id, content: "_Card doesn't exist, edit it to create it._"}, db: that.db, index: that.index});
+	    that.el.html(v.render().$el);
 	});
     },
     
@@ -317,13 +386,9 @@ var Router = Backbone.Router.extend({
     }
 });
 
-function loadApp(db, remoteDB, index) {
+function loadApp(db, index) {
     window.app = new Router({db: db, el: $("#container"), index: index});
-    let search = new SearchBarView({
-	db: db,
-	remotedb: remoteDB,
-	container: $("#container")
-    });
+    let search = new SearchBarView({db: db, container: $("#container")});
     $("#search-bar").html(search.render().el);
 
     Backbone.history.start();
@@ -331,14 +396,16 @@ function loadApp(db, remoteDB, index) {
 
 const db = new PouchDB('cards');
 window.db = db;
-const remoteDB = new PouchDB('http://' + window.location.host + '/db/cards');
-
-db.sync(remoteDB, {
-    live: true
-}).on('change', function (change) {
-    console.log(change);
-}).on('error', function (err) {
-    console.log(err);
+db.get(keys.settings).then(function (doc) {
+    let remoteHost = doc.fields["remote-database"].value;
+    const remoteDB = new PouchDB(remoteHost);
+    db.sync(remoteDB, {
+	live: true
+    }).on('change', function (change) {
+	console.log(change);
+    }).on('error', function (err) {
+	console.log(err);
+    });
 });
 
 db.allDocs({include_docs: true}).then(r => {
@@ -355,6 +422,6 @@ db.allDocs({include_docs: true}).then(r => {
 	})
     })
     window.index = index;
-    loadApp(db, remoteDB, index);
+    loadApp(db, index);
 });
 
