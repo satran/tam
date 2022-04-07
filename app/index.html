@@ -4,7 +4,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="theme-color" content="#fffcf9" media="(prefers-color-scheme: light)">
-        <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+        <meta name="theme-color" content="#323f4b" media="(prefers-color-scheme: dark)">
 	<link rel="icon" type="image/png" href="favicon.png" />
         <link rel="stylesheet" href="app.css"/>
         <title>Tam</title>
@@ -49,7 +49,7 @@
           <div class="tags"><% if (card.tags) card.tags.forEach(tag => { %>
             <a href="#search/tags:<%- tag %>" class="tag"><%- tag %></a>
           <% }) %></div>
-          <div class="content"><%= card.content %></div>
+          <div class="content"><%if (card.content) %><%= card.content %></div>
 	</script>
 
 	<script type="text/template" id="config-card-view-tmpl">

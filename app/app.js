@@ -265,6 +265,7 @@ var CardView = Backbone.View.extend({
     },
 
     eval: function(content) {
+	if (!content) return "";
 	let tmpl = _.template(content);
 	return tmpl({card: this.model, search: _.bind(this.search, this)});
     },

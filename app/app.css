@@ -162,7 +162,7 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 100%;
     border-radius: 6px;
-    box-shadow: 0 0px 10px -5px var(--card-shadow-color);
+    box-shadow: 0 0px 7px -5px var(--card-shadow-color);
     border: 1px solid var(--border-color);
     letter-spacing: normal;
     line-height: 1.5;
@@ -316,11 +316,13 @@ body {
 }
 .card.config .field input {
     flex-grow: 1;
-    border: 1px solid var(--border-color);
+    border: none;
     outline: none;
     border-radius: 0;
     text-decoration: none;
     padding: .5em;
+    background: var(--editable-bg-color);
+    color: var(--content-fg-color);
 }
 .card.config .field label {
   flex-grow: 1;
@@ -344,35 +346,14 @@ body {
 	--content-bg-color: #1f2933;
 	--content-fg-color: #cbd2d9;
 
-	--editable-bg-color: #3e4c59;
+	--editable-bg-color: #17222b;
 
 	--card-shadow-color: #000000;
-	--card-tag-bg-color: #f4de9b;
-	--card-tag-fg-color: #907421;
-	--card-tag-border-color: #ec6;
+	--card-tag-bg-color: #323f4b;
+	--card-tag-fg-color: #cbd2d9;;
+	--card-tag-border-color: #3e4c59;
 
 	--btn-success-bg-color: #2da562;
 	--btn-success-fg-color: #ffffff;
     }
-    /* brown pallete
-:root {
-	--main-bg-color: #27241d;
-	--main-fg-color: #faf9f7;
-	--border-color: #625d52;
-	--border-emp-color: #504a40;
-
-	--content-bg-color: #423d33;
-	--content-fg-color: #faf9f7;
-
-	--editable-bg-color: #504a40;
-
-	--card-shadow-color: #000000;
-	--card-tag-bg-color: #f4de9b;
-	--card-tag-fg-color: #907421;
-	--card-tag-border-color: #ec6;
-
-	--btn-success-bg-color: #2da562;
-	--btn-success-fg-color: #ffffff;
-    }
-*/
 }
