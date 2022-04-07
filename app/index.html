@@ -5,7 +5,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="theme-color" content="#fffcf9" media="(prefers-color-scheme: light)">
         <meta name="theme-color" content="#323f4b" media="(prefers-color-scheme: dark)">
-	<link rel="icon" type="image/png" href="favicon.png" />
+	      <link rel="icon" type="image/png" href="favicon.png" />
         <link rel="stylesheet" href="app.css"/>
         <title>Tam</title>
     </head>
@@ -13,19 +13,19 @@
         <header id="search-bar"></header>
         <div id="container"></div>
 
-	<script type="text/template" id="search-bar-tmpl">
-	    <a class="item back"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/> </svg></a>
+	      <script type="text/template" id="search-bar-tmpl">
+	       <a class="item back"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-left" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/> </svg></a>
             <input class="item search" type="text" placeholder="search"/>
             <a class="item settings" href="#@:/settings"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3h9.05zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8h2.05zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1h9.05z"/> </svg></a>
-	</script>
+	      </script>
 
-	<script type="text/template" id="card-summary-view-tmpl">
+	      <script type="text/template" id="card-summary-view-tmpl">
           <a class="title" href="#view/<%= card._id %>"><%= card._id %></a>
           <a class="btn edit" href="#edit/<%= card._id %>"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16"> <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/> <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/> </svg></a>
           <a class="btn meta" href="#meta/<%= card._id %>"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16"> <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg></a>
         </script>
-	
-	<script type="text/template" id="card-edit-view-tmpl">
+	      
+	      <script type="text/template" id="card-edit-view-tmpl">
           <header>
             <a class="btn" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/> <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/> </svg></a>
             <a class="btn new" href="#new"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/></svg></a>
@@ -36,9 +36,9 @@
           <input class="item title" type="text" placeholder="Enter title of card..." value="<%= card._id %>"/>
           <input class="item tags" type="text" placeholder="Enter tags, separated by space" value="<% if (card.tags) {%><%- card.tags.join(" ") %><% } %>"/>
           <div class="editor"><%= card.content %></div>
-	</script>
+	      </script>
 
-	<script type="text/template" id="card-view-tmpl">
+	      <script type="text/template" id="card-view-tmpl">
           <header>
             <a class="btn" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/> <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/> </svg></a>
             <a class="btn new" href="#new"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/></svg></a>
@@ -48,42 +48,42 @@
           <div class="item title"><%= card._id %></div>
           <div class="tags"><% if (card.tags) card.tags.forEach(tag => { %>
             <a href="#search/tags:<%- tag %>" class="tag"><%- tag %></a>
-	    <% }) %>
-    	  </div>
-    <% if (refs) { %>
+	       <% }) %>
+    	   </div>
+         <% if (refs) { %>
           <div class="refs">
              <div class="label">Links to this</div>
              <div class="refs-content"><%= refs %></div>
-		   </div>
-		   <% } %>
+		     </div>
+		     <% } %>
           <div class="content"><%if (card.content) %><%= card.content %></div>
-	</script>
+	      </script>
 
-	<script type="text/template" id="config-card-view-tmpl">
+	      <script type="text/template" id="config-card-view-tmpl">
           <header>
             <a class="btn" href="#"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M2 13.5V7h1v6.5a.5.5 0 0 0 .5.5h9a.5.5 0 0 0 .5-.5V7h1v6.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5zm11-11V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/> <path fill-rule="evenodd" d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/> </svg></a>
             <a class="btn new" href="#new"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/></svg></a>
             <span class="btn spacer"></span>
             <a class="btn cancel">Discard changes</a>
             <a class="btn save">Save</a>
-    </header>
-    <div class="item title"><%= model._id %></div>
-    <div class="fields">
-    <% for (key in model.fields) { %>
-      <div class="field">
-        <label><%- model.fields[key].key %></label>
-        <input class="field-value" data-key="<%- key %>" type="text" value="<%- model.fields[key].value %>" />
-      </div>
+         </header>
+         <div class="item title"><%= model._id %></div>
+         <div class="fields">
+         <% for (key in model.fields) { %>
+         <div class="field">
+         <label><%- model.fields[key].key %></label>
+         <input class="field-value" data-key="<%- key %>" type="text" value="<%- model.fields[key].value %>" />
+         </div>
 				   <% } %>
-    </div>
-	</script>
+         </div>
+	      </script>
 
-	<script src="showdown.min.js"></script>
-	<script src="pouchdb.js"></script>
-	<script src="jquery.js"></script>
-	<script src="underscore.js"></script>
-	<script src="backbone.js"></script>
-	<script src="search-query-parser.js"></script>
+	      <script src="showdown.min.js"></script>
+	      <script src="pouchdb.js"></script>
+	      <script src="jquery.js"></script>
+	      <script src="underscore.js"></script>
+	      <script src="backbone.js"></script>
+	      <script src="search-query-parser.js"></script>
         <script src="app.js" type="module"></script>
     </body>
 </html>

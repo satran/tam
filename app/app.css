@@ -118,7 +118,7 @@ hr {
     border-bottom: 1px solid var(--border-color);
 }
 a {
-  color: var(--content-fg-color);
+    color: var(--content-fg-color);
 }
 
 body {
@@ -174,6 +174,9 @@ body {
     background: var(--content-bg-color);
     color: var(--content-fg-color);
     padding: 2em;
+    /* to break long lines*/
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 .card header {
     position: sticky;
@@ -199,18 +202,18 @@ body {
     flex-grow: 1;
 }
 .card header .btn.save {
-  display: inline-block;
-  padding: 0.25em 1em;
-  border-radius: 1.5em;
-  vertical-align: middle;
-  text-decoration: none;
-  text-align: center;
-  white-space: normal;
-  cursor: pointer;
-  outline-offset: 0.4em;
-  background: var(--btn-success-bg-color);
-  color: var(--btn-success-fg-color);
-  margin: .25em;
+    display: inline-block;
+    padding: 0.25em 1em;
+    border-radius: 1.5em;
+    vertical-align: middle;
+    text-decoration: none;
+    text-align: center;
+    white-space: normal;
+    cursor: pointer;
+    outline-offset: 0.4em;
+    background: var(--btn-success-bg-color);
+    color: var(--btn-success-fg-color);
+    margin: .25em;
 }
 .card header .btn.cancel {
     text-decoration: underline;
@@ -265,14 +268,15 @@ body {
     text-decoration: none;
 }
 .card .refs {
-  padding: 1em;
-  background: var(--editable-bg-color);
-  border-radius: .5em;
-  border: 1px solid var(--border-color);
+    padding: 1em;
+    margin: .5em;
+    background: var(--editable-bg-color);
+    border-radius: .5em;
+    border: 1px solid var(--border-color);
 }
 .card .refs .label {
-  font-weight: bold;
-  margin-bottom: 1em;
+    font-weight: bold;
+    margin-bottom: 1em;
 }
 
 .card .content, .card .editor {
@@ -324,9 +328,9 @@ body {
 }
 
 .card.config .field {
-  padding: .5em;
-  display: flex;
-  flex-direction: column;
+    padding: .5em;
+    display: flex;
+    flex-direction: column;
 }
 .card.config .field input {
     flex-grow: 1;
@@ -339,35 +343,34 @@ body {
     color: var(--content-fg-color);
 }
 .card.config .field label {
-  flex-grow: 1;
-  font-size: .8em
+    flex-grow: 1;
+    font-size: .8em
 }
 
 @media screen and (max-width: 800px) {
     .card {
-	width: 100%;
-	padding: 0;
-	border-radius: 0;
+	      padding: 0;
+	      border-radius: 0;
     }
 }
 @media (prefers-color-scheme: dark) {
     :root {
-	--main-bg-color: #323f4b;
-	--main-fg-color: #cbd2d9;
-	--border-color: #3e4c59;
-	--border-emp-color: #3e4c59;
+	      --main-bg-color: #323f4b;
+	      --main-fg-color: #cbd2d9;
+	      --border-color: #3e4c59;
+	      --border-emp-color: #3e4c59;
 
-	--content-bg-color: #1f2933;
-	--content-fg-color: #cbd2d9;
+	      --content-bg-color: #1f2933;
+	      --content-fg-color: #cbd2d9;
 
-	--editable-bg-color: #17222b;
+	      --editable-bg-color: #17222b;
 
-	--card-shadow-color: #000000;
-	--card-tag-bg-color: #323f4b;
-	--card-tag-fg-color: #cbd2d9;;
-	--card-tag-border-color: #3e4c59;
+	      --card-shadow-color: #000000;
+	      --card-tag-bg-color: #323f4b;
+	      --card-tag-fg-color: #cbd2d9;;
+	      --card-tag-border-color: #3e4c59;
 
-	--btn-success-bg-color: #2da562;
-	--btn-success-fg-color: #ffffff;
+	      --btn-success-bg-color: #2da562;
+	      --btn-success-fg-color: #ffffff;
     }
 }
