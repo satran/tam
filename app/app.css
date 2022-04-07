@@ -58,7 +58,7 @@ table {
     width: 100%;
 }
 th {
-    border-bottom: 2px solid #efefef;
+    border-bottom: 2px solid ;
     font-weight: bold;
     text-align: left;
 }
@@ -90,16 +90,38 @@ em {
 a:visited{
     color: inherit;
 }
+/* --------- end of reset --------- */
+
+:root {
+    --main-bg-color: #fffcf9;
+    --main-fg-color: #333333;
+    --border-color: #efefef;
+    --border-emp-color: #ccc;
+
+    --content-bg-color: #ffffff;
+    --content-fg-color: #002b36;
+
+    --editable-bg-color: #eecc6612;
+
+    --card-shadow-color: #888888;
+    --card-tag-bg-color: #f4de9b;
+    --card-tag-fg-color: #907421;
+    --card-tag-border-color: #ec6;
+
+    --btn-success-bg-color: #2da562;
+    --btn-success-fg-color: #ffffff;
+}
+
+
 hr {
     border: 0;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid var(--border-color);
 }
 
 body {
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-    color: #333333;
-    /*background: #fbf7f0;*/
-    background: #fffcf9;
+    color: var(--main-fg-color);
+    background: var(--main-bg-color);
     font-size: 100%;
 }
 #search-bar>div {
@@ -118,8 +140,8 @@ body {
     flex-grow: 1;
     font-family: inherit;
     outline: none;
-    background-color: #fff;
-    border: 1px solid #eee;
+    background-color: var(--content-bg-color);
+    border: 1px solid var(--border-color);
     border-radius: 5em;
     display: block;
     text-decoration: none;
@@ -140,20 +162,20 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 100%;
     border-radius: 6px;
-    box-shadow: 0 0px 5px -5px #888;
-    border: 1px solid #efefef;
+    box-shadow: 0 0px 10px -5px var(--card-shadow-color);
+    border: 1px solid var(--border-color);
     letter-spacing: normal;
     line-height: 1.5;
     margin: 1em auto;
     max-width: 44rem;
-    background: #fff;
-    color: #002b36;
+    background: var(--content-bg-color);
+    color: var(--content-fg-color);
     padding: 2em;
 }
 .card header {
     position: sticky;
     top: 0;
-    background: #fff;
+    background: var(--content-bg-color);
     border-radius: 6px 6px 0 0; 
     display: flex;
     justify-content: flex-end;
@@ -183,21 +205,20 @@ body {
   white-space: normal;
   cursor: pointer;
   outline-offset: 0.4em;
-  background: #2da562;
-  color: #fff;
+  background: var(--btn-success-bg-color);
+  color: var(--btn-success-fg-color);
   margin: .25em;
 }
 .card header .btn.cancel {
     text-decoration: underline;
 }
 .card .title {
-    margin: 0 1em;
     text-decoration: none;
     color: inherit;
     font-weight: bold;
     flex-grow: 1;
     font-size: 1.5em;
-    border-bottom: 1px solid #efefef;
+    border-bottom: 1px solid var(--border-color);
     text-align: center;
 }
 .card input.title, .card input.item.tags {
@@ -208,17 +229,18 @@ body {
     text-decoration: none;
     padding: .5em;
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
-    background: inherit;
+    background: var(--editable-bg-color);
+    color: var(--editable-fg-color)
 }
 .card input.title {
     font-size: 1.5em;
-    background: #eecc6612;
+    background: var(--editable-bg-color);
     margin: 0;
 }
 .card input.item.tags {
     /*border-bottom: 1px solid #eecc66ad;*/
     /*background: #eecc6647;*/
-    background: #eecc6612;
+    background: var(--editable-bg-color);
     margin: .25em 0;
 }
 .card .tags {
@@ -229,14 +251,14 @@ body {
     text-align: center;
 }
 .card .tags .tag {
-    background: #f4de9b;
-    border: 1px solid #ec6;
+    background: var(--card-tag-bg-color);
+    border: 1px solid var(--card-tag-border-color);
     margin: .25em;
     padding: .1em .25em;
     font-size: .7em;
     font-weight: bold;
     border-radius: .5em;
-    color: #907421;
+    color: var(--card-tag-fg-color);
     text-decoration: none;
 }
 .card .content, .card .editor {
@@ -247,15 +269,8 @@ body {
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     font-size: 100%;
     tab-size: 4;
-    background: #eecc6612;
+    background: var(--editable-bg-color);
 }
-.card.edit, .card.edit header {
-     color: #002b36;
-}
-.card.edit header .btn {
-    border-color: #eee8d5;
-}
-
 .card .content h1, .card .content h2, .card .content h3, .card .content h4, .card .content h5, .card .content h6 {
     font-weight: bold;
     margin: .5em 0;
@@ -280,8 +295,8 @@ body {
     display: flex;
     max-width: 44em;
     margin: 0 auto;
-    background: #fff;
-    border-bottom: 1px solid #ccc;
+    background: var(--content-bg-color);
+    border-bottom: 1px solid var(--border-emp-color);
     letter-spacing: normal;
     line-height: 1.5;
 }
@@ -301,7 +316,7 @@ body {
 }
 .card.config .field input {
     flex-grow: 1;
-    border: 1px solid #efefef;
+    border: 1px solid var(--border-color);
     outline: none;
     border-radius: 0;
     text-decoration: none;
@@ -318,4 +333,46 @@ body {
 	padding: 0;
 	border-radius: 0;
     }
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+	--main-bg-color: #323f4b;
+	--main-fg-color: #cbd2d9;
+	--border-color: #3e4c59;
+	--border-emp-color: #3e4c59;
+
+	--content-bg-color: #1f2933;
+	--content-fg-color: #cbd2d9;
+
+	--editable-bg-color: #3e4c59;
+
+	--card-shadow-color: #000000;
+	--card-tag-bg-color: #f4de9b;
+	--card-tag-fg-color: #907421;
+	--card-tag-border-color: #ec6;
+
+	--btn-success-bg-color: #2da562;
+	--btn-success-fg-color: #ffffff;
+    }
+    /* brown pallete
+:root {
+	--main-bg-color: #27241d;
+	--main-fg-color: #faf9f7;
+	--border-color: #625d52;
+	--border-emp-color: #504a40;
+
+	--content-bg-color: #423d33;
+	--content-fg-color: #faf9f7;
+
+	--editable-bg-color: #504a40;
+
+	--card-shadow-color: #000000;
+	--card-tag-bg-color: #f4de9b;
+	--card-tag-fg-color: #907421;
+	--card-tag-border-color: #ec6;
+
+	--btn-success-bg-color: #2da562;
+	--btn-success-fg-color: #ffffff;
+    }
+*/
 }
