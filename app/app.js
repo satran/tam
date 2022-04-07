@@ -254,6 +254,7 @@ var CardView = Backbone.View.extend({
 	this.model = options.model;
 	this.db = options.db;
 	this.index = options.index;
+	this.backlinks = options.backlinks;
 	this.parser = new showdown.Converter({
 	    simplifiedAutoLink: true,
 	    tables: true,
@@ -279,14 +280,34 @@ var CardView = Backbone.View.extend({
 	return ret;
     },
 
+    parseLinks: function(content) {
+	content = content.replaceAll(/\[\[([^\[\]\|]*)\]\]/g , convertBracesToLinksWithoutTitle);
+	content = content.replaceAll(/\[\[([^\[\]\|]*)\|([^\[\]\|]*)\]\]/g , convertBracesToLinks);
+	return content;
+    },
+
+    renderRefs: function(refs) {
+	let content = "";
+	for (let i=0; i<refs.length; i++) {
+	    let line = refs[i].line;
+	    line = line.replace(/^\s*/, "");
+	    line = line.replace(/^\s*\#* ?/, "");
+	    content += line + " ([[" + refs[i].card + "]])\n";
+	}
+	content = this.parseLinks(content);
+	return this.parser.makeHtml(content);
+    },
+    
     render: function() {
 	let attr = clone(this.model);
 	let content = this.eval(attr.content);
-	content = content.replaceAll(/\[\[([^\[\]\|]*)\]\]/g , convertBracesToLinksWithoutTitle);
-	content = content.replaceAll(/\[\[([^\[\]\|]*)\|([^\[\]\|]*)\]\]/g , convertBracesToLinks);
+	let backlinks = this.backlinks.links[this.model._id];
+	if (!backlinks) backlinks = [];
+	content = this.parseLinks(content);
 	content = this.parser.makeHtml(content);
 	attr.content = content;
-	this.$el.html(this.template({card: attr}));
+
+	this.$el.html(this.template({card: attr, refs: this.renderRefs(backlinks)}));
 	return this;
     }
 });
@@ -297,6 +318,7 @@ var Router = Backbone.Router.extend({
     	this.db = db;
     	this.el = options.el;
 	this.index = options.index;
+	this.backlinks = options.backlinks;
     },
 
     routes: {
@@ -364,14 +386,14 @@ var Router = Backbone.Router.extend({
     view: function(id) {
 	let that = this;
 	this.db.get(id).then(function (doc) {
-	    let v = new CardView({model: doc, db: that.db, index: that.index});
+	    let v = new CardView({model: doc, db: that.db, index: that.index, backlinks: that.backlinks});
 	    that.el.html(v.render().$el);
 	}).catch(function (err) {
 	    if (err.status !== 404) {
 		console.log(err);
 		return;
 	    }
-	    let v = new CardView({model: {_id: id, content: "_Card doesn't exist, edit it to create it._"}, db: that.db, index: that.index});
+	    let v = new CardView({model: {_id: id, content: "_Card doesn't exist, edit it to create it._"}, db: that.db, index: that.index, backlinks: that.backlinks});
 	    that.el.html(v.render().$el);
 	});
     },
@@ -386,8 +408,8 @@ var Router = Backbone.Router.extend({
     }
 });
 
-function loadApp(db, index) {
-    window.app = new Router({db: db, el: $("#container"), index: index});
+function loadApp(db, index, backlinks) {
+    window.app = new Router({db: db, el: $("#container"), index: index, backlinks: backlinks});
     let search = new SearchBarView({db: db, container: $("#container")});
     $("#search-bar").html(search.render().el);
 
@@ -408,20 +430,46 @@ db.get(keys.settings).then(function (doc) {
     });
 });
 
+function BackLinks() {
+    let links = {links: {}};
+
+    function getCleanID(id) {
+	return id.split("|")[0];
+    }
+
+    links.add = function(doc) {
+	if (!doc.content) return;
+	let match = doc.content.matchAll(/\n([^\n]*)\[\[([^[]*)\]\]([^\n]*)\n/g);
+	while (true) {
+	    let matched = match.next();
+	    if (!matched.value) break;
+	    if(matched.value.length != 4) continue;
+	    let id = getCleanID(matched.value[2])
+	    if (!id) continue;
+	    if (!links.links.hasOwnProperty(id)) links.links[id] = [];
+	    links.links[id].push({card: doc._id, line: matched.value[0].trim('\n')});
+	}
+    };
+
+    return links;
+}
+
 db.allDocs({include_docs: true}).then(r => {
     let index = new Fuse([], {
 	keys: ['title', 'content', 'tags'],
 	threshold: 0
     });
+    let backlinks = BackLinks();
+    window.backlinks = backlinks;
     db.allDocs({include_docs: true}).then(r => {
 	r.rows.forEach(d => {
 	    let doc = d.doc;
+	    backlinks.add(doc);
 	    doc.title = doc._id; // just to make the search easier
 	    delete doc._id;
 	    index.add(doc);
-	})
-    })
+	});
+	loadApp(db, index, backlinks);
+    });
     window.index = index;
-    loadApp(db, index);
 });
-
