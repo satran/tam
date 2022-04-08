@@ -92,7 +92,9 @@ var SearchBarView = Backbone.View.extend({
     },
 
     render: function() {
-        this.$el.html(this.template());
+        var d = new Date();
+        var today = d.toISOString().split("T")[0];
+        this.$el.html(this.template({today: today}));
         return this;
     }
 });
@@ -285,7 +287,7 @@ var CardView = Backbone.View.extend({
     renderRefs: function(refs) {
         let content = "";
         for(let key in refs) {
-            content += "#" + key + "\n";
+            content += "# [[" + key + "]]\n";
             for (let i in refs[key]){
                 let line = refs[key][i];
                 line = line.replace(/^\s*/, "");
