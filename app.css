@@ -295,6 +295,25 @@ body {
     tab-size: 4;
     background: var(--editable-bg-color);
 }
+
+.card .content pre, .card .content code{
+    padding: 1em;
+    background: var(--editable-bg-color);
+    border-radius: .5em;
+    border: 1px solid var(--border-color);
+    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+}
+.card .content code {
+    padding: .1em .2em;
+    font-size: .9em;
+}
+.card .content pre>code {
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: inherit;
+}
+
 .card .content h1, .card .content h2, .card .content h3, .card .content h4, .card .content h5, .card .content h6 {
     font-weight: bold;
     margin: .5em 0;
