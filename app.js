@@ -1,9 +1,11 @@
 import { CodeJar } from './codejar.js';
+import {Store, Parser} from './store.js';
 import Fuse from './fuse.js';
 
 const keys = {
     settings: "@:/settings"
-}
+};
+
 const defaultConfig = {
     "settings": {
         "_id": keys.settings,
@@ -18,7 +20,7 @@ const defaultConfig = {
             }
         }
     }
-}
+};
 
 const queryOptions = { keywords: ['title', 'tags', 'content'] };
 function parseQuery(query) {
@@ -122,7 +124,7 @@ var Card = Backbone.Model.extend({
         this.db.put(attrs).then(function(response) {
             that.db.remove(that.attributes).then((_) => {
                 success(response.id);
-            })
+            });
         }).catch(function(err) {
             console.log(err);
         });
@@ -147,13 +149,39 @@ var Card = Backbone.Model.extend({
             attrs._rev = this.attributes._rev;
         }
         let that = this;
+        // Generate the todos and the references to other cards
+        if (!attrs.content) attrs.content = "";
+        let parsed = new Parser(attrs.content).parse();
+        attrs.todos = parsed.todos;
+
         this.db.put(attrs).then(function(response) {
+            for (let other in parsed.refs) {
+                that.db.get(other).then(d => {
+                    if (!d.refs) d.refs = {};
+                    d.refs[attrs._id] = parsed.refs[other];
+                    that.db.put(d).then(()=>console.log(other));
+                }).catch(err => {
+                    if (err.status !== 404) {
+                        console.log(err);
+                        return;
+                    }
+                    let d = {
+                        _id: other,
+                        content: "",
+                        refs: {}
+                    };
+                    d.refs[attrs._id] = parsed.refs[other];
+                    that.db.put(d)
+                        .then(()=>console.log(other))
+                        .catch(err => console.log(err));
+                });
+            }
             callback(response.id);
         }).catch(function(err) {
             console.log(err);
         });
     }
-})
+});
 
 var CardSummaryView = Backbone.View.extend({
     className: "card-summary",
@@ -172,7 +200,7 @@ var CardSummaryView = Backbone.View.extend({
 const highlight = (editor) => {
     let code = editor.innerHTML;
     // code = code.replace(/(\n?)(\s*.*:\n)/g, '$1<span class="header">$2</span>');
-    editor.innerHTML = code
+    editor.innerHTML = code;
 };
 
 var CardEditView = Backbone.View.extend({
@@ -252,7 +280,6 @@ var CardView = Backbone.View.extend({
         this.model = options.model;
         this.db = options.db;
         this.index = options.index;
-        this.backlinks = options.backlinks;
         this.parser = new showdown.Converter({
             simplifiedAutoLink: true,
             tables: true,
@@ -302,13 +329,11 @@ var CardView = Backbone.View.extend({
     render: function() {
         let attr = clone(this.model);
         let content = this.eval(attr.content);
-        let backlinks = this.backlinks.links[this.model._id];
-        if (!backlinks) backlinks = [];
         content = this.parseLinks(content);
         content = this.parser.makeHtml(content);
         attr.content = content;
 
-        this.$el.html(this.template({ card: attr, refs: this.renderRefs(backlinks) }));
+        this.$el.html(this.template({ card: attr, refs: this.renderRefs(this.model.refs) }));
         return this;
     }
 });
@@ -387,7 +412,7 @@ var Router = Backbone.Router.extend({
     view: function(id) {
         let that = this;
         this.db.get(id).then(function(doc) {
-            let v = new CardView({ model: doc, db: that.db, index: that.index, backlinks: that.backlinks });
+            let v = new CardView({ model: doc, db: that.db, index: that.index});
             that.el.html(v.render().$el);
         }).catch(function(err) {
             if (err.status !== 404) {
@@ -409,8 +434,8 @@ var Router = Backbone.Router.extend({
     }
 });
 
-function loadApp(db, index, backlinks) {
-    window.app = new Router({ db: db, el: $("#container"), index: index, backlinks: backlinks });
+function loadApp(db, index) {
+    window.app = new Router({ db: db, el: $("#container"), index: index});
     let search = new SearchBarView({ db: db, container: $("#container") });
     $("#search-bar").html(search.render().el);
 
@@ -419,6 +444,7 @@ function loadApp(db, index, backlinks) {
 
 const db = new PouchDB('cards');
 window.db = db;
+
 db.get(keys.settings).then(function(doc) {
     let remoteHost = doc.fields["remote-database"].value;
     const remoteDB = new PouchDB(remoteHost);
@@ -431,47 +457,21 @@ db.get(keys.settings).then(function(doc) {
     });
 });
 
-function BackLinks() {
-    let links = { links: {} };
-
-    function getCleanID(id) {
-        return id.split("|")[0];
-    }
-
-    links.add = function(doc) {
-        if (!doc.content) return;
-        let match = doc.content.matchAll(/\n([^\n]*)\[\[([^[]*)\]\]([^\n]*)\n/g);
-        while (true) {
-            let matched = match.next();
-            if (!matched.value) break;
-            if (matched.value.length != 4) continue;
-            let id = getCleanID(matched.value[2]);
-            if (!id) continue;
-            if (!links.links.hasOwnProperty(id)) links.links[id] = {};
-            if (!links.links[id].hasOwnProperty(doc._id)) links.links[id][doc._id] = [];
-            links.links[id][doc._id].push(matched.value[0].trim('\n'));
-        }
-    };
-
-    return links;
-}
-
 db.allDocs({ include_docs: true }).then(r => {
     let index = new Fuse([], {
         keys: ['title', 'content', 'tags'],
         threshold: 0
     });
-    let backlinks = BackLinks();
-    window.backlinks = backlinks;
     db.allDocs({ include_docs: true }).then(r => {
         r.rows.forEach(d => {
             let doc = d.doc;
-            backlinks.add(doc);
             doc.title = doc._id; // just to make the search easier
             delete doc._id;
             index.add(doc);
         });
-        loadApp(db, index, backlinks);
+        loadApp(db, index);
     });
     window.index = index;
 });
+
+window.Store = Store;
