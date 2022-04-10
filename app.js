@@ -2,26 +2,6 @@ import { CodeJar } from './codejar.js';
 import {Store, Parser} from './store.js';
 import Fuse from './fuse.js';
 
-const keys = {
-    settings: "@:/settings"
-};
-
-const defaultConfig = {
-    "settings": {
-        "_id": keys.settings,
-        "fields": {
-            "remote-database": {
-                "key": "Remote Database",
-                "value": ""
-            },
-            "start-card": {
-                "key": "Start Card",
-                "value": "Start"
-            }
-        }
-    }
-};
-
 const queryOptions = { keywords: ['title', 'tags', 'content'] };
 function parseQuery(query) {
     let parsed = parse(query, queryOptions);
@@ -39,7 +19,7 @@ var ConfigCardView = Backbone.View.extend({
 
     initialize: function(options) {
         this.model = options.model;
-        this.db = options.db;
+        this.store = options.store;
     },
 
     save: function() {
@@ -49,7 +29,7 @@ var ConfigCardView = Backbone.View.extend({
             let key = fields[i].dataset["key"];
             this.model.fields[key].value = value;
         }
-        this.db.put(this.model).then(r => console.log(r));
+        this.store.saveRaw(this.model).then(r => console.log(r));
     },
 
     render: function() {
@@ -68,11 +48,6 @@ var SearchBarView = Backbone.View.extend({
         'keypress .search': "search"
     },
 
-    initialize: function(options) {
-        this.db = options.db;
-        this.remotedb = options.remotedb;
-    },
-
     search: function(e) {
         if (e.keyCode !== 13) {
             return;
@@ -83,14 +58,6 @@ var SearchBarView = Backbone.View.extend({
 
     back: function() {
         window.history.back();
-    },
-
-    sync: function() {
-        this.db.sync(this.remotedb).on('change', function(change) {
-            console.log(change);
-        }).on('error', function(err) {
-            console.log(err);
-        });
     },
 
     render: function() {
@@ -112,23 +79,20 @@ function clone(obj) {
 
 var Card = Backbone.Model.extend({
     idAttribute: "_id",
+
     initialize: function(attributes, options) {
-        this.db = options.db;
+        this.store = options.store;
     },
 
     rename: function(newid, success) {
         let attrs = clone(this.attributes);
-        attrs._id = newid;
-        delete (attrs._rev);
-        let that = this;
-        this.db.put(attrs).then(function(response) {
-            that.db.remove(that.attributes).then((_) => {
+        this.store.renameCard(attrs, newid)
+            .then(response => {
                 success(response.id);
+            })
+            .catch(function(err) {
+                console.log(err);
             });
-        }).catch(function(err) {
-            console.log(err);
-        });
-
     },
 
     save: function(arg) {
@@ -149,36 +113,8 @@ var Card = Backbone.Model.extend({
             attrs._rev = this.attributes._rev;
         }
         let that = this;
-        // Generate the todos and the references to other cards
-        if (!attrs.content) attrs.content = "";
-        let parsed = new Parser(attrs.content).parse();
-        attrs.todos = parsed.todos;
-
-        this.db.put(attrs).then(function(response) {
-            for (let other in parsed.refs) {
-                that.db.get(other).then(d => {
-                    if (!d.refs) d.refs = {};
-                    d.refs[attrs._id] = parsed.refs[other];
-                    that.db.put(d).then(()=>console.log(other));
-                }).catch(err => {
-                    if (err.status !== 404) {
-                        console.log(err);
-                        return;
-                    }
-                    let d = {
-                        _id: other,
-                        content: "",
-                        refs: {}
-                    };
-                    d.refs[attrs._id] = parsed.refs[other];
-                    that.db.put(d)
-                        .then(()=>console.log(other))
-                        .catch(err => console.log(err));
-                });
-            }
-            callback(response.id);
-        }).catch(function(err) {
-            console.log(err);
+        this.store.saveCard(attrs).then((resp)=> {
+            callback(resp.id);
         });
     }
 });
@@ -213,7 +149,6 @@ var CardEditView = Backbone.View.extend({
 
     initialize: function(model, options) {
         this.model = model;
-        this.db = options.db;
     },
 
     cancel: function() {
@@ -235,11 +170,15 @@ var CardEditView = Backbone.View.extend({
         }
         if (this.model.id && title !== this.model.id) {
             // rename file
-            this.model.rename(title, (id) => { window.location = "#view/" + id });
+            this.model.rename(title, (id) => {
+                window.location = "#view/" + id;
+            });
             return;
         }
         this.model.set('_id', title.trim());
-        this.model.save((id) => { window.location = "#view/" + id });
+        this.model.save((id) => {
+            window.location = "#view/" + id;
+        });
     },
 
     render: function() {
@@ -278,7 +217,7 @@ var CardView = Backbone.View.extend({
 
     initialize: function(options) {
         this.model = options.model;
-        this.db = options.db;
+        this.store = options.store;
         this.index = options.index;
         this.parser = new showdown.Converter({
             simplifiedAutoLink: true,
@@ -341,7 +280,7 @@ var CardView = Backbone.View.extend({
 
 var Router = Backbone.Router.extend({
     initialize: function(options) {
-        this.db = db;
+        this.store = options.store;
         this.el = options.el;
         this.index = options.index;
         this.backlinks = options.backlinks;
@@ -358,44 +297,44 @@ var Router = Backbone.Router.extend({
 
     config: function(id) {
         let that = this;
-        this.db.get("@:/" + id).then(function(doc) {
-            let v = new ConfigCardView({ model: doc, db: that.db });
+        this.store.get("@:/" + id).then(function(doc) {
+            let v = new ConfigCardView({ model: doc, store: that.store });
             that.el.html(v.render().$el);
         }).catch(function(err) {
             if (err.status !== 404) {
                 console.log(err);
                 return;
             }
-            let v = new ConfigCardView({ model: defaultConfig[id], db: that.db });
+            let v = new ConfigCardView({ model: defaults[id], db: that.db });
             that.el.html(v.render().$el);
         });
     },
 
     root: function() {
         let that = this;
-        this.db.get(keys.settings).then(function(doc) {
+        this.store.settings().then(function(doc) {
             if (doc.fields["start-card"].value) {
                 that.view(doc.fields["start-card"].value);
                 return;
             } else {
-                that.view(defaultConfig.settings.fields["start-card"].value);
+                that.view(defaults.settings.fields["start-card"].value);
             }
         }).catch(function(err) {
             console.log(err);
-            that.view(defaultConfig.settings.fields["start-card"].value);
+            that.view(defaults.settings.fields["start-card"].value);
         });
     },
 
     newCard: function() {
-        let model = new Card({}, { db: this.db });
-        let v = new CardEditView(model, { db: this.db });
+        let model = new Card({}, { store: this.store });
+        let v = new CardEditView(model, { store: this.store });
         this.el.html(v.render().$el);
     },
 
     edit: function(id) {
         let that = this;
-        this.db.get(id).then(function(doc) {
-            let model = new Card(doc, { db: that.db });
+        this.store.get(id).then(function(doc) {
+            let model = new Card(doc, { store: that.store, db: that.db });
             let v = new CardEditView(model, { db: that.db });
             that.el.html(v.render().$el);
         }).catch(function(err) {
@@ -403,7 +342,7 @@ var Router = Backbone.Router.extend({
                 console.log(err);
                 return;
             }
-            let model = new Card({ _id: id }, { db: that.db });
+            let model = new Card({ _id: id }, { store: that.store, db: that.db });
             let v = new CardEditView(model, { db: that.db });
             that.el.html(v.render().$el);
         });
@@ -411,8 +350,8 @@ var Router = Backbone.Router.extend({
 
     view: function(id) {
         let that = this;
-        this.db.get(id).then(function(doc) {
-            let v = new CardView({ model: doc, db: that.db, index: that.index});
+        this.store.get(id).then(function(doc) {
+            let v = new CardView({ store: that.store, model: doc, db: that.db, index: that.index});
             that.el.html(v.render().$el);
         }).catch(function(err) {
             if (err.status !== 404) {
@@ -434,44 +373,29 @@ var Router = Backbone.Router.extend({
     }
 });
 
-function loadApp(db, index) {
-    window.app = new Router({ db: db, el: $("#container"), index: index});
-    let search = new SearchBarView({ db: db, container: $("#container") });
+function loadApp(store, index) {
+    window.app = new Router({ store: store, el: $("#container"), index: index});
+    let search = new SearchBarView({ store: store, container: $("#container") });
     $("#search-bar").html(search.render().el);
 
     Backbone.history.start();
 }
 
-const db = new PouchDB('cards');
-window.db = db;
+let store = new Store('cards');
+store.sync();
 
-db.get(keys.settings).then(function(doc) {
-    let remoteHost = doc.fields["remote-database"].value;
-    const remoteDB = new PouchDB(remoteHost);
-    db.sync(remoteDB, {
-        live: true
-    }).on('change', function(change) {
-        console.log(change);
-    }).on('error', function(err) {
-        console.log(err);
-    });
+let index = new Fuse([], {
+    keys: ['title', 'content', 'tags'],
+    threshold: 0
 });
 
-db.allDocs({ include_docs: true }).then(r => {
-    let index = new Fuse([], {
-        keys: ['title', 'content', 'tags'],
-        threshold: 0
+store.all().then( r=> {
+    r.rows.forEach(d => {
+        let doc = d.doc;
+        doc.title = doc._id; // just to make the search easier
+        delete doc._id;
+        index.add(doc);
     });
-    db.allDocs({ include_docs: true }).then(r => {
-        r.rows.forEach(d => {
-            let doc = d.doc;
-            doc.title = doc._id; // just to make the search easier
-            delete doc._id;
-            index.add(doc);
-        });
-        loadApp(db, index);
-    });
+    loadApp(store, index);
     window.index = index;
 });
-
-window.Store = Store;
