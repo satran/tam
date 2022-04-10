@@ -68,6 +68,26 @@ var SearchBarView = Backbone.View.extend({
     }
 });
 
+var TodosView = Backbone.View.extend({
+    className: "todos",
+    template: _.template($('#todos-view-tmpl').html()),
+
+    initialize: function(options) {
+        this.todos = options.todos;
+        this.parser = new Parser();
+    },
+
+    render: function() {
+        for (let id in this.todos){
+            for (let i in this.todos[id]){
+                this.todos[id][i].html = this.parser.parse(this.todos[id][i].text);
+            }
+        }
+        this.$el.html(this.template({ todos: this.todos }));
+        return this;
+    }
+});
+
 function clone(obj) {
     if (null == obj || "object" != typeof obj) return obj;
     var copy = obj.constructor();
@@ -203,14 +223,6 @@ var CardEditView = Backbone.View.extend({
     }
 });
 
-function convertBracesToLinks(match, p1, p2, offset, string) {
-    return '<a href="#view/' + p1 + '">' + p2 + '</a>';
-}
-
-function convertBracesToLinksWithoutTitle(match, p1, offset, string) {
-    return '<a href="#view/' + p1 + '">' + p1 + '</a>';
-}
-
 var CardView = Backbone.View.extend({
     className: "card",
     template: _.template($('#card-view-tmpl').html()),
@@ -219,14 +231,7 @@ var CardView = Backbone.View.extend({
         this.model = options.model;
         this.store = options.store;
         this.index = options.index;
-        this.parser = new showdown.Converter({
-            simplifiedAutoLink: true,
-            tables: true,
-            tasklists: true,
-            smartIndentationFix: true,
-            simpleLineBreaks: true,
-            ellipsis: false
-        });
+        this.parser = new Parser();
     },
 
     eval: function(content) {
@@ -244,12 +249,6 @@ var CardView = Backbone.View.extend({
         return ret;
     },
 
-    parseLinks: function(content) {
-        content = content.replaceAll(/\[\[([^\[\]\|]*)\]\]/g, convertBracesToLinksWithoutTitle);
-        content = content.replaceAll(/\[\[([^\[\]\|]*)\|([^\[\]\|]*)\]\]/g, convertBracesToLinks);
-        return content;
-    },
-
     renderRefs: function(refs) {
         let content = "";
         for(let key in refs) {
@@ -261,15 +260,13 @@ var CardView = Backbone.View.extend({
                 content += line + "\n";
             }
         }
-        content = this.parseLinks(content);
-        return this.parser.makeHtml(content);
+        return this.parser.parse(content);
     },
 
     render: function() {
         let attr = clone(this.model);
         let content = this.eval(attr.content);
-        content = this.parseLinks(content);
-        content = this.parser.makeHtml(content);
+        content = this.parser.parse(content);
         attr.content = content;
 
         this.$el.html(this.template({ card: attr, refs: this.renderRefs(this.model.refs) }));
@@ -292,6 +289,7 @@ var Router = Backbone.Router.extend({
         "edit/:id": "edit",
         "view/:id": "view",
         "new": "newCard",
+        "todos": "todos",
         "search/:query": "search"
     },
 
@@ -363,6 +361,14 @@ var Router = Backbone.Router.extend({
         });
     },
 
+    todos: function(){
+        let that = this;
+        this.store.todos().then(todos => {
+            let v = new TodosView({todos: todos});
+            that.el.html(v.render().$el);
+        });
+    },
+
     search: function(query) {
         let that = this;
         this.el.html('');
@@ -382,6 +388,7 @@ function loadApp(store, index) {
 }
 
 let store = new Store('cards');
+window.store = store;
 store.sync();
 
 let index = new Fuse([], {

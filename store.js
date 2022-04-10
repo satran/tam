@@ -62,7 +62,7 @@ export class Store {
         this.db.allDocs({ include_docs: true }).then(r => {
             r.rows.forEach(d => {
                 let doc = d.doc;
-                that.save(doc);
+                that.saveCard(doc);
             });
         });
     }
@@ -93,9 +93,9 @@ export class Store {
     saveCard(doc) {
         return new Promise((resolve, reject) => {
             if (!doc.content) doc.content = "";
-            let parsed = new Parser(doc.content).parse();
-            if (parsed.todos.length > 0) {
-                doc.todos = parsed.todos;
+            let index = new Index(doc.content).index();
+            if (index.todos.length > 0) {
+                doc.todos = index.todos;
             } else {
                 // this is to make it easier to query all cards
                 // which have todos
@@ -103,10 +103,10 @@ export class Store {
             }
             let that = this;
             that.db.put(doc).then(function(response) {
-                for (let other in parsed.refs) {
+                for (let other in index.refs) {
                     that.db.get(other).then(d => {
                         if (!d.refs) d.refs = {};
-                        d.refs[doc._id] = parsed.refs[other];
+                        d.refs[doc._id] = index.refs[other];
                         that.db.put(d).then(()=>console.log(other));
                     }).catch(err => {
                         if (err.status !== 404) {
@@ -120,7 +120,7 @@ export class Store {
                             content: "",
                             refs: {}
                         };
-                        d.refs[doc._id] = parsed.refs[other];
+                        d.refs[doc._id] = index.refs[other];
                         that.db.put(d)
                             .then(()=>console.log(other))
                             .catch(err => console.log(err));
@@ -142,21 +142,34 @@ export class Store {
     }
 
     todos() {
-        return this.db.find({
-            selector: {"todos": {"$gt": null}},
-            fields: ["_id", "todos"]
+        return new Promise((resolve, reject) => {
+            this.db.find({
+                selector: {"todos": {"$gt": null}},
+                fields: ["_id", "todos"]
+            }).then(r => {
+                let todos = {};
+                let docs = r.docs;
+                for (let i in docs) {
+                    let id= docs[i]._id;
+                    todos[id] = [];
+                    for (let j in docs[i].todos) {
+                        todos[id].push({text: docs[i].todos[j]});
+                    }
+                }
+                resolve(todos);
+            }).catch( err => reject(err));
         });
     }
 }
 
-export class Parser {
+export class Index {
     text = "";
 
     constructor(text) {
         this.text = text;
     }
 
-    parse() {
+    index() {
         let todos = [];
         let refs = {};
         let lines = this.text.split('\n');
@@ -164,6 +177,7 @@ export class Parser {
             let line = lines[i];
             let todoMatch = line.match(/^\s*\- \[ \]/);
             if (todoMatch && todoMatch.length == 1) {
+                //line = line.replace(/^\s*\- \[ \]/, '');
                 todos.push(line.trim());
             }
             let links = line.match(/\[\[([^\]]*)\]\]/g);
@@ -183,5 +197,39 @@ export class Parser {
             }
         }
         return {todos: todos, refs: refs};
+    }
+}
+
+export class Parser {
+    parser;
+
+    constructor(text) {
+        this.parser = new showdown.Converter({
+            simplifiedAutoLink: true,
+            tables: true,
+            tasklists: true,
+            smartIndentationFix: true,
+            simpleLineBreaks: true,
+            ellipsis: false
+        });
+    }
+
+    convertBracesToLinks(match, p1, p2, offset, string) {
+        return '<a href="#view/' + p1 + '">' + p2 + '</a>';
+    }
+
+    convertBracesToLinksWithoutTitle(match, p1, offset, string) {
+        return '<a href="#view/' + p1 + '">' + p1 + '</a>';
+    }
+
+    parseLinks(content) {
+        content = content.replaceAll(/\[\[([^\[\]\|]*)\]\]/g, this.convertBracesToLinksWithoutTitle);
+        content = content.replaceAll(/\[\[([^\[\]\|]*)\|([^\[\]\|]*)\]\]/g, this.convertBracesToLinks);
+        return content;
+    }
+
+    parse(content) {
+        content = this.parseLinks(content);
+        return this.parser.makeHtml(content);
     }
 }

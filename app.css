@@ -159,7 +159,11 @@ body {
 #container {
     margin-bottom: 70vh;
 }
-.card {
+.todos h1 {
+    font-weight: bold;
+    margin: .5em 0;
+}
+.card, .todos{
     display:flex;
     flex-direction: column;
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -182,7 +186,7 @@ body {
     position: sticky;
     top: 0;
     background: var(--content-bg-color);
-    border-radius: 6px 6px 0 0; 
+    border-radius: 6px 6px 0 0;
     display: flex;
     justify-content: flex-end;
     padding: .25em;
