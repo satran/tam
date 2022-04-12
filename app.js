@@ -326,7 +326,7 @@ var Router = Backbone.Router.extend({
                 console.log(err);
                 return;
             }
-            let v = new ConfigCardView({ model: defaults[id], db: that.db });
+            let v = new ConfigCardView({ model: defaults[id], store: that.store });
             that.el.html(v.render().$el);
         });
     },
@@ -348,23 +348,23 @@ var Router = Backbone.Router.extend({
 
     newCard: function() {
         let model = new Card({}, { store: this.store });
-        let v = new CardEditView(model, { store: this.store });
+        let v = new CardEditView(model);
         this.el.html(v.render().$el);
     },
 
     edit: function(id) {
         let that = this;
         this.store.get(id).then(function(doc) {
-            let model = new Card(doc, { store: that.store, db: that.db });
-            let v = new CardEditView(model, { db: that.db });
+            let model = new Card(doc, { store: that.store});
+            let v = new CardEditView(model);
             that.el.html(v.render().$el);
         }).catch(function(err) {
             if (err.status !== 404) {
                 console.log(err);
                 return;
             }
-            let model = new Card({ _id: id }, { store: that.store, db: that.db });
-            let v = new CardEditView(model, { db: that.db });
+            let model = new Card({ _id: id }, { store: that.store});
+            let v = new CardEditView(model);
             that.el.html(v.render().$el);
         });
     },
@@ -372,14 +372,14 @@ var Router = Backbone.Router.extend({
     view: function(id) {
         let that = this;
         this.store.get(id).then(function(doc) {
-            let v = new CardView({ store: that.store, model: doc, db: that.db, index: that.index});
+            let v = new CardView({ store: that.store, model: doc, index: that.index});
             that.el.html(v.render().$el);
         }).catch(function(err) {
             if (err.status !== 404) {
                 console.log(err);
                 return;
             }
-            let v = new CardView({ model: { _id: id, content: "_Card doesn't exist, edit it to create it._" }, db: that.db, index: that.index, backlinks: that.backlinks });
+            let v = new CardView({ model: { _id: id, content: "_Card doesn't exist, edit it to create it._" }, index: that.index, backlinks: that.backlinks });
             that.el.html(v.render().$el);
         });
     },
