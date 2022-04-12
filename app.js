@@ -1,6 +1,29 @@
 import { CodeJar } from './codejar.js';
-import {Store, Parser} from './store.js';
+import {Store, Parser, defaults} from './store.js';
 import Fuse from './fuse.js';
+
+// Register worker to enable offline capabilities
+const registerServiceWorker = async () => {
+  if ('serviceWorker' in navigator) {
+    try {
+      const registration = await navigator.serviceWorker.register(
+        '/worker.js'
+      );
+      if (registration.installing) {
+        console.log('Service worker installing');
+      } else if (registration.waiting) {
+        console.log('Service worker installed');
+      } else if (registration.active) {
+        console.log('Service worker active');
+      }
+    } catch (error) {
+      console.error(`Registration failed with ${error}`);
+    }
+  }
+};
+
+registerServiceWorker();
+// End of worker registration
 
 const queryOptions = { keywords: ['title', 'tags', 'content'] };
 function parseQuery(query) {
@@ -79,7 +102,7 @@ var TodosView = Backbone.View.extend({
 
     render: function() {
         for (let id in this.todos){
-            for (let i in this.todos[id]){
+            for (i in this.todos[id]){
                 this.todos[id][i].html = this.parser.parse(this.todos[id][i].text);
             }
         }
