@@ -195,6 +195,7 @@ var CardEditView = Backbone.View.extend({
     },
 
     cancel: function() {
+        localStorage.removeItem(this.model.id);
         if (this.model.attributes._rev === undefined) {
             // This is rendering a new document
             window.history.back();
@@ -206,6 +207,7 @@ var CardEditView = Backbone.View.extend({
     save: function() {
         let title = this.$el.find(".title").val();
         let tags = this.$el.find(".tags").val().trim();
+        let oldid = this.model.id;
         if (tags.length > 0) {
             this.model.set("tags", tags.split(" "));
         } else {
@@ -214,23 +216,32 @@ var CardEditView = Backbone.View.extend({
         if (this.model.id && title !== this.model.id) {
             // rename file
             this.model.rename(title, (id) => {
+                localStorage.removeItem(oldid);
                 window.location = "#view/" + id;
             });
             return;
         }
         this.model.set('_id', title.trim());
         this.model.save((id) => {
+            localStorage.removeItem(oldid);
             window.location = "#view/" + id;
         });
     },
 
     render: function() {
+        let content = localStorage.getItem(this.model.id);
+        if (content) {
+            if (confirm('Draft exists, should I restore it?')) {
+                this.model.set("content", content);
+            } else {
+                localStorage.removeItem(this.model.id);
+            }
+        }
         this.$el.html(this.template({ card: this.model.attributes }));
         this.jar = CodeJar(
             this.$el.find(".editor")[0],
             highlight,
             {
-                indentOn: /[({\[\-]$/,
                 spellcheck: true
             }
         );
@@ -240,6 +251,7 @@ var CardEditView = Backbone.View.extend({
             if (cancel) clearTimeout(cancel);
             cancel = setTimeout(() => {
                 that.model.set('content', code);
+                localStorage.setItem(this.model.id, code);
             }, 500);
         });
         return this;
