@@ -210,6 +210,8 @@ export class Parser {
             tasklists: true,
             smartIndentationFix: true,
             simpleLineBreaks: true,
+            noHeaderId: true,
+            strikethrough: true,
             ellipsis: false
         });
     }
