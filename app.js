@@ -102,7 +102,7 @@ var TodosView = Backbone.View.extend({
 
     render: function() {
         for (let id in this.todos){
-            for (i in this.todos[id]){
+            for (let i in this.todos[id]){
                 this.todos[id][i].html = this.parser.parse(this.todos[id][i].text);
             }
         }
@@ -246,6 +246,28 @@ var CardEditView = Backbone.View.extend({
     }
 });
 
+var CardRefView = Backbone.View.extend({
+    className: "ref",
+
+    initialize: function(options) {
+        this.parser = new Parser();
+    },
+
+    render: function(key, lines) {
+        let content = "# [[" + key + "]]\n";
+        for (let i in lines){
+            let line = lines[i];
+            // No need indents, this could cause some problem in rendering
+            line = line.replace(/^\s*/, "");
+            // Same for headings
+            line = line.replace(/^\s*\#* ?/, "");
+            content += line + "\n";
+        }
+        this.$el.html(this.parser.parse(content));
+        return this;
+    }
+});
+
 var CardView = Backbone.View.extend({
     className: "card",
     template: _.template($('#card-view-tmpl').html()),
@@ -273,17 +295,10 @@ var CardView = Backbone.View.extend({
     },
 
     renderRefs: function(refs) {
-        let content = "";
-        for(let key in refs) {
-            content += "# [[" + key + "]]\n";
-            for (let i in refs[key]){
-                let line = refs[key][i];
-                line = line.replace(/^\s*/, "");
-                line = line.replace(/^\s*\#* ?/, "");
-                content += line + "\n";
-            }
+        for(let key in this.model.refs) {
+            let refview = new CardRefView().render(key, this.model.refs[key]);
+            this.$el.find(".refs-content").append(refview.$el);
         }
-        return this.parser.parse(content);
     },
 
     render: function() {
@@ -292,7 +307,8 @@ var CardView = Backbone.View.extend({
         content = this.parser.parse(content);
         attr.content = content;
 
-        this.$el.html(this.template({ card: attr, refs: this.renderRefs(this.model.refs) }));
+        this.$el.html(this.template({ card: attr, refs: this.model.refs }));
+        if (this.model.refs) this.renderRefs();
         return this;
     }
 });
