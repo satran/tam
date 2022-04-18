@@ -1,25 +1,26 @@
 import { CodeJar } from './codejar.js';
-import {Store, Parser, defaults} from './store.js';
+import { Store, Parser, defaults } from './store.js';
 import Fuse from './fuse.js';
+import parse from './search-query-parser.js';
 
 // Register worker to enable offline capabilities
 const registerServiceWorker = async () => {
-  if ('serviceWorker' in navigator) {
-    try {
-      const registration = await navigator.serviceWorker.register(
-        '/worker.js'
-      );
-      if (registration.installing) {
-        console.log('Service worker installing');
-      } else if (registration.waiting) {
-        console.log('Service worker installed');
-      } else if (registration.active) {
-        console.log('Service worker active');
-      }
-    } catch (error) {
-      console.error(`Registration failed with ${error}`);
+    if ('serviceWorker' in navigator) {
+        try {
+            const registration = await navigator.serviceWorker.register(
+                '/worker.js'
+            );
+            if (registration.installing) {
+                console.log('Service worker installing');
+            } else if (registration.waiting) {
+                console.log('Service worker installed');
+            } else if (registration.active) {
+                console.log('Service worker active');
+            }
+        } catch (error) {
+            console.error(`Registration failed with ${error}`);
+        }
     }
-  }
 };
 
 registerServiceWorker();
@@ -40,12 +41,12 @@ var ConfigCardView = Backbone.View.extend({
         "click .save": "save"
     },
 
-    initialize: function(options) {
+    initialize: function (options) {
         this.model = options.model;
         this.store = options.store;
     },
 
-    save: function() {
+    save: function () {
         let fields = this.$el.find("input.field-value");
         for (let i = 0; i < fields.length; i++) {
             let value = fields[i].value;
@@ -55,7 +56,7 @@ var ConfigCardView = Backbone.View.extend({
         this.store.saveRaw(this.model).then(r => console.log(r));
     },
 
-    render: function() {
+    render: function () {
         this.$el.html(this.template({ model: this.model }));
         return this;
     }
@@ -71,7 +72,7 @@ var SearchBarView = Backbone.View.extend({
         'keypress .search': "search"
     },
 
-    search: function(e) {
+    search: function (e) {
         if (e.keyCode !== 13) {
             return;
         }
@@ -79,14 +80,14 @@ var SearchBarView = Backbone.View.extend({
         window.location = "#search/" + search;
     },
 
-    back: function() {
+    back: function () {
         window.history.back();
     },
 
-    render: function() {
+    render: function () {
         var d = new Date();
         var today = d.toISOString().split("T")[0];
-        this.$el.html(this.template({today: today}));
+        this.$el.html(this.template({ today: today }));
         return this;
     }
 });
@@ -95,14 +96,14 @@ var TodosView = Backbone.View.extend({
     className: "todos",
     template: _.template($('#todos-view-tmpl').html()),
 
-    initialize: function(options) {
+    initialize: function (options) {
         this.todos = options.todos;
         this.parser = new Parser();
     },
 
-    render: function() {
-        for (let id in this.todos){
-            for (let i in this.todos[id]){
+    render: function () {
+        for (let id in this.todos) {
+            for (let i in this.todos[id]) {
                 this.todos[id][i].html = this.parser.parse(this.todos[id][i].text);
             }
         }
@@ -123,22 +124,22 @@ function clone(obj) {
 var Card = Backbone.Model.extend({
     idAttribute: "_id",
 
-    initialize: function(attributes, options) {
+    initialize: function (attributes, options) {
         this.store = options.store;
     },
 
-    rename: function(newid, success) {
+    rename: function (newid, success) {
         let attrs = clone(this.attributes);
         this.store.renameCard(attrs, newid)
             .then(response => {
                 success(response.id);
             })
-            .catch(function(err) {
+            .catch(function (err) {
                 console.log(err);
             });
     },
 
-    save: function(arg) {
+    save: function (arg) {
         let callback = console.log;
         let attrs;
         if (typeof arg === "function") {
@@ -156,7 +157,7 @@ var Card = Backbone.Model.extend({
             attrs._rev = this.attributes._rev;
         }
         let that = this;
-        this.store.saveCard(attrs).then((resp)=> {
+        this.store.saveCard(attrs).then((resp) => {
             callback(resp.id);
         });
     }
@@ -166,11 +167,11 @@ var CardSummaryView = Backbone.View.extend({
     className: "card-summary",
     template: _.template($('#card-summary-view-tmpl').html()),
 
-    initialize: function(model, options) {
+    initialize: function (model, options) {
         this.model = model;
     },
 
-    render: function() {
+    render: function () {
         this.$el.html(this.template({ card: this.model }));
         return this;
     }
@@ -190,11 +191,11 @@ var CardEditView = Backbone.View.extend({
         "click .save": "save",
     },
 
-    initialize: function(model, options) {
+    initialize: function (model, options) {
         this.model = model;
     },
 
-    cancel: function() {
+    cancel: function () {
         localStorage.removeItem(this.model.id);
         if (this.model.attributes._rev === undefined) {
             // This is rendering a new document
@@ -204,7 +205,7 @@ var CardEditView = Backbone.View.extend({
         }
     },
 
-    save: function() {
+    save: function () {
         let title = this.$el.find(".title").val();
         let tags = this.$el.find(".tags").val().trim();
         let oldid = this.model.id;
@@ -228,7 +229,7 @@ var CardEditView = Backbone.View.extend({
         });
     },
 
-    render: function() {
+    render: function () {
         let content = localStorage.getItem(this.model.id);
         if (content) {
             if (confirm('Draft exists, should I restore it?')) {
@@ -261,13 +262,13 @@ var CardEditView = Backbone.View.extend({
 var CardRefView = Backbone.View.extend({
     className: "ref",
 
-    initialize: function(options) {
+    initialize: function (options) {
         this.parser = new Parser();
     },
 
-    render: function(key, lines) {
+    render: function (key, lines) {
         let content = "# [[" + key + "]]\n";
-        for (let i in lines){
+        for (let i in lines) {
             let line = lines[i];
             // No need indents, this could cause some problem in rendering
             line = line.replace(/^\s*/, "");
@@ -284,20 +285,20 @@ var CardView = Backbone.View.extend({
     className: "card",
     template: _.template($('#card-view-tmpl').html()),
 
-    initialize: function(options) {
+    initialize: function (options) {
         this.model = options.model;
         this.store = options.store;
         this.index = options.index;
         this.parser = new Parser();
     },
 
-    eval: function(content) {
+    eval: function (content) {
         if (!content) return "";
         let tmpl = _.template(content);
         return tmpl({ card: this.model, search: _.bind(this.search, this) });
     },
 
-    search: function(query) {
+    search: function (query) {
         let ret = [];
         let rows = this.index.search(parseQuery(query));
         for (let i = 0; i < rows.length; i++) {
@@ -306,14 +307,14 @@ var CardView = Backbone.View.extend({
         return ret;
     },
 
-    renderRefs: function(refs) {
-        for(let key in this.model.refs) {
+    renderRefs: function (refs) {
+        for (let key in this.model.refs) {
             let refview = new CardRefView().render(key, this.model.refs[key]);
             this.$el.find(".refs-content").append(refview.$el);
         }
     },
 
-    render: function() {
+    render: function () {
         let attr = clone(this.model);
         let content = this.eval(attr.content);
         content = this.parser.parse(content);
@@ -327,7 +328,7 @@ var CardView = Backbone.View.extend({
 
 
 var Router = Backbone.Router.extend({
-    initialize: function(options) {
+    initialize: function (options) {
         this.store = options.store;
         this.el = options.el;
         this.index = options.index;
@@ -344,12 +345,12 @@ var Router = Backbone.Router.extend({
         "search/:query": "search"
     },
 
-    config: function(id) {
+    config: function (id) {
         let that = this;
-        this.store.get("@:/" + id).then(function(doc) {
+        this.store.get("@:/" + id).then(function (doc) {
             let v = new ConfigCardView({ model: doc, store: that.store });
             that.el.html(v.render().$el);
-        }).catch(function(err) {
+        }).catch(function (err) {
             if (err.status !== 404) {
                 console.log(err);
                 return;
@@ -359,50 +360,50 @@ var Router = Backbone.Router.extend({
         });
     },
 
-    root: function() {
+    root: function () {
         let that = this;
-        this.store.settings().then(function(doc) {
+        this.store.settings().then(function (doc) {
             if (doc.fields["start-card"].value) {
                 that.view(doc.fields["start-card"].value);
                 return;
             } else {
                 that.view(defaults.settings.fields["start-card"].value);
             }
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.log(err);
             that.view(defaults.settings.fields["start-card"].value);
         });
     },
 
-    newCard: function() {
+    newCard: function () {
         let model = new Card({}, { store: this.store });
         let v = new CardEditView(model);
         this.el.html(v.render().$el);
     },
 
-    edit: function(id) {
+    edit: function (id) {
         let that = this;
-        this.store.get(id).then(function(doc) {
-            let model = new Card(doc, { store: that.store});
+        this.store.get(id).then(function (doc) {
+            let model = new Card(doc, { store: that.store });
             let v = new CardEditView(model);
             that.el.html(v.render().$el);
-        }).catch(function(err) {
+        }).catch(function (err) {
             if (err.status !== 404) {
                 console.log(err);
                 return;
             }
-            let model = new Card({ _id: id }, { store: that.store});
+            let model = new Card({ _id: id }, { store: that.store });
             let v = new CardEditView(model);
             that.el.html(v.render().$el);
         });
     },
 
-    view: function(id) {
+    view: function (id) {
         let that = this;
-        this.store.get(id).then(function(doc) {
-            let v = new CardView({ store: that.store, model: doc, index: that.index});
+        this.store.get(id).then(function (doc) {
+            let v = new CardView({ store: that.store, model: doc, index: that.index });
             that.el.html(v.render().$el);
-        }).catch(function(err) {
+        }).catch(function (err) {
             if (err.status !== 404) {
                 console.log(err);
                 return;
@@ -412,15 +413,15 @@ var Router = Backbone.Router.extend({
         });
     },
 
-    todos: function(){
+    todos: function () {
         let that = this;
         this.store.todos().then(todos => {
-            let v = new TodosView({todos: todos});
+            let v = new TodosView({ todos: todos });
             that.el.html(v.render().$el);
         });
     },
 
-    search: function(query) {
+    search: function (query) {
         let that = this;
         this.el.html('');
         index.search(parseQuery(query)).forEach(card => {
@@ -431,7 +432,7 @@ var Router = Backbone.Router.extend({
 });
 
 function loadApp(store, index) {
-    window.app = new Router({ store: store, el: $("#container"), index: index});
+    window.app = new Router({ store: store, el: $("#container"), index: index });
     let search = new SearchBarView({ store: store, container: $("#container") });
     $("#search-bar").html(search.render().el);
 
@@ -447,7 +448,7 @@ let index = new Fuse([], {
     threshold: 0
 });
 
-store.all().then( r=> {
+store.all().then(r => {
     r.rows.forEach(d => {
         let doc = d.doc;
         doc.title = doc._id; // just to make the search easier
