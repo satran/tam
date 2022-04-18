@@ -40,14 +40,14 @@ export class Store {
 
     sync() {
         let that = this;
-        this.db.get(keys.settings).then(function(doc) {
+        this.db.get(keys.settings).then(function (doc) {
             let remoteHost = doc.fields["remote-database"].value;
             that.remoteDB = new PouchDB(remoteHost);
             that.db.sync(that.remoteDB, {
                 live: true
-            }).on('change', function(change) {
+            }).on('change', function (change) {
                 console.log(change);
-            }).on('error', function(err) {
+            }).on('error', function (err) {
                 console.log(err);
             });
         });
@@ -74,7 +74,7 @@ export class Store {
             doc._id = newid;
             delete (doc._rev);
             let that = this;
-            this.db.put(doc).then(function(response) {
+            this.db.put(doc).then(function (response) {
                 doc._id = oldid;
                 doc._rev = oldrev;
                 that.db.remove(doc)
@@ -102,12 +102,12 @@ export class Store {
                 doc.todos = null;
             }
             let that = this;
-            that.db.put(doc).then(function(response) {
+            that.db.put(doc).then(function (response) {
                 for (let other in index.refs) {
                     that.db.get(other).then(d => {
                         if (!d.refs) d.refs = {};
                         d.refs[doc._id] = index.refs[other];
-                        that.db.put(d).then(()=>console.log(other));
+                        that.db.put(d).then(() => console.log(other));
                     }).catch(err => {
                         if (err.status !== 404) {
                             console.log(err);
@@ -122,12 +122,12 @@ export class Store {
                         };
                         d.refs[doc._id] = index.refs[other];
                         that.db.put(d)
-                            .then(()=>console.log(other))
+                            .then(() => console.log(other))
                             .catch(err => console.log(err));
                     });
                 }
                 resolve(response);
-            }).catch(function(err) {
+            }).catch(function (err) {
                 reject(err);
             });
         });
@@ -144,20 +144,20 @@ export class Store {
     todos() {
         return new Promise((resolve, reject) => {
             this.db.find({
-                selector: {"todos": {"$gt": null}},
+                selector: { "todos": { "$gt": null } },
                 fields: ["_id", "todos"]
             }).then(r => {
                 let todos = {};
                 let docs = r.docs;
                 for (let i in docs) {
-                    let id= docs[i]._id;
+                    let id = docs[i]._id;
                     todos[id] = [];
                     for (let j in docs[i].todos) {
-                        todos[id].push({text: docs[i].todos[j]});
+                        todos[id].push({ text: docs[i].todos[j] });
                     }
                 }
                 resolve(todos);
-            }).catch( err => reject(err));
+            }).catch(err => reject(err));
         });
     }
 }
@@ -173,7 +173,7 @@ export class Index {
         let todos = [];
         let refs = {};
         let lines = this.text.split('\n');
-        for(let i in lines) {
+        for (let i in lines) {
             let line = lines[i];
             let todoMatch = line.match(/^\s*\- \[ \]/);
             if (todoMatch && todoMatch.length == 1) {
@@ -181,22 +181,22 @@ export class Index {
                 todos.push(line.trim());
             }
             let links = line.match(/\[\[([^\]]*)\]\]/g);
-            if (links && links.length >0){
-                for(let j in links) {
+            if (links && links.length > 0) {
+                for (let j in links) {
                     let matched = links[j].match(/\[\[([^|]*).*\]\]/);
                     console.log(matched);
                     if (!matched || matched.length != 2) {
                         continue;
                     }
                     let other = matched[1];
-                    if(!refs.hasOwnProperty(other)){
+                    if (!refs.hasOwnProperty(other)) {
                         refs[other] = [];
                     }
                     refs[other].push(line);
                 }
             }
         }
-        return {todos: todos, refs: refs};
+        return { todos: todos, refs: refs };
     }
 }
 

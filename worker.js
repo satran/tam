@@ -8,7 +8,7 @@ const putInCache = async (request, response) => {
     await cache.put(request, response);
 };
 
-const cacheFirst = async ({ request, preloadResponsePromise}) => {
+const cacheFirst = async ({ request, preloadResponsePromise }) => {
     // First try to get the resource from the cache
     const responseFromCache = await caches.match(request);
     if (responseFromCache) {

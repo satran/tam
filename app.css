@@ -4,19 +4,87 @@
    License: none (public domain)
 */
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
     margin: 0;
     padding: 0;
     border: 0;
@@ -24,60 +92,92 @@ time, mark, audio, video {
     font: inherit;
     vertical-align: baseline;
 }
+
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
     display: block;
 }
+
 body {
     line-height: 1;
     margin: 0;
     padding: 0;
     font-size: 100%;
 }
-ol, ul {
+
+ol,
+ul {
     padding-left: 1.5em;
     /*list-style: unset;*/
 }
+
 blockquote {
     border-left: 2px solid;
     padding-left: 1em;
 }
-blockquote, q {
+
+blockquote,
+q {
     quotes: none;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
     content: '';
     content: none;
 }
+
 table {
     border-collapse: collapse;
     border-spacing: 0;
     margin-bottom: 2em;
     width: 100%;
 }
+
 th {
-    border-bottom: 2px solid ;
+    border-bottom: 2px solid;
     font-weight: bold;
     text-align: left;
 }
-td { border-bottom: 1px solid #efefef; }
-caption, th, td {
+
+td {
+    border-bottom: 1px solid #efefef;
+}
+
+caption,
+th,
+td {
     padding: 4px 10px 4px 0;
 }
+
 caption {
     background: #f1f1f1;
     padding: 10px 0;
     margin-bottom: 1em;
 }
 
-tr,td,th {
+tr,
+td,
+th {
     vertical-align: middle;
 }
 
 /* Use this if you use span-x classes on th/td. */
-table .last { padding-right: 0; }
+table .last {
+    padding-right: 0;
+}
 
 strong {
     font-weight: bold;
@@ -87,9 +187,10 @@ em {
     font-style: italic;
 }
 
-a:visited{
+a:visited {
     color: inherit;
 }
+
 /* --------- end of reset --------- */
 
 :root {
@@ -117,6 +218,7 @@ hr {
     border: 0;
     border-bottom: 1px solid var(--border-color);
 }
+
 a {
     color: var(--content-fg-color);
 }
@@ -127,6 +229,7 @@ body {
     background: var(--main-bg-color);
     font-size: 100%;
 }
+
 #search-bar>div {
     display: flex;
     max-width: 44em;
@@ -135,10 +238,12 @@ body {
     letter-spacing: normal;
     line-height: 1.5;
 }
+
 #search-bar .item {
     padding: .5em;
     color: inherit;
 }
+
 #search-bar .search {
     flex-grow: 1;
     font-family: inherit;
@@ -151,20 +256,25 @@ body {
     font-size: inherit;
     padding: .5em 1em;
 }
+
 /* This is for the svg icons to scale with size */
 .bi {
     width: 1em;
     height: 1em;
 }
+
 #container {
     margin-bottom: 70vh;
 }
+
 .todos h1 {
     font-weight: bold;
     margin: .5em 0;
 }
-.card, .todos{
-    display:flex;
+
+.card,
+.todos {
+    display: flex;
     flex-direction: column;
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 100%;
@@ -182,6 +292,7 @@ body {
     overflow-wrap: break-word;
     word-wrap: break-word;
 }
+
 .card header {
     position: sticky;
     top: 0;
@@ -191,20 +302,24 @@ body {
     justify-content: flex-end;
     padding: .25em;
 }
+
 .card header .btns {
     padding: .5em;
     display: flex;
     align-items: center;
 }
+
 .card header .btn {
     text-decoration: none;
     color: inherit;
     cursor: pointer;
     padding: .5em;
 }
+
 .card header .spacer {
     flex-grow: 1;
 }
+
 .card header .btn.save {
     display: inline-block;
     padding: 0.25em 1em;
@@ -219,9 +334,11 @@ body {
     color: var(--btn-success-fg-color);
     margin: .25em;
 }
+
 .card header .btn.cancel {
     text-decoration: underline;
 }
+
 .card .title {
     text-decoration: none;
     color: inherit;
@@ -231,7 +348,9 @@ body {
     border-bottom: 1px solid var(--border-color);
     text-align: center;
 }
-.card input.title, .card input.item.tags {
+
+.card input.title,
+.card input.item.tags {
     flex-grow: 1;
     border: none;
     outline: none;
@@ -242,17 +361,20 @@ body {
     background: var(--editable-bg-color);
     color: var(--editable-fg-color)
 }
+
 .card input.title {
     font-size: 1.5em;
     background: var(--editable-bg-color);
     margin: 0;
 }
+
 .card input.item.tags {
     /*border-bottom: 1px solid #eecc66ad;*/
     /*background: #eecc6647;*/
     background: var(--editable-bg-color);
     margin: .25em 0;
 }
+
 .card .tags {
     display: flex;
     padding: 0 .5em;
@@ -260,6 +382,7 @@ body {
     justify-content: center;
     text-align: center;
 }
+
 .card .tags .tag {
     background: var(--card-tag-bg-color);
     border: 1px solid var(--card-tag-border-color);
@@ -271,34 +394,42 @@ body {
     color: var(--card-tag-fg-color);
     text-decoration: none;
 }
+
 .card .refs {
     margin: 1em;
 }
+
 .card .refs .label {
     font-weight: bold;
     margin-bottom: 1em;
 }
+
 .card .refs-content {
     padding: 1em;
     background: var(--editable-bg-color);
     border-radius: .5em;
     border: 1px solid var(--border-color);
 }
+
 .card .refs-content .ref {
     padding-bottom: 1em;
 }
+
 .card .refs-content .ref:last-child {
     padding-bottom: 0;
 }
+
 .card .refs-content h1 {
     font-weight: bold;
     margin-bottom: .5em;
 }
 
-.card .content, .card .editor {
+.card .content,
+.card .editor {
     flex-grow: 1;
     padding: 0 1em 1em;
 }
+
 .card .editor {
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     font-size: 100%;
@@ -306,7 +437,8 @@ body {
     background: var(--editable-bg-color);
 }
 
-.card .content pre, .card .content code{
+.card .content pre,
+.card .content code {
     padding: 1em;
     background: var(--editable-bg-color);
     border-radius: .5em;
@@ -314,10 +446,12 @@ body {
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     white-space: pre-wrap;
 }
+
 .card .content code {
     padding: .1em .2em;
     font-size: .9em;
 }
+
 .card .content pre>code {
     border: none;
     background: none;
@@ -325,23 +459,33 @@ body {
     font-size: inherit;
 }
 
-.card .content h1, .card .content h2, .card .content h3, .card .content h4, .card .content h5, .card .content h6 {
+.card .content h1,
+.card .content h2,
+.card .content h3,
+.card .content h4,
+.card .content h5,
+.card .content h6 {
     font-weight: bold;
     margin: .5em 0;
 }
-.card .content h1{
+
+.card .content h1 {
     font-size: 1.3em;
 }
-.card .content h2{
+
+.card .content h2 {
     font-size: 1.2em;
 }
-.card .content h3{
+
+.card .content h3 {
     font-size: 1.1em;
 }
-.card .content p{
+
+.card .content p {
     margin: 1em 0;
 }
-.card .content a{
+
+.card .content a {
     color: inherit;
 }
 
@@ -354,10 +498,13 @@ body {
     letter-spacing: normal;
     line-height: 1.5;
 }
+
 .card-summary .title {
     flex-grow: 1;
 }
-.card-summary .title, .card-summary .btn {
+
+.card-summary .title,
+.card-summary .btn {
     padding: 1em;
     text-decoration: none;
     color: inherit;
@@ -368,6 +515,7 @@ body {
     display: flex;
     flex-direction: column;
 }
+
 .card.config .field input {
     flex-grow: 1;
     border: none;
@@ -378,6 +526,7 @@ body {
     background: var(--editable-bg-color);
     color: var(--content-fg-color);
 }
+
 .card.config .field label {
     flex-grow: 1;
     font-size: .8em
@@ -385,28 +534,30 @@ body {
 
 @media screen and (max-width: 800px) {
     .card {
-	      padding: 0;
-	      border-radius: 0;
+        padding: 0;
+        border-radius: 0;
     }
 }
+
 @media (prefers-color-scheme: dark) {
     :root {
-	      --main-bg-color: #323f4b;
-	      --main-fg-color: #cbd2d9;
-	      --border-color: #3e4c59;
-	      --border-emp-color: #3e4c59;
+        --main-bg-color: #323f4b;
+        --main-fg-color: #cbd2d9;
+        --border-color: #3e4c59;
+        --border-emp-color: #3e4c59;
 
-	      --content-bg-color: #1f2933;
-	      --content-fg-color: #cbd2d9;
+        --content-bg-color: #1f2933;
+        --content-fg-color: #cbd2d9;
 
-	      --editable-bg-color: #17222b;
+        --editable-bg-color: #17222b;
 
-	      --card-shadow-color: #000000;
-	      --card-tag-bg-color: #323f4b;
-	      --card-tag-fg-color: #cbd2d9;;
-	      --card-tag-border-color: #3e4c59;
+        --card-shadow-color: #000000;
+        --card-tag-bg-color: #323f4b;
+        --card-tag-fg-color: #cbd2d9;
+        ;
+        --card-tag-border-color: #3e4c59;
 
-	      --btn-success-bg-color: #2da562;
-	      --btn-success-fg-color: #ffffff;
+        --btn-success-bg-color: #2da562;
+        --btn-success-fg-color: #ffffff;
     }
 }
