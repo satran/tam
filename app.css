@@ -312,6 +312,7 @@ body {
     border-radius: .5em;
     border: 1px solid var(--border-color);
     font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    white-space: pre-wrap;
 }
 .card .content code {
     padding: .1em .2em;
