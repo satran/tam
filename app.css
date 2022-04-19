@@ -343,9 +343,6 @@ body {
 }
 
 .card header {
-    position: sticky;
-    top: 0;
-    background: var(--content-bg-color);
     border-radius: 6px 6px 0 0;
     display: flex;
     justify-content: flex-end;
@@ -469,6 +466,9 @@ body {
     font-weight: bold;
     margin-bottom: .5em;
 }
+.card.edit {
+    background-color: var(--editable-bg-color);
+}
 
 .card .content,
 .card .editor {
@@ -479,7 +479,7 @@ body {
 .card .editor {
     font-size: 100%;
     tab-size: 4;
-    background: var(--editable-bg-color);
+    border-bottom: 1px solid var(--border-color);
 }
 
 .card .content pre,
@@ -567,7 +567,8 @@ body {
     border-radius: 0;
     text-decoration: none;
     padding: .5em;
-    background: var(--editable-bg-color);
+    background: var(--content-bg-color);
+    border-bottom: 1px solid var(--border-color);
     color: var(--content-fg-color);
 }
 
