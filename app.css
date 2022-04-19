@@ -270,7 +270,6 @@ body {
 }
 #bar .item.logo {
     text-align: center;
-    flex-grow: 1;
     text-decoration: none;
     font-weight: bold;
 }
@@ -361,6 +360,8 @@ body {
     line-height: 1.5;
     color: var(--content-fg-color);
     padding: .5em 1em;
+    max-width: 44em;
+    margin: 0 auto;
     /* to break long lines*/
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -385,7 +386,7 @@ body {
     padding: .5em;
 }
 
-.card header .spacer {
+.spacer {
     flex-grow: 1;
 }
 
