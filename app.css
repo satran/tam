@@ -238,11 +238,7 @@ body {
 }
 
 #app{
-    max-width: 66em;
-    margin: 1em auto;
-    border-radius: 6px;
-    box-shadow: 0 0px 7px -5px var(--card-shadow-color);
-    border: 1px solid var(--border-color);
+    margin: 0;
     background: var(--content-bg-color);
     font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-size: 100%;
@@ -251,17 +247,22 @@ body {
 #wrapper {
     display: flex;
     flex-direction: row;
+    margin: 0 auto;
+    max-width: 66em;
 }
 
 #bar {
     border-bottom: 1px solid var(--header-border-color);
-    border-radius: 6px 6px 0 0 ;
     position: sticky;
     top: 0;
     background-color: var(--header-bg-color);
     color: var(--header-fg-color);
     z-index: 1000;
+}
+#bar>div {
     display: flex;
+    max-width: 66em;
+    margin: 0 auto;
 }
 #bar .item {
     padding: 1em;
@@ -601,11 +602,6 @@ body {
 }
 
 @media screen and (max-width: 800px) {
-    #app {
-        margin: 0;
-        box-shadow: none;
-        border: none;
-    }
     #wrapper {
         flex-direction: column;
         margin: 0;
