@@ -630,16 +630,16 @@ body {
     :root {
         --main-bg-color: #323f4b;
         --main-fg-color: #cbd2d9;
-        --border-color: #3e4c59;
+        --border-color: #2f353a;
         --border-emp-color: #3e4c59;
 
         --header-fg-color: #cbd2d9;
         --header-bg-color: #1f2933;
-        --header-border-color: #3e4c59;
+        --header-border-color: #2f353a;
     
         --sidebar-fg-color: #cbd2d9;
         --sidebar-bg-color: #1f2933;
-        --sidebar-border-color: #3e4c59;
+        --sidebar-border-color: #2f353a;
 
         --content-bg-color: #1f2933;
         --content-fg-color: #cbd2d9;
