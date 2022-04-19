@@ -111,7 +111,6 @@ var SideBarView = Backbone.View.extend({
     template: _.template($('#side-bar-tmpl').html()),
 
     events: {
-        'click .back': "back",
         'keypress .search': "search"
     },
 
@@ -125,10 +124,6 @@ var SideBarView = Backbone.View.extend({
         }
         let search = e.target.value;
         window.location = "#search/" + search;
-    },
-
-    back: function () {
-        window.history.back();
     },
 
     toggle: function() {
@@ -343,11 +338,26 @@ var CardView = Backbone.View.extend({
     className: "card",
     template: _.template($('#card-view-tmpl').html()),
 
+    events: {
+        'click .fav': 'toggleFav'
+    },
+
     initialize: function (options) {
         this.model = options.model;
         this.store = options.store;
         this.index = options.index;
         this.parser = new Parser();
+    },
+
+    toggleFav: function() {
+        let that = this;
+        that.store.get(this.model._id).then(d => {
+            d.fav = !d.fav;
+            that.store.put(d).then(r => {
+                that.model.fav = d.fav;
+                that.render();
+            })
+        })
     },
 
     eval: function (content) {
@@ -495,6 +505,9 @@ function loadApp(store, index) {
     $("#side-bar").html(search.render().el);
     $("#menu-btn").click(e=>{
         $("#side-bar").toggle();
+    });
+    $("#bar back").click(e=>{
+        window.history.back();
     })
     Backbone.history.start();
 }

@@ -137,6 +137,10 @@ export class Store {
         return this.db.get(id);
     }
 
+    put(d) {
+        return this.db.put(d);
+    }
+
     all() {
         return this.db.allDocs({ include_docs: true });
     }
