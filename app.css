@@ -280,6 +280,7 @@ body {
     border-right: 1px solid var(--sidebar-border-color);
     position: sticky;
     top: 0;
+    /* Because of the flex box expand I need to make sure the width is set both max and min */
     min-width: 20em;
     max-width: 20em;
     padding: 0 1em;
@@ -310,6 +311,28 @@ body {
 }
 #side-bar .item span{
     padding-left: .5em;
+}
+
+#side-bar .group {
+    padding: .5em 1em;
+    display: flex;
+    flex-direction: column;
+    background: var(--editable-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    margin-top: 1em;
+}
+#side-bar .group header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 1em 0;
+    font-weight: bold;
+    display: flex;
+}
+#side-bar .group header span{
+    padding-left: 1em;
+}
+#side-bar .group a{
+    text-decoration: none;
 }
 
 /* This is for the svg icons to scale with size */
@@ -538,7 +561,7 @@ body {
     max-width: 44em;
     margin: 0 auto;
     background: var(--content-bg-color);
-    border-bottom: 1px solid var(--border-emp-color);
+    border-bottom: 1px solid var(--border-color);
     letter-spacing: normal;
     line-height: 1.5;
 }
@@ -592,9 +615,10 @@ body {
         border-right: none;
         border-bottom: 1px solid var(--border-color);
         position: inherit;
-        width: 100%;
-        max-width: 100%;
         display: none;
+        flex-grow: 1;
+        min-width: none;
+        max-width: none;
     }
     .card {
         padding: 0;

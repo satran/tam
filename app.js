@@ -62,13 +62,61 @@ var ConfigCardView = Backbone.View.extend({
     }
 });
 
+var FavsMenuView = Backbone.View.extend({
+    className: "group",
 
-var SearchBarView = Backbone.View.extend({
+    template: _.template($('#favs-menu-tmpl').html()),
+
+    initialize: function(options) {
+        this.store = options.store;
+    },
+
+    render: function() {
+        let that = this;
+        this.store.db.find({selector: {fav: true}, fields: ["_id"]}).then(r=>{
+            let favs = new Set();
+            r.docs.forEach(doc => {
+                favs.add(doc._id);
+            })
+            that.$el.html(that.template({ favs: favs }));
+        })
+        return this;
+    }
+});
+
+var TagsMenuView = Backbone.View.extend({
+    className: "group",
+
+    template: _.template($('#tags-menu-tmpl').html()),
+
+    initialize: function(options) {
+        this.store = options.store;
+    },
+
+    render: function() {
+        let that = this;
+        this.store.db.find({selector: {tags: {$gte: 1}}, fields: ["tags"]}).then(r=>{
+            let tags = new Set();
+            r.docs.forEach(doc => {
+                doc.tags.forEach(t => tags.add(t));
+            })
+            that.$el.html(that.template({ tags: tags }));
+        })
+        return this;
+    }
+});
+
+
+var SideBarView = Backbone.View.extend({
     template: _.template($('#side-bar-tmpl').html()),
 
     events: {
         'click .back': "back",
         'keypress .search': "search"
+    },
+
+    initialize: function(options) {
+        this.store = options.store;
     },
 
     search: function (e) {
@@ -91,6 +139,13 @@ var SearchBarView = Backbone.View.extend({
         var d = new Date();
         var today = d.toISOString().split("T")[0];
         this.$el.html(this.template({ today: today }));
+
+        let favsv = new FavsMenuView({store: this.store});
+        this.$el.find(".gen").append(favsv.render().$el);
+
+        let tagsv = new TagsMenuView({store: this.store});
+        this.$el.find(".gen").append(tagsv.render().$el);
+
         return this;
     }
 });
@@ -436,7 +491,7 @@ var Router = Backbone.Router.extend({
 
 function loadApp(store, index) {
     window.app = new Router({ store: store, el: $("#container"), index: index });
-    let search = new SearchBarView({ store: store, container: $("#container") });
+    let search = new SideBarView({ store: store, container: $("#container") });
     $("#side-bar").html(search.render().el);
     $("#menu-btn").click(e=>{
         $("#side-bar").toggle();
