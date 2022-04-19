@@ -274,7 +274,7 @@ body {
     font-weight: bold;
 }
 
-#search-bar {
+#side-bar {
     background: var(--sidebar-bg-color);
     border-radius: 6px 0 0 0;
     border-right: 1px solid var(--sidebar-border-color);
@@ -284,10 +284,10 @@ body {
     max-width: 20em;
     padding: 0 1em;
     overflow-x: auto;
-    font-size: 80%;
+    font-size: 90%;
 }
 
-#search-bar .item.search {
+#side-bar .item.search {
     font-family: inherit;
     outline: none;
     background-color: var(--content-bg-color);
@@ -302,13 +302,13 @@ body {
     width: calc(100% - 3em);
 }
 
-#search-bar .item {
+#side-bar .item {
     padding: .5em 1em;
     text-decoration: none;
     cursor: pointer;
     display: flex;
 }
-#search-bar .item span{
+#side-bar .item span{
     padding-left: .5em;
 }
 
@@ -586,7 +586,7 @@ body {
         flex-direction: column;
         margin: 0;
     }
-    #search-bar {
+    #side-bar {
         border-radius: 0;
         border-right: none;
         border-bottom: 1px solid var(--border-color);

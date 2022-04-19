@@ -64,7 +64,7 @@ var ConfigCardView = Backbone.View.extend({
 
 
 var SearchBarView = Backbone.View.extend({
-    template: _.template($('#search-bar-tmpl').html()),
+    template: _.template($('#side-bar-tmpl').html()),
 
     events: {
         'click .back': "back",
@@ -437,9 +437,9 @@ var Router = Backbone.Router.extend({
 function loadApp(store, index) {
     window.app = new Router({ store: store, el: $("#container"), index: index });
     let search = new SearchBarView({ store: store, container: $("#container") });
-    $("#search-bar").html(search.render().el);
+    $("#side-bar").html(search.render().el);
     $("#menu-btn").click(e=>{
-        $("#search-bar").toggle();
+        $("#side-bar").toggle();
     })
     Backbone.history.start();
 }
