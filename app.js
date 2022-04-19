@@ -67,7 +67,6 @@ var SearchBarView = Backbone.View.extend({
     template: _.template($('#search-bar-tmpl').html()),
 
     events: {
-        'click .sync': "sync",
         'click .back': "back",
         'keypress .search': "search"
     },
@@ -82,6 +81,10 @@ var SearchBarView = Backbone.View.extend({
 
     back: function () {
         window.history.back();
+    },
+
+    toggle: function() {
+        this.$el.toggle();
     },
 
     render: function () {
@@ -435,7 +438,9 @@ function loadApp(store, index) {
     window.app = new Router({ store: store, el: $("#container"), index: index });
     let search = new SearchBarView({ store: store, container: $("#container") });
     $("#search-bar").html(search.render().el);
-
+    $("#menu-btn").click(e=>{
+        $("#search-bar").toggle();
+    })
     Backbone.history.start();
 }
 

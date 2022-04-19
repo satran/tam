@@ -199,6 +199,14 @@ a:visited {
     --border-color: #efefef;
     --border-emp-color: #ccc;
 
+    --header-fg-color:  #323f4b;
+    --header-bg-color: #ffffff;
+    --header-border-color: #efefef;
+
+    --sidebar-fg-color: #333333;
+    --sidebar-bg-color: #ffffff;
+    --sidebar-border-color: #efefef;
+
     --content-bg-color: #ffffff;
     --content-fg-color: #002b36;
 
@@ -224,37 +232,84 @@ a {
 }
 
 body {
-    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     color: var(--main-fg-color);
     background: var(--main-bg-color);
     font-size: 100%;
 }
 
-#search-bar>div {
+#app{
+    max-width: 66em;
+    margin: 1em auto;
+    border-radius: 6px;
+    box-shadow: 0 0px 7px -5px var(--card-shadow-color);
+    border: 1px solid var(--border-color);
+    background: var(--content-bg-color);
+    font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 100%;
+}
+
+#wrapper {
     display: flex;
-    max-width: 44em;
-    margin: 0 auto;
-    padding: .5em;
-    letter-spacing: normal;
-    line-height: 1.5;
+    flex-direction: row;
 }
 
-#search-bar .item {
-    padding: .5em;
-    color: inherit;
+#bar {
+    border-bottom: 1px solid var(--header-border-color);
+    border-radius: 6px 6px 0 0 ;
+    position: sticky;
+    top: 0;
+    background-color: var(--header-bg-color);
+    color: var(--header-fg-color);
+    z-index: 1000;
+    display: flex;
 }
-
-#search-bar .search {
+#bar .item {
+    padding: 1em;
+    color: var(--header-fg-color);
+}
+#bar .item.logo {
+    text-align: center;
     flex-grow: 1;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#search-bar {
+    background: var(--sidebar-bg-color);
+    border-radius: 6px 0 0 0;
+    border-right: 1px solid var(--sidebar-border-color);
+    position: sticky;
+    top: 0;
+    min-width: 20em;
+    max-width: 20em;
+    padding: 0 1em;
+    overflow-x: auto;
+    font-size: 80%;
+}
+
+#search-bar .item.search {
     font-family: inherit;
     outline: none;
     background-color: var(--content-bg-color);
     border: 1px solid var(--border-color);
+    color: var(--content-fg-color);
     border-radius: 5em;
     display: block;
     text-decoration: none;
     font-size: inherit;
     padding: .5em 1em;
+    margin: .5em;
+    width: calc(100% - 3em);
+}
+
+#search-bar .item {
+    padding: .5em 1em;
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+}
+#search-bar .item span{
+    padding-left: .5em;
 }
 
 /* This is for the svg icons to scale with size */
@@ -264,7 +319,9 @@ body {
 }
 
 #container {
-    margin-bottom: 70vh;
+    /* margin-bottom: 50vh; */
+    min-height: 80vh;
+    flex-grow: 1;
 }
 
 .todos h1 {
@@ -276,18 +333,10 @@ body {
 .todos {
     display: flex;
     flex-direction: column;
-    font-family: -apple-system, BlinkMacSystemFont, "Open Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-size: 100%;
-    border-radius: 6px;
-    box-shadow: 0 0px 7px -5px var(--card-shadow-color);
-    border: 1px solid var(--border-color);
     letter-spacing: normal;
     line-height: 1.5;
-    margin: 1em auto;
-    max-width: 44rem;
-    background: var(--content-bg-color);
     color: var(--content-fg-color);
-    padding: 2em;
+    padding: .5em 1em;
     /* to break long lines*/
     overflow-wrap: break-word;
     word-wrap: break-word;
@@ -300,7 +349,6 @@ body {
     border-radius: 6px 6px 0 0;
     display: flex;
     justify-content: flex-end;
-    padding: .25em;
 }
 
 .card header .btns {
@@ -345,7 +393,6 @@ body {
     font-weight: bold;
     flex-grow: 1;
     font-size: 1.5em;
-    border-bottom: 1px solid var(--border-color);
     text-align: center;
 }
 
@@ -357,7 +404,6 @@ body {
     border-radius: 0;
     text-decoration: none;
     padding: .5em;
-    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     background: var(--editable-bg-color);
     color: var(--editable-fg-color)
 }
@@ -431,7 +477,6 @@ body {
 }
 
 .card .editor {
-    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     font-size: 100%;
     tab-size: 4;
     background: var(--editable-bg-color);
@@ -443,7 +488,6 @@ body {
     background: var(--editable-bg-color);
     border-radius: .5em;
     border: 1px solid var(--border-color);
-    font-family: "SF Mono", "Inconsolata", "Segoe UI Mono", ui-monospace, Menlo, Monaco, "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
     white-space: pre-wrap;
 }
 
@@ -533,6 +577,24 @@ body {
 }
 
 @media screen and (max-width: 800px) {
+    #app {
+        margin: 0;
+        box-shadow: none;
+        border: none;
+    }
+    #wrapper {
+        flex-direction: column;
+        margin: 0;
+    }
+    #search-bar {
+        border-radius: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        position: inherit;
+        width: 100%;
+        max-width: 100%;
+        display: none;
+    }
     .card {
         padding: 0;
         border-radius: 0;
@@ -545,6 +607,14 @@ body {
         --main-fg-color: #cbd2d9;
         --border-color: #3e4c59;
         --border-emp-color: #3e4c59;
+
+        --header-fg-color: #cbd2d9;
+        --header-bg-color: #1f2933;
+        --header-border-color: #3e4c59;
+    
+        --sidebar-fg-color: #cbd2d9;
+        --sidebar-bg-color: #1f2933;
+        --sidebar-border-color: #3e4c59;
 
         --content-bg-color: #1f2933;
         --content-fg-color: #cbd2d9;
